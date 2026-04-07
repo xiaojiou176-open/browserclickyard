@@ -1,0 +1,39 @@
+{
+  "log": {
+    "entries": [
+      {
+        "startedDateTime": "2025-02-19T10:00:00.000Z",
+        "request": {
+          "method": "GET",
+          "url": "https://app.local/register",
+          "headers": [{ "name": "Accept", "value": "text/html" }]
+        },
+        "response": {
+          "status": 200,
+          "headers": []
+        }
+      },
+      {
+        "startedDateTime": "2025-02-19T10:00:01.000Z",
+        "request": {
+          "method": "POST",
+          "url": "https://app.local/api/register",
+          "headers": [
+            { "name": "Content-Type", "value": "application/json" },
+            { "name": "Origin", "value": "https://app.local" },
+            { "name": "Referer", "value": "https://app.local/register" },
+            { "name": "Accept", "value": "application/json" }
+          ],
+          "postData": {
+            "mimeType": "application/json",
+            "text": "{\"email\":\"json.user@example.com\",\"password\":\"__fixture_password__\",\"profile\":{\"nickname\":\"json-user\",\"apiToken\":\"__fixture_api_token__\"}}"
+          }
+        },
+        "response": {
+          "status": 201,
+          "headers": []
+        }
+      }
+    ]
+  }
+}

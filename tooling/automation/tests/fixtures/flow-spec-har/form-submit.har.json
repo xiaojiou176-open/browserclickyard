@@ -1,0 +1,38 @@
+{
+  "log": {
+    "entries": [
+      {
+        "startedDateTime": "2025-02-19T10:05:00.000Z",
+        "request": {
+          "method": "GET",
+          "url": "http://127.0.0.1:18080/signup",
+          "headers": [{ "name": "Accept", "value": "text/html" }]
+        },
+        "response": {
+          "status": 200,
+          "headers": []
+        }
+      },
+      {
+        "startedDateTime": "2025-02-19T10:05:01.000Z",
+        "request": {
+          "method": "POST",
+          "url": "http://127.0.0.1:18080/signup/submit",
+          "headers": [
+            { "name": "Content-Type", "value": "application/x-www-form-urlencoded" },
+            { "name": "Origin", "value": "http://127.0.0.1:18080" },
+            { "name": "Referer", "value": "http://127.0.0.1:18080/signup" }
+          ],
+          "postData": {
+            "mimeType": "application/x-www-form-urlencoded",
+            "text": "email=form.user%40example.com&password=__fixture_password__&plan=pro&csrf_token=__fixture_csrf_token__"
+          }
+        },
+        "response": {
+          "status": 302,
+          "headers": []
+        }
+      }
+    ]
+  }
+}
