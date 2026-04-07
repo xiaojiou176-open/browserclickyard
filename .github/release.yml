@@ -1,0 +1,28 @@
+changelog:
+  categories:
+    - title: Product surface
+      labels:
+        - product
+        - ux
+        - showcase
+    - title: Control plane and runtime
+      labels:
+        - control-plane
+        - backend
+        - orchestration
+    - title: Proof and quality gates
+      labels:
+        - proof
+        - quality
+        - ci
+    - title: MCP and integrations
+      labels:
+        - mcp
+        - integration
+    - title: Documentation and public surface
+      labels:
+        - docs
+        - public-surface
+  exclude:
+    labels:
+      - skip-changelog

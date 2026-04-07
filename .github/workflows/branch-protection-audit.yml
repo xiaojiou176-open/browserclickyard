@@ -1,0 +1,88 @@
+name: Branch Protection Audit
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: branch-protection-audit-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+
+jobs:
+  branch-protection-audit:
+    runs-on: ubuntu-latest
+    environment: owner-approved-sensitive
+    env:
+      GH_TOKEN: ${{ secrets.BRANCH_PROTECTION_AUDIT_TOKEN }}
+      GITHUB_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@bab023d7a2c8eef4351fc96992dc6d83c9561bb2
+        with:
+          clean: true
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Audit branch protection aggregate check
+        id: audit
+        env:
+          UIQ_BRANCH_PROTECTION_REPO: ${{ github.repository }}
+          UIQ_BRANCH_PROTECTION_BRANCH: main
+        run: |
+          set -euo pipefail
+          mkdir -p .runtime-cache/artifacts/ci
+          log_path=".runtime-cache/artifacts/ci/branch-protection-audit.log"
+          status_path=".runtime-cache/artifacts/ci/branch-protection-audit.exitcode"
+          export UIQ_BRANCH_PROTECTION_REPORT_PATH=".runtime-cache/artifacts/ci/branch-protection-audit.json"
+          if [[ -z "${GH_TOKEN:-}" && -n "${GITHUB_TOKEN:-}" ]]; then
+            export GH_TOKEN="${GITHUB_TOKEN}"
+          fi
+          if [[ -z "${GH_TOKEN:-}" ]]; then
+            printf '%s\n' \
+              'BRANCH_PROTECTION_AUDIT_TOKEN is not configured for this workflow run.' \
+              'The audit workflow was triggered, but remote branch-protection truth remains blocked' \
+              'until a privileged token is provided.' \
+              > "$log_path"
+            python3 scripts/ci/write_branch_protection_blocked_report.py
+            printf '%s\n' "2" > "$status_path"
+            echo "audit_exit=2" >> "$GITHUB_OUTPUT"
+            echo "::warning::BRANCH_PROTECTION_AUDIT_TOKEN is not configured; writing blocked audit evidence instead of failing before artifacts."
+            exit 0
+          fi
+          set +e
+          bash scripts/ci/check-branch-protection.sh --branch main | tee "$log_path"
+          audit_exit=${PIPESTATUS[0]}
+          set -e
+          printf '%s\n' "$audit_exit" > "$status_path"
+          echo "audit_exit=$audit_exit" >> "$GITHUB_OUTPUT"
+      - name: Build branch protection audit summary
+        if: ${{ always() }}
+        env:
+          UIQ_BRANCH_PROTECTION_REPO: ${{ github.repository }}
+          UIQ_BRANCH_PROTECTION_BRANCH: main
+        run: |
+          python3 scripts/ci/render_branch_protection_audit_summary.py
+      - name: Publish branch protection audit summary
+        if: ${{ always() }}
+        run: cat .runtime-cache/artifacts/ci/branch-protection-audit.md >> "$GITHUB_STEP_SUMMARY"
+      - name: Upload branch protection audit artifacts
+        if: ${{ always() }}
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
+        with:
+          name: branch-protection-audit
+          path: |
+            .runtime-cache/artifacts/ci/branch-protection-audit.json
+            .runtime-cache/artifacts/ci/branch-protection-audit.log
+            .runtime-cache/artifacts/ci/branch-protection-audit.md
+          retention-days: 14
+      - name: Fail workflow when branch protection audit is not passing
+        if: ${{ always() && steps.audit.outputs.audit_exit != '0' }}
+        env:
+          AUDIT_EXIT: ${{ steps.audit.outputs.audit_exit }}
+        run: |
+          set -euo pipefail
+          echo "::error::Branch protection audit failed or was blocked. Inspect uploaded branch-protection-audit artifacts."
+          exit "$AUDIT_EXIT"

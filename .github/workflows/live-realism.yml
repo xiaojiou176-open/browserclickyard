@@ -1,0 +1,75 @@
+name: Live Realism Gate
+
+on:
+  workflow_dispatch:
+    inputs:
+      external_url:
+        description: "External website URL for live smoke test"
+        required: false
+        type: string
+        default: "https://example.com"
+      run_live_llm:
+        description: "Run live Gemini API smoke test"
+        required: false
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: live-realism-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  UIQ_HEARTBEAT_INTERVAL_SEC: "60"
+
+jobs:
+  live-realism:
+    runs-on: ubuntu-latest
+    environment: owner-approved-sensitive
+    steps:
+      - uses: actions/checkout@bab023d7a2c8eef4351fc96992dc6d83c9561bb2
+        with:
+          clean: true
+          persist-credentials: false
+      - name: Activate pnpm from root packageManager
+        run: |
+          set -euo pipefail
+          corepack enable
+          corepack prepare "$(node -p "require('./package.json').packageManager")" --activate
+      - name: Containerized static realism gates
+        run: |
+          UIQ_CONTAINER_GATE_SERVICE_OVERRIDE=ci-gate \
+          UIQ_CONTAINER_GATE_BUILD_OVERRIDE=ci-gate \
+          UIQ_CONTAINER_GATE_COMMAND_OVERRIDE='pnpm gate:sensitive-surfaces && pnpm gate:secret-leak && pnpm gate:iac:consistency && bash scripts/ci/gemini-only-policy.sh --report' \
+          bash scripts/ci/run-gate-in-container.sh exec
+      - name: Require Gemini secret (live realism)
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          set -euo pipefail
+          if [[ -z "${GEMINI_API_KEY:-}" ]]; then
+            echo "::error::GEMINI_API_KEY is required for live-realism workflow."
+            exit 1
+          fi
+      - name: Containerized live external website smoke
+        env:
+          UIQ_LIVE_EXTERNAL_ENABLED: "true"
+          UIQ_LIVE_EXTERNAL_URL: ${{ inputs.external_url }}
+        run: |
+          UIQ_CONTAINER_GATE_SERVICE_OVERRIDE=ci-browser \
+          UIQ_CONTAINER_GATE_BUILD_OVERRIDE=ci-browser \
+          UIQ_CONTAINER_GATE_COMMAND_OVERRIDE='pnpm test:live:web' \
+          bash scripts/ci/run-gate-in-container.sh exec
+      - name: Containerized live Gemini smoke
+        if: ${{ inputs.run_live_llm }}
+        env:
+          UIQ_LIVE_LLM_ENABLED: "true"
+          VIDEO_ANALYZER_PROVIDER: "gemini"
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          UIQ_CONTAINER_GATE_SERVICE_OVERRIDE=ci-browser \
+          UIQ_CONTAINER_GATE_BUILD_OVERRIDE=ci-browser \
+          UIQ_CONTAINER_GATE_COMMAND_OVERRIDE='pnpm --dir tooling/automation run live:preflight:key && node scripts/ai/check-provider-readiness.mjs --strict && pnpm test:live:llm' \
+          bash scripts/ci/run-gate-in-container.sh exec

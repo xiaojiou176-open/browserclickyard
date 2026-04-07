@@ -1,0 +1,21 @@
+title: "[Announcement] "
+labels:
+  - announcement
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Maintainer announcement template for release updates, roadmap milestones,
+        and major proof-surface improvements.
+  - type: textarea
+    id: summary
+    attributes:
+      label: Announcement summary
+      placeholder: What changed and why should the community care?
+    validations:
+      required: true
+  - type: textarea
+    id: links
+    attributes:
+      label: Links
+      placeholder: Link to releases, proof docs, benchmarks, or migration guides.

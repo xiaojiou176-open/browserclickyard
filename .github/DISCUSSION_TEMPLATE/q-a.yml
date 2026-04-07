@@ -1,0 +1,22 @@
+title: "[Q&A] "
+labels:
+  - q-and-a
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Ask usage and evaluation questions here.
+        For reproducible bugs, open an issue. For sensitive security topics, use
+        the private advisory flow.
+  - type: textarea
+    id: question
+    attributes:
+      label: Question
+      placeholder: What are you trying to do with Prooflane?
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Context
+      placeholder: Share the goal, current setup, and what already confused you.

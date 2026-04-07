@@ -1,0 +1,186 @@
+name: Upstream Drift Audit
+
+on:
+  schedule:
+    - cron: "0 3 * * 1"
+  workflow_dispatch:
+    inputs:
+      upstream_branch:
+        description: "Upstream branch to audit against"
+        required: false
+        default: "main"
+        type: string
+      max_behind:
+        description: "Maximum allowed commits behind upstream branch"
+        required: false
+        default: "200"
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: upstream-drift-audit-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  upstream-precheck:
+    runs-on: ubuntu-latest
+    outputs:
+      should_run: ${{ steps.evaluate.outputs.should_run }}
+    steps:
+      - name: Evaluate upstream prerequisite
+        id: evaluate
+        env:
+          UIQ_UPSTREAM_REPO_URL: ${{ vars.UIQ_UPSTREAM_REPO_URL || '' }}
+        run: |
+          set -euo pipefail
+          if [[ -z "${UIQ_UPSTREAM_REPO_URL}" ]]; then
+            echo "should_run=false" >> "$GITHUB_OUTPUT"
+            {
+              echo "## Upstream Drift Audit"
+              echo ""
+              echo "- Status: INACTIVE"
+              echo "- Reason: \`UIQ_UPSTREAM_REPO_URL\` is not configured for this repository."
+              echo "- Interpretation: upstream drift audit tooling exists, but this repository currently has no materialized live upstream binding."
+              echo "- Action: bind a canonical upstream URL before treating upstream drift as an active gate."
+            } >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          echo "should_run=true" >> "$GITHUB_OUTPUT"
+
+  upstream-drift-audit:
+    needs: upstream-precheck
+    if: ${{ needs.upstream-precheck.outputs.should_run == 'true' }}
+    runs-on: ubuntu-latest
+    env:
+      UIQ_UPSTREAM_REPO_URL: ${{ vars.UIQ_UPSTREAM_REPO_URL || '' }}
+      UIQ_UPSTREAM_BRANCH: ${{ github.event.inputs.upstream_branch || vars.UIQ_UPSTREAM_BRANCH || 'main' }}
+      UPSTREAM_BRANCH: ${{ github.event.inputs.upstream_branch || vars.UIQ_UPSTREAM_BRANCH || 'main' }}
+      MAX_BEHIND: ${{ github.event.inputs.max_behind || '200' }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@bab023d7a2c8eef4351fc96992dc6d83c9561bb2
+        with:
+          clean: true
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Bootstrap upstream remote binding (strict)
+        shell: bash
+        run: |
+          set -euo pipefail
+          bash scripts/upstream/bootstrap.sh --strict
+
+      - name: Validate threshold input
+        shell: bash
+        run: |
+          set -euo pipefail
+          if ! [[ "$MAX_BEHIND" =~ ^[0-9]+$ ]]; then
+            echo "error: max_behind must be a non-negative integer, got '$MAX_BEHIND'" >&2
+            exit 1
+          fi
+
+      - name: Run drift audit (strong blocking mode)
+        shell: bash
+        run: |
+          set -euo pipefail
+          audit_json="$(bash scripts/git-sync-audit.sh --fetch --json --upstream-branch "$UPSTREAM_BRANCH")"
+          printf '%s\n' "$audit_json" > upstream-drift-audit.json
+          cat upstream-drift-audit.json
+
+          python3 - <<'PY'
+          import json
+          import os
+          import sys
+
+          with open("upstream-drift-audit.json", "r", encoding="utf-8") as fh:
+              data = json.load(fh)
+
+          upstream = data.get("upstream", {})
+          rerere = data.get("rerere", {})
+          head_vs_branch = upstream.get("head_vs_branch", {})
+          behind = head_vs_branch.get("behind")
+          ahead = head_vs_branch.get("ahead")
+          max_behind = int(os.environ["MAX_BEHIND"])
+
+          failures = []
+          warnings = []
+          remediations = []
+
+          if not upstream.get("configured"):
+              failures.append(
+                  "upstream remote 'upstream' is not configured (cannot audit upstream drift)"
+              )
+              remediations.extend(
+                  [
+                      "git remote add upstream <UPSTREAM_REPO_URL>",
+                      "git fetch upstream --prune",
+                      "re-run this workflow (workflow_dispatch) with the correct upstream_branch",
+                  ]
+              )
+          if not upstream.get("ref_present"):
+              failures.append(f"upstream ref '{upstream.get('branch')}' is not present")
+              remediations.append(
+                  "verify upstream branch name and fetch refs: git fetch upstream --prune"
+              )
+          if behind is None:
+              failures.append("unable to compute behind count against upstream branch")
+          elif behind > max_behind:
+              failures.append(
+                  f"drift threshold exceeded: behind={behind} > max_behind={max_behind}"
+              )
+
+          if not rerere.get("enabled"):
+              warnings.append("rerere.enabled is false")
+          if not rerere.get("autoupdate"):
+              warnings.append("rerere.autoupdate is false")
+
+          summary_lines = [
+              "## Upstream Drift Audit",
+              f"- upstream branch: `{upstream.get('branch')}`",
+              f"- ahead: `{ahead}`",
+              f"- behind: `{behind}`",
+              f"- threshold: `{max_behind}`",
+              f"- rerere.enabled: `{rerere.get('enabled')}`",
+              f"- rerere.autoupdate: `{rerere.get('autoupdate')}`",
+          ]
+
+          if warnings:
+              summary_lines.append("")
+              summary_lines.append("### Warnings")
+              summary_lines.extend([f"- {warning}" for warning in warnings])
+
+          if failures:
+              summary_lines.append("")
+              summary_lines.append("### Failures")
+              summary_lines.extend([f"- {failure}" for failure in failures])
+              if remediations:
+                  summary_lines.append("")
+                  summary_lines.append("### Remediation")
+                  summary_lines.extend([f"- `{step}`" for step in remediations])
+              print("\n".join(f"error: {failure}" for failure in failures), file=sys.stderr)
+              if not upstream.get("configured"):
+                  print(
+                      "::error title=Upstream remote missing::Run 'git remote add upstream <UPSTREAM_REPO_URL>' then 'git fetch upstream --prune', and re-run upstream-drift-audit.",
+                      file=sys.stderr,
+                  )
+          else:
+              summary_lines.append("")
+              summary_lines.append("Result: PASS")
+
+          summary_path = os.environ.get("GITHUB_STEP_SUMMARY")
+          if summary_path:
+              with open(summary_path, "a", encoding="utf-8") as fh:
+                  fh.write("\n".join(summary_lines) + "\n")
+
+          if failures:
+              sys.exit(1)
+          PY
+
+      - name: Upload audit artifact
+        if: always()
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
+        with:
+          name: upstream-drift-audit
+          path: upstream-drift-audit.json

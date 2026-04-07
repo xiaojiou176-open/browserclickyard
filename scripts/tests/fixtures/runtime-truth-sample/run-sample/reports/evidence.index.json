@@ -1,0 +1,23 @@
+{
+  "runId": "run-sample",
+  "profile": "pr",
+  "target": {
+    "type": "web",
+    "name": "web.ci"
+  },
+  "generatedAt": "2026-03-21T23:00:00.000Z",
+  "items": [
+    {
+      "id": "log-backend-runtime",
+      "source": "report",
+      "evidenceClass": "log",
+      "path": "logs/runtime/service-api.app.jsonl"
+    },
+    {
+      "id": "report-summary",
+      "source": "report",
+      "evidenceClass": "report",
+      "path": "reports/summary.json"
+    }
+  ]
+}

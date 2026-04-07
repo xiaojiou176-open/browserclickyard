@@ -1,0 +1,1 @@
+{"ts":"2026-03-21T00:00:00Z","request_id":"req-789","trace_id":"trace-789","component":"automation.vonage","evidenceClass":"log","event":"vonage.callback.accepted","status":"ok"}

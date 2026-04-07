@@ -1,0 +1,133 @@
+name: PR Gate
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pr-gate-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  UIQ_HEARTBEAT_INTERVAL_SEC: "60"
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+  UIQ_ALLOW_HOST_GATE_DIAGNOSTIC: "1"
+  UIQ_ALLOW_HOST_GATE_DIAGNOSTIC_REASON: pr-quick-gate
+
+jobs:
+  pr-quick-gate:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+    env:
+      UIQ_UPSTREAM_REPO_URL: ${{ vars.UIQ_UPSTREAM_REPO_URL || format('https://github.com/{0}.git', github.repository) }}
+      UIQ_UPSTREAM_BRANCH: ${{ vars.UIQ_UPSTREAM_BRANCH || 'main' }}
+    steps:
+      - uses: actions/checkout@bab023d7a2c8eef4351fc96992dc6d83c9561bb2
+        with:
+          clean: true
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Activate pnpm from root packageManager
+        run: |
+          set -euo pipefail
+          corepack enable
+          corepack prepare "$(node -p "require('./package.json').packageManager")" --activate
+      - name: OpenAI residue hard gate
+        run: bash scripts/ci/gate-openai-residue.sh
+      - name: Workflow lint
+        env:
+          PRE_COMMIT_HOME: ${{ runner.temp }}/uiq-pre-commit/pr-quick-gate
+        run: |
+          set -euo pipefail
+          export HOME="${RUNNER_TEMP}/uiq-home"
+          mkdir -p "${HOME}"
+          python3 -m pip install --user pre-commit
+          export PATH="${HOME}/.local/bin:$PATH"
+          pre-commit run actionlint --all-files --hook-stage pre-push --show-diff-on-failure
+          rm -rf "${HOME}"
+      - name: Dependency review
+        if: ${{ github.event_name == 'pull_request' }}
+        uses: actions/dependency-review-action@2031cfc080254a8a887f58cffee85186f0e49e48 # v4.9.0
+        with:
+          config-file: ./.github/dependency-review-config.yml
+      - name: Workflow security lint
+        uses: zizmorcore/zizmor-action@71321a20a9ded102f6e9ce5718a2fcec2c4f70d8 # v0.5.2
+        with:
+          advanced-security: false
+      - name: Upstream binding audit
+        if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.fork == false }}
+        run: |
+          set -euo pipefail
+          bash scripts/upstream/bootstrap.sh --strict
+          mkdir -p .runtime-cache/artifacts/ci
+          audit_json="$(bash scripts/git-sync-audit.sh --fetch --json --upstream-branch "${UIQ_UPSTREAM_BRANCH}")"
+          printf '%s\n' "$audit_json" > .runtime-cache/artifacts/ci/upstream-audit-pr.json
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+
+          data = json.loads(Path(".runtime-cache/artifacts/ci/upstream-audit-pr.json").read_text(encoding="utf-8"))
+          upstream = data.get("upstream", {})
+          if not upstream.get("configured"):
+            raise SystemExit("upstream remote not configured after bootstrap")
+          if not upstream.get("ref_present"):
+            raise SystemExit("upstream branch ref missing after bootstrap fetch")
+          print("upstream binding audit passed")
+          PY
+      - name: Bootstrap Python runtime
+        run: |
+          set -euo pipefail
+          export HOME="${RUNNER_TEMP}/uiq-home"
+          mkdir -p "${HOME}"
+          python3 -m pip install --user uv
+          echo "${HOME}/.local/bin" >> "$GITHUB_PATH"
+      - name: Setup Trivy
+        uses: aquasecurity/setup-trivy@3fb12ec12f41e471780db15c232d5dd185dcb514 # v0.2.6
+        with:
+          cache: true
+      - name: Repo governance fast gate
+        run: |
+          # docs-gate.sh and pnpm gate:docs:diff-linkage stay reachable through gate:repo:fast.
+          bash scripts/lib/pnpm-safe.sh gate:repo:fast
+      - name: Trivy repo scan
+        run: |
+          UIQ_TRIVY_FORMAT=sarif \
+          UIQ_TRIVY_OUTPUT_PATH=.runtime-cache/artifacts/ci/trivy-results.sarif \
+          bash scripts/ci/run-trivy-fs.sh
+      - name: Upload Trivy SARIF
+        if: ${{ always() && hashFiles('.runtime-cache/artifacts/ci/trivy-results.sarif') != '' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.fork == false) }}
+        uses: github/codeql-action/upload-sarif@3d8036cf7fe7433e4a725cf513a6ea56c7fd0f14 # codeql-bundle-v2.25.0
+        with:
+          sarif_file: .runtime-cache/artifacts/ci/trivy-results.sarif
+          category: trivy
+      - name: Lint all
+        run: UIQ_CONTAINER_GATE_NAME=pr-quick-gate-lint bash scripts/lint-all.sh
+      - name: Log quality
+        run: node scripts/ci/check-log-quality.mjs
+      - name: MCP contract check
+        run: bash scripts/lib/pnpm-safe.sh mcp:check
+      - name: frontend-e2e-behavior-suite
+        run: bash scripts/lib/pnpm-safe.sh test:matrix:fast
+      - name: Run PR Profile
+        run: bash scripts/lib/pnpm-safe.sh doctor:repo
+
+  pr_required_gate:
+    runs-on: ubuntu-latest
+    if: ${{ always() }}
+    needs:
+      - pr-quick-gate
+    env:
+      PR_QUICK_GATE_RESULT: ${{ needs.pr-quick-gate.result }}
+    steps:
+      - name: Aggregate PR quick gate
+        run: |
+          set -euo pipefail
+          if [[ "$PR_QUICK_GATE_RESULT" != "success" ]]; then
+            echo "pr-quick-gate did not succeed: $PR_QUICK_GATE_RESULT"
+            exit 1
+          fi

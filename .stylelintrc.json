@@ -1,0 +1,13 @@
+{
+  "extends": ["stylelint-config-standard"],
+  "plugins": ["@stylistic/stylelint-plugin"],
+  "rules": {
+    "no-descending-specificity": null,
+    "no-duplicate-selectors": null,
+    "selector-class-pattern": null,
+    "alpha-value-notation": "number",
+    "color-function-notation": "modern",
+    "declaration-no-important": null,
+    "@stylistic/number-leading-zero": "always"
+  }
+}

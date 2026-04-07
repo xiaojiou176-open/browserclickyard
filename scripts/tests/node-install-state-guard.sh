@@ -1,0 +1,61 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+# shellcheck source=/dev/null
+source "$ROOT_DIR/scripts/lib/node-toolchain.sh"
+
+tmp_dir="$(mktemp -d)"
+workspace_root="$tmp_dir/workspace/repo"
+node_root="$workspace_root/node_modules"
+
+cleanup() {
+  rm -rf "$tmp_dir"
+}
+trap cleanup EXIT
+
+mkdir -p "$node_root/.pnpm/node_modules"
+
+cat >"$node_root/.pnpm-workspace-state-v1.json" <<'JSON'
+{
+  "projects": {
+    "/workspace": {
+      "name": "ui-automation-control-plane",
+      "version": "0.1.0"
+    }
+  }
+}
+JSON
+
+set +e
+failure_output="$(
+  UIQ_NODE_MODULES_DIR="$node_root" uiq_workspace_install_state_ready "$workspace_root" 2>&1
+)"
+failure_status=$?
+set -e
+
+if [[ "$failure_status" -eq 0 ]]; then
+  echo "expected workspace-state mismatch to fail install-state guard" >&2
+  exit 1
+fi
+
+if ! grep -Fq "workspace-state-root-mismatch" <<<"$failure_output"; then
+  echo "expected workspace-state mismatch reason in guard output" >&2
+  echo "$failure_output" >&2
+  exit 1
+fi
+
+cat >"$node_root/.pnpm-workspace-state-v1.json" <<JSON
+{
+  "projects": {
+    "${workspace_root}": {
+      "name": "ui-automation-control-plane",
+      "version": "0.1.0"
+    }
+  }
+}
+JSON
+
+UIQ_NODE_MODULES_DIR="$node_root" uiq_workspace_install_state_ready "$workspace_root"
+
+echo "node install-state guard checks passed"

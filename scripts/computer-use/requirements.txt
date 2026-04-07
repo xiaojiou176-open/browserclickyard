@@ -1,0 +1,15 @@
+# ============================================
+# Computer Use - OS-level, completely undetectable
+# ============================================
+
+# Core dependencies
+pyautogui>=0.9.54
+pillow>=10.0.0
+
+# ============================================
+# Gemini provider
+# ============================================
+
+# Model: models/gemini-3.1-pro-preview (default, overridable by GEMINI_MODEL)
+# API: computer_use tool
+google-genai==1.42.0

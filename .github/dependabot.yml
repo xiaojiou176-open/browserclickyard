@@ -1,0 +1,53 @@
+version: 2
+# Reopened version-update policy:
+# - Dependabot version updates run on the weekly cadence below for the repo's governed ecosystems.
+# - The PR cap stays intentionally small so dependency churn remains reviewable after the history rebuild cutover.
+# - Security-fix automation remains governed separately by GitHub security settings and repo gates.
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    cooldown:
+      default-days: 7
+    labels:
+      - "dependencies"
+      - "github-actions"
+    open-pull-requests-limit: 5
+
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    cooldown:
+      default-days: 7
+    ignore:
+      - dependency-name: "@vitejs/plugin-react"
+        versions:
+          - "5.2.x"
+    labels:
+      - "dependencies"
+      - "javascript"
+    open-pull-requests-limit: 5
+
+  - package-ecosystem: "uv"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    cooldown:
+      default-days: 7
+    labels:
+      - "dependencies"
+      - "python"
+    open-pull-requests-limit: 5
+
+  - package-ecosystem: "docker"
+    directory: "/services/api"
+    schedule:
+      interval: "weekly"
+    cooldown:
+      default-days: 7
+    labels:
+      - "dependencies"
+      - "docker"
+    open-pull-requests-limit: 5

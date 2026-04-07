@@ -1,0 +1,109 @@
+name: CI
+
+on:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.event_name }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  CI: "true"
+  UIQ_HEARTBEAT_INTERVAL_SEC: "60"
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+  UIQ_ALLOW_HOST_GATE_DIAGNOSTIC: "1"
+  UIQ_ALLOW_HOST_GATE_DIAGNOSTIC_REASON: ci-quick-gate
+
+jobs:
+  ci-quick-gate:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: read
+      security-events: write
+    steps:
+      - uses: actions/checkout@bab023d7a2c8eef4351fc96992dc6d83c9561bb2
+        with:
+          clean: true
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Activate pnpm from root packageManager
+        run: |
+          set -euo pipefail
+          corepack enable
+          corepack prepare "$(node -p "require('./package.json').packageManager")" --activate
+      - name: OpenAI residue hard gate
+        run: bash scripts/ci/gate-openai-residue.sh
+      - name: Workflow lint
+        env:
+          PRE_COMMIT_HOME: ${{ runner.temp }}/uiq-pre-commit/ci-quick-gate
+        run: |
+          set -euo pipefail
+          export HOME="${RUNNER_TEMP}/uiq-home"
+          mkdir -p "${HOME}"
+          python3 -m pip install --user pre-commit
+          export PATH="${HOME}/.local/bin:$PATH"
+          pre-commit run actionlint --all-files --hook-stage pre-push --show-diff-on-failure
+          rm -rf "${HOME}"
+      - name: Workflow security lint
+        uses: zizmorcore/zizmor-action@71321a20a9ded102f6e9ce5718a2fcec2c4f70d8 # v0.5.2
+        with:
+          advanced-security: false
+      - name: Bootstrap Python runtime
+        run: |
+          set -euo pipefail
+          export HOME="${RUNNER_TEMP}/uiq-home"
+          mkdir -p "${HOME}"
+          python3 -m pip install --user uv
+          echo "${HOME}/.local/bin" >> "$GITHUB_PATH"
+      - name: Setup Trivy
+        uses: aquasecurity/setup-trivy@3fb12ec12f41e471780db15c232d5dd185dcb514 # v0.2.6
+        with:
+          cache: true
+      - name: Repo governance fast gate
+        run: |
+          # docs-gate.sh and pnpm gate:docs:diff-linkage stay reachable through gate:repo:fast.
+          bash scripts/lib/pnpm-safe.sh gate:repo:fast
+      - name: Trivy repo scan
+        run: |
+          UIQ_TRIVY_FORMAT=sarif \
+          UIQ_TRIVY_OUTPUT_PATH=.runtime-cache/artifacts/ci/trivy-results.sarif \
+          bash scripts/ci/run-trivy-fs.sh
+      - name: Upload Trivy SARIF
+        if: ${{ always() }}
+        uses: github/codeql-action/upload-sarif@3d8036cf7fe7433e4a725cf513a6ea56c7fd0f14 # codeql-bundle-v2.25.0
+        with:
+          sarif_file: .runtime-cache/artifacts/ci/trivy-results.sarif
+          category: trivy
+      - name: Repo doctor
+        run: bash scripts/lib/pnpm-safe.sh doctor:repo
+      - name: Lint all
+        run: UIQ_CONTAINER_GATE_NAME=ci-quick-gate-lint bash scripts/lint-all.sh
+      - name: Log quality
+        run: node scripts/ci/check-log-quality.mjs
+      - name: MCP contract check
+        run: bash scripts/lib/pnpm-safe.sh mcp:check
+      - name: Fast matrix
+        run: bash scripts/lib/pnpm-safe.sh test:matrix:fast
+
+  required_ci_gate:
+    runs-on: ubuntu-latest
+    if: ${{ always() }}
+    needs:
+      - ci-quick-gate
+    env:
+      CI_QUICK_GATE_RESULT: ${{ needs.ci-quick-gate.result }}
+    steps:
+      - name: Aggregate required CI quick gate
+        run: |
+          set -euo pipefail
+          if [[ "$CI_QUICK_GATE_RESULT" != "success" ]]; then
+            echo "ci-quick-gate did not succeed: $CI_QUICK_GATE_RESULT"
+            exit 1
+          fi
