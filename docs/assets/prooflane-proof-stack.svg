@@ -1,0 +1,23 @@
+<svg width="1440" height="840" viewBox="0 0 1440 840" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1440" height="840" rx="28" fill="#081723"/>
+  <text x="96" y="98" fill="#F7FBFF" font-family="Helvetica, Arial, sans-serif" font-size="46" font-weight="700">Public proof stack</text>
+  <text x="96" y="136" fill="#95B9CE" font-family="Helvetica, Arial, sans-serif" font-size="20">Prooflane separates public evidence from</text>
+  <text x="96" y="164" fill="#95B9CE" font-family="Helvetica, Arial, sans-serif" font-size="20">private runtime artifacts on purpose.</text>
+  <rect x="120" y="210" width="1200" height="530" rx="34" fill="#0E2435" stroke="#254C64"/>
+
+  <rect x="172" y="268" width="1096" height="94" rx="24" fill="#12324A"/>
+  <text x="218" y="320" fill="#18D2C3" font-family="Helvetica, Arial, sans-serif" font-size="30" font-weight="700">1. Product story</text>
+  <text x="218" y="348" fill="#EAF6FF" font-family="Helvetica, Arial, sans-serif" font-size="18">README, get-started, FAQ, and the first-look path</text>
+
+  <rect x="172" y="390" width="1096" height="94" rx="24" fill="#113047"/>
+  <text x="218" y="442" fill="#FF8A00" font-family="Helvetica, Arial, sans-serif" font-size="30" font-weight="700">2. Contract truth</text>
+  <text x="218" y="470" fill="#EAF6FF" font-family="Helvetica, Arial, sans-serif" font-size="18">Architecture, API, CI governance, and public-boundary docs</text>
+
+  <rect x="172" y="512" width="1096" height="94" rx="24" fill="#102C42"/>
+  <text x="218" y="564" fill="#FFD166" font-family="Helvetica, Arial, sans-serif" font-size="28" font-weight="700">3. Public-safe artifacts</text>
+  <text x="218" y="592" fill="#EAF6FF" font-family="Helvetica, Arial, sans-serif" font-size="18">Allowlisted reports, release notes, changelog, discussions, and samples</text>
+
+  <rect x="172" y="634" width="1096" height="94" rx="24" fill="#0B1A27" stroke="#425C6D" stroke-dasharray="14 12"/>
+  <text x="218" y="686" fill="#9AAFC0" font-family="Helvetica, Arial, sans-serif" font-size="28" font-weight="700">Private-only by default</text>
+  <text x="218" y="714" fill="#C8D7E2" font-family="Helvetica, Arial, sans-serif" font-size="18">Failure bundles, broad artifacts, logs, and sensitive runtime evidence</text>
+</svg>

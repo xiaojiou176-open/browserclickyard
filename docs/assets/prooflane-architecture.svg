@@ -1,0 +1,28 @@
+<svg width="1440" height="860" viewBox="0 0 1440 860" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1440" height="860" rx="28" fill="#081723"/>
+  <text x="88" y="92" fill="#F8FBFF" font-family="Helvetica, Arial, sans-serif" font-size="48" font-weight="700">Prooflane architecture at a glance</text>
+  <text x="88" y="134" fill="#94B9CE" font-family="Helvetica, Arial, sans-serif" font-size="24">One product surface, one control plane, one orchestrator path, one proof lane.</text>
+  <rect x="92" y="214" width="1256" height="566" rx="32" fill="#0E2334" stroke="#244B63"/>
+  <rect x="132" y="272" width="300" height="176" rx="26" fill="#102A40"/>
+  <text x="164" y="332" fill="#18D2C3" font-family="Helvetica, Arial, sans-serif" font-size="26" font-weight="700">Command Center</text>
+  <text x="164" y="374" fill="#EAF6FF" font-family="Helvetica, Arial, sans-serif" font-size="22">apps/command-center</text>
+  <text x="164" y="414" fill="#90B3C8" font-family="Helvetica, Arial, sans-serif" font-size="20">Operator UI for tasks, runs,</text>
+  <text x="164" y="442" fill="#90B3C8" font-family="Helvetica, Arial, sans-serif" font-size="20">evidence review, and status.</text>
+  <rect x="570" y="232" width="300" height="228" rx="26" fill="#102A40"/>
+  <text x="604" y="300" fill="#FF8A00" font-family="Helvetica, Arial, sans-serif" font-size="26" font-weight="700">FastAPI control plane</text>
+  <text x="604" y="342" fill="#EAF6FF" font-family="Helvetica, Arial, sans-serif" font-size="22">services/api</text>
+  <text x="604" y="382" fill="#90B3C8" font-family="Helvetica, Arial, sans-serif" font-size="20">Governance, auth, run state,</text>
+  <text x="604" y="410" fill="#90B3C8" font-family="Helvetica, Arial, sans-serif" font-size="20">automation services, API.</text>
+  <rect x="1008" y="272" width="300" height="176" rx="26" fill="#102A40"/>
+  <text x="1040" y="332" fill="#FFD166" font-family="Helvetica, Arial, sans-serif" font-size="26" font-weight="700">MCP boundary</text>
+  <text x="1040" y="374" fill="#EAF6FF" font-family="Helvetica, Arial, sans-serif" font-size="22">services/mcp-server</text>
+  <text x="1040" y="414" fill="#90B3C8" font-family="Helvetica, Arial, sans-serif" font-size="20">Governed tool exposure over</text>
+  <text x="1040" y="442" fill="#90B3C8" font-family="Helvetica, Arial, sans-serif" font-size="20">the same runtime.</text>
+  <rect x="364" y="552" width="712" height="164" rx="26" fill="#0C2030"/>
+  <text x="402" y="612" fill="#18D2C3" font-family="Helvetica, Arial, sans-serif" font-size="28" font-weight="700">Orchestrator-first run path</text>
+  <text x="402" y="654" fill="#EAF6FF" font-family="Helvetica, Arial, sans-serif" font-size="24">Flow -&gt; Template -&gt; Run</text>
+  <text x="402" y="694" fill="#90B3C8" font-family="Helvetica, Arial, sans-serif" font-size="20">pnpm uiq &lt;command&gt; writes manifest, summary, diagnostics, and evidence indexes.</text>
+  <path d="M432 360H570" stroke="#18D2C3" stroke-width="10" stroke-linecap="round"/>
+  <path d="M870 360H1008" stroke="#FF8A00" stroke-width="10" stroke-linecap="round"/>
+  <path d="M720 460V552" stroke="#FFD166" stroke-width="10" stroke-linecap="round"/>
+</svg>

@@ -1,0 +1,35 @@
+<svg width="1280" height="640" viewBox="0 0 1280 640" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="92" y1="48" x2="1184" y2="598" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#071726"/>
+      <stop offset="0.55" stop-color="#0B3046"/>
+      <stop offset="1" stop-color="#134D69"/>
+    </linearGradient>
+    <linearGradient id="cardGlow" x1="780" y1="156" x2="1148" y2="448" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#15364E"/>
+      <stop offset="1" stop-color="#0C1A28"/>
+    </linearGradient>
+  </defs>
+  <rect width="1280" height="640" fill="url(#bg)"/>
+  <circle cx="1114" cy="108" r="144" fill="#18D2C3" fill-opacity="0.09"/>
+  <circle cx="132" cy="604" r="238" fill="#FF8A00" fill-opacity="0.10"/>
+  <text x="108" y="112" fill="#D9FBFF" font-family="Helvetica, Arial, sans-serif" font-size="24" font-weight="700" letter-spacing="2">PROOFLANE</text>
+  <text x="108" y="208" fill="#F8FBFF" font-family="Helvetica, Arial, sans-serif" font-size="48" font-weight="700">AI-native WebUI</text>
+  <text x="108" y="266" fill="#F8FBFF" font-family="Helvetica, Arial, sans-serif" font-size="48" font-weight="700">stress lab</text>
+  <text x="108" y="338" fill="#A6C8DA" font-family="Helvetica, Arial, sans-serif" font-size="22">Run browser experiments first,</text>
+  <text x="108" y="372" fill="#A6C8DA" font-family="Helvetica, Arial, sans-serif" font-size="22">then open proof, AI summaries,</text>
+  <text x="108" y="406" fill="#A6C8DA" font-family="Helvetica, Arial, sans-serif" font-size="22">and agent-ready workflows only when you need them.</text>
+  <rect x="780" y="156" width="360" height="296" rx="30" fill="url(#cardGlow)" stroke="#335C74"/>
+  <text x="816" y="216" fill="#18D2C3" font-family="Helvetica, Arial, sans-serif" font-size="18" font-weight="700" letter-spacing="1.4">STRESS LAB</text>
+  <rect x="816" y="246" width="244" height="16" rx="8" fill="#DDFBFF"/>
+  <rect x="816" y="278" width="206" height="12" rx="6" fill="#89AEC4"/>
+  <rect x="816" y="302" width="222" height="12" rx="6" fill="#89AEC4"/>
+  <rect x="816" y="338" width="92" height="60" rx="18" fill="#14354D"/>
+  <rect x="924" y="338" width="92" height="60" rx="18" fill="#14354D"/>
+  <rect x="1032" y="338" width="72" height="60" rx="18" fill="#14354D"/>
+  <text x="834" y="375" fill="#F8FBFF" font-family="Helvetica, Arial, sans-serif" font-size="18" font-weight="700">Target</text>
+  <text x="939" y="375" fill="#F8FBFF" font-family="Helvetica, Arial, sans-serif" font-size="18" font-weight="700">Result</text>
+  <text x="1037" y="375" fill="#F8FBFF" font-family="Helvetica, Arial, sans-serif" font-size="18" font-weight="700">Review</text>
+  <rect x="816" y="426" width="126" height="14" rx="7" fill="#FF8A00"/>
+  <rect x="958" y="426" width="146" height="14" rx="7" fill="#18D2C3"/>
+</svg>

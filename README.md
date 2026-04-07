@@ -1,0 +1,342 @@
+# Prooflane
+
+> An AI-native WebUI stress lab for localhost-first browser experiments, with
+> governed proof and agent-ready workflows when results need deeper review.
+
+[Start with results](./docs/get-started.md) ·
+[Guided demo](./docs/examples/public-stress-lab-guided-demo.md) ·
+[Agent review loop](./docs/how-to/mcp-agent-review-loop.md) ·
+[Why Prooflane](./docs/why-prooflane.md) ·
+[Proof center](./docs/proof-center.md) ·
+[Public proof sample](./docs/examples/public-proof-sample/README.md) ·
+[First public release notes](./docs/releases/v0.1.0-public-launch.md) ·
+[Historical closure snapshot](./docs/releases/v0.1.0-public-closure.md) ·
+[FAQ](./docs/faq.md) ·
+[Docs](./docs/index.md) ·
+[Releases](https://github.com/xiaojiou176-open/ui-automation-control-plane/releases) ·
+[Discussions](https://github.com/xiaojiou176-open/ui-automation-control-plane/discussions)
+
+![Prooflane studio preview card](./docs/assets/prooflane-studio-preview.svg)
+
+## Product In Three Layers
+
+Use this shortcut if you want the product category, the heat hook, and the
+ outcome in one glance.
+
+| Layer | Phrase | What it means |
+| --- | --- | --- |
+| Category | **AI-native WebUI stress lab** | Start from a target URL and run browser experiments without stitching together ad hoc scripts and CI fragments. |
+| Heat hook | **MCP server for Codex, Claude Code, and other MCP-capable clients** | Prooflane exposes read-mostly MCP tools/resources that those clients can call; this is MCP compatibility and discoverability wording, not a partnership claim. |
+| Result word | **Readable result path** | Read a release brief, similar failures, report paths, and manual-gate context from the same runtime before you escalate. |
+
+## New Here?
+
+Choose the path that matches how much effort you want to spend before you know
+whether Prooflane is for you.
+
+- **No local setup yet?** Open the
+  [public-safe guided demo](./docs/examples/public-stress-lab-guided-demo.md).
+- **Want to see the real shell locally?** Go to
+  [docs/get-started.md](./docs/get-started.md).
+- **Want the deeper governed layer?** Use
+  [docs/proof-center.md](./docs/proof-center.md) and
+  [docs/mcp.md](./docs/mcp.md).
+- **Want the MCP-capable client path?** Start with
+  [docs/how-to/mcp-agent-review-loop.md](./docs/how-to/mcp-agent-review-loop.md).
+
+## First Practical Win
+
+Choose the shortest path that matches the lab result you want first by jumping
+straight to **Start With Results**:
+
+- See the localhost-first stress-lab entry in one place
+- Copy-paste the exact commands without scanning the whole README
+- Confirm what you should expect when each path works before you open advanced review
+
+See: [Start with results](./docs/get-started.md).
+
+![Prooflane Command Center running locally with Stress Lab, Runs and Blocks, Flow Studio, and Advanced Review available in the operator shell. This is a maintainer-local product view, not a hosted public demo or proof of live GitHub settings.](./docs/assets/prooflane-command-center-real.png)
+
+## 30-Second First Look
+
+If you want the fastest visible result, start the local stress-lab shell
+first. This is the quickest way to confirm that the Command Center and API boot
+on your machine after setup. It is not the same thing as producing governed run
+proof.
+
+```bash
+./scripts/dev-up.sh
+```
+
+If this is your first time in a fresh checkout, bootstrap once and then launch:
+
+```bash
+./scripts/setup.sh && ./scripts/dev-up.sh
+```
+
+What you should see:
+
+- The Command Center on `http://127.0.0.1:17373`
+- API health on `http://127.0.0.1:17380/health/`
+- A live Stress Lab surface with URL-first parameters, lab-mode guidance, Runs & Blocks, and Advanced Review instead of a static docs-only experience
+
+The screenshot above is a real local run of the current English product
+surface. It is a maintainer-local product view, not a hosted public demo or a
+claim about live GitHub settings. A governed run is a separate step and
+requires a valid `GEMINI_API_KEY`.
+Current GitHub-side metadata and remote enforcement remain audit-backed states.
+Use [docs/reference/public-readiness.md](./docs/reference/public-readiness.md)
+and the latest audit artifacts for current remote truth instead of treating
+the historical closure snapshot as live GitHub proof.
+
+![Prooflane hero showing an AI-native WebUI stress lab with target-first entry, result reading, and optional governed review.](./docs/assets/prooflane-hero.svg)
+
+## What Prooflane Gives You Right Now
+
+Prooflane takes browser automation out of the "test folder plus tribal
+knowledge" trap and turns it into an **AI-native WebUI stress lab** with a
+governed deep-review layer behind it.
+
+- Start from a target URL, choose a lab mode, and run browser experiments
+  without stitching together local scripts, CI fragments, and hidden debug
+  artifacts.
+- Check reusable journey target fit before you launch, so a saved template does
+  not silently drift onto the wrong target family.
+- Read the latest result, failures, waiting states, and screenshots from one
+  operator surface instead of hunting through logs and test outputs.
+- Use the Runs & Blocks report surface to jump from the latest run into summary
+  and lens-specific artifact paths, and treat the Manual Gate inbox as the
+  operator queue for paused runs.
+- Switch the operator shell guidance between **English** and **简体中文**
+  without changing command ids, artifact paths, or MCP/API contracts.
+- Escalate into proof campaigns, AI findings, and governed comparison only when
+  the experiment result needs deeper review.
+- Read grouped AI findings in Advanced Review by severity and finding family,
+  not as one flat pile of review output.
+- Use the cross-target feasibility advisor when a reusable journey needs to
+  move across target families, so migration hints stay attached to the same
+  governed review surface.
+- Copy an **agent handoff prompt** from Advanced Review when you want Codex,
+  Claude Code, or another MCP-capable client to continue the same governed
+  follow-up without rebuilding the run context by hand.
+- Switch key shell guidance between English and Simplified Chinese when you
+  want the main navigation, onboarding, and help surfaces to match the
+  operator's preferred reading language.
+- Connect Codex, Claude Code, or another MCP-capable client to the same deeper
+  layer through release-brief, similar-failure, feasibility, and manual-gate
+  read surfaces instead of a generic chat wrapper.
+- Keep AI and MCP as amplifiers over the same runtime instead of inventing a
+  second truth surface.
+- Reuse the same substrate for exploration, stress, performance, resilience,
+  visual, and accessibility work.
+
+## Product Map
+
+This is the shortest way to understand how the layers fit together without
+turning the homepage into a slogan pileup.
+
+| Layer | What it means |
+| --- | --- |
+| Main product | Prooflane is an **AI-native WebUI stress lab** for localhost-first browser experiments. |
+| First-use path | Start with a target, choose a lab mode, read the latest result, then refine or compare. |
+| AI layer | AI writes briefs, summarizes findings, and suggests next checks after a result exists. |
+| MCP layer | MCP gives coding agents and operator copilots access to the same runtime and governed read surfaces through a real MCP server, not a fake chat wrapper. |
+| Proof / review layer | Governed proof and `Advanced Review` are the deeper layer for comparison, audits, and handoff. |
+
+## Bilingual Shell
+
+The Command Center now keeps the same operator path available in **English**
+and **简体中文** for the highest-traffic shell guidance.
+
+- Use the language toggle in the header when you want bilingual navigation,
+  onboarding, review framing, parameter guidance, and operator feedback chrome.
+- Command ids, artifact paths, MCP tool ids, and API routes stay stable across
+  both languages.
+- Detailed runtime diagnostics remain English-first today, so operators and
+  agent logs keep one contract while the shell guidance becomes easier to scan.
+- Advanced Review also drafts a copy-ready agent handoff prompt, so bilingual
+  operators can switch shell guidance language without changing the underlying
+  Codex / Claude Code / MCP workflow contract.
+- Flow Studio, confirmation dialogs, toasts, and the latest operator shell
+  feedback now follow the same bilingual shell layer instead of dropping back
+  to English-only chrome at the edges.
+
+## Start With Results
+
+Choose the path that matches the result you want first. Governance and deep
+references come after the first visible win.
+
+| I want to... | Run this | What you get |
+| --- | --- | --- |
+| Understand the product without local setup | Open [the guided demo](./docs/examples/public-stress-lab-guided-demo.md) | A public-safe walkthrough of the target -> experiment -> result -> advanced-review path |
+| See the stress-lab shell fast | `./scripts/dev-up.sh` | Command Center on `http://127.0.0.1:17373`, API health on `http://127.0.0.1:17380/health/`, and a live Stress Lab surface when dependencies are already installed |
+| Bootstrap then open the stress lab | `./scripts/setup.sh && ./scripts/dev-up.sh` | The same stress-lab surface, plus local dependencies and Playwright installed for a fresh checkout |
+| Run a localhost-first governed experiment | `GEMINI_API_KEY=<your-key> pnpm uiq run --profile deep-localhost --target web.any-localhost --base-url http://127.0.0.1:3000` | A governed run for a localhost WebUI that writes `manifest.json`, `reports/summary.json`, diagnostics indexes, and evidence indexes under `.runtime-cache/artifacts/runs/<runId>/` |
+| Connect the platform through MCP | `pnpm mcp:start` | The core Prooflane tool surface for MCP-capable clients |
+
+For a step-by-step path, go to [docs/get-started.md](./docs/get-started.md).
+
+## Current Route B Boundary
+
+Prooflane is now deliberately telling the **stress-lab-first** story at the
+front door, but the current MVP is still **localhost-first / governed-target
+first**.
+
+- `web.any-localhost` is the current honest “any WebUI” bridge for local apps.
+- `--base-url` is guarded to `localhost`, `127.0.0.1`, or `::1` unless a
+  target explicitly allowlists something broader.
+- Advanced Review, proof campaigns, AI summaries, and MCP remain available, but
+  they are the deeper layer after the first experiment result exists.
+
+## Run Lanes At A Glance
+
+Not every surface that says "run" means the same thing.
+
+| Surface | What it is for | Primary truth / output |
+| --- | --- | --- |
+| `./scripts/dev-up.sh` | Boot the local product UI + API | `.runtime-cache/dev/*`, local logs, local health surfaces |
+| `POST /api/runs` | Create a workflow run from saved templates in the operator product | Universal workflow ledger (`Session -> Flow -> Template -> Run`) |
+| `POST /api/automation/run` | Queue an allowlisted automation command such as `script-pipeline-capture` or `script-pipeline-full` | `AutomationTask` ledger |
+| `pnpm uiq run --profile ... --target ...` | Produce governed experiment evidence and deeper proof | `.runtime-cache/artifacts/runs/<runId>/manifest.json` and related reports |
+| `pnpm mcp:start` | Expose the API + governed proof surfaces to MCP clients | Reuses the same API and governed artifact bundle contracts |
+
+The canonical run-lane contract lives in
+[docs/architecture.md](./docs/architecture.md). Read that contract before
+treating `/api/runs`, `/api/automation/run`, and `pnpm uiq run` as
+interchangeable.
+
+## One Stress-Lab Journey
+
+If you are new to the product surface, this is the shortest mental model:
+
+1. **Start in Stress Lab** when you want to point the system at a WebUI and
+   choose the kind of experiment to run.
+2. **Move to Runs & Blocks** when you need to inspect the latest outcome,
+   follow execution, or clear a manual gate.
+3. **Open Flow Studio** when the result tells you the journey itself needs to
+   be refined.
+4. **Open Advanced Review** only when you already have a meaningful result and
+   need governed comparison, AI summaries, or proof bundles.
+
+Think of these pages as **start**, **read**, **refine**, and **deep-compare**.
+They are related, but they are not interchangeable truth surfaces.
+
+![Prooflane result path diagram showing the local first-look path, the governed run path, and the MCP connection route.](./docs/assets/prooflane-result-path.svg)
+
+## Why Teams Reach For Prooflane
+
+### 1. It starts from the WebUI you care about
+
+Prooflane does not start with a governance board. It starts with the target URL
+and the experiment question: explore, load, perf, chaos, visual, or
+accessibility.
+
+### 2. It keeps results readable before it asks for deeper proof
+
+The operator shell is being realigned so you can read the latest experiment
+result first, then decide whether you need Flow Studio or Advanced Review.
+
+### 3. It still preserves governed depth when you need it
+
+Proof bundles, AI summaries, manual-gate tooling, and MCP do not disappear in
+Route B. They move behind the lab result as the deeper layer for comparison,
+handoff, and governance.
+
+## Why Prooflane Instead Of The Usual Alternatives
+
+| Option | Good at | What breaks down | Why Prooflane is different |
+| --- | --- | --- | --- |
+| Raw Playwright scripts | Fast local experiments | Ownership, visibility, reusable proof, and repeatable result reading | Prooflane adds a stress-lab shell, governed run bundles, and deeper review surfaces |
+| CI-only quality gates | Hard blocking checks | Weak operator context and weak debugging ergonomics | Prooflane connects failures back to experiment results, diagnostics, and governed proof |
+| Synthetic monitoring or perf-only tools | One slice of the browser story | Weak coverage across interaction, chaos, visual, and accessibility signals | Prooflane keeps multiple browser lab modes on one substrate |
+
+See the longer positioning note in [docs/why-prooflane.md](./docs/why-prooflane.md).
+
+## Public Proof, Not Vibes
+
+We want the public repo to show more than opinions. The public story has one
+public-safe sample surface and a set of contracts around it:
+
+- [docs/proof-center.md](./docs/proof-center.md): the public proof map, the
+  single public-safe proof sample, and the boundary between public-safe and
+  private-only evidence
+- [docs/architecture.md](./docs/architecture.md): canonical architecture and
+  primary execution path
+- [docs/reference/ci-governance.md](./docs/reference/ci-governance.md):
+  required CI topology and thresholds
+- [docs/reference/public-readiness.md](./docs/reference/public-readiness.md):
+  public boundary stance
+- [CHANGELOG.md](./CHANGELOG.md): current shipping history
+- [docs/releases/v0.1.0-public-launch.md](./docs/releases/v0.1.0-public-launch.md):
+  first public release notes
+- [docs/releases/v0.1.0-public-closure.md](./docs/releases/v0.1.0-public-closure.md):
+  closure record for the first public Prooflane surface
+
+In this repo, **proof** means governed evidence that can be revisited later. It
+does **not** mean every operator panel, log line, or local screenshot. The
+Command Center helps you work with runs, but the governed proof lane is still
+the source of release-grade evidence.
+
+If you want a no-setup walkthrough of this exact layering, start with the
+[public-safe guided demo](./docs/examples/public-stress-lab-guided-demo.md).
+
+Mock-backed usability studies stay out of the public-proof lane. They are
+internal design evidence, not public proof.
+
+![Prooflane architecture map showing the Command Center, FastAPI control plane, orchestrator path, MCP boundary, and run evidence.](./docs/assets/prooflane-architecture.svg)
+
+## Why Star Prooflane Now
+
+Star the repo if you want a front-row seat to the public build-out of:
+
+- An AI-native WebUI stress lab, not just another test helper
+- Public proof surfaces that make experiment results and governed review easier
+  to trust
+- MCP-native operator workflows for browser testing and deeper comparison
+- A stronger open workflow around releases, discussions, proof publishing, and
+  differentiated docs
+
+Starring now is useful if you care about where browser automation is heading,
+even before you adopt the full stack in production.
+
+## Docs By Depth
+
+| If you want... | Start here |
+| --- | --- |
+| The fastest first win | [docs/get-started.md](./docs/get-started.md) |
+| The testing pyramid and coverage map | [docs/reference/testing-strategy.md](./docs/reference/testing-strategy.md) |
+| The product story and differentiation | [docs/why-prooflane.md](./docs/why-prooflane.md) |
+| Public evidence and boundary rules | [docs/proof-center.md](./docs/proof-center.md) |
+| The first public release story | [docs/releases/v0.1.0-public-launch.md](./docs/releases/v0.1.0-public-launch.md) |
+| A map of the documentation stack | [docs/index.md](./docs/index.md) |
+| Runtime, contracts, and architecture truth | [docs/architecture.md](./docs/architecture.md) |
+| MCP usage | [docs/how-to/mcp-quickstart-1pager.md](./docs/how-to/mcp-quickstart-1pager.md) |
+
+## Public Boundary
+
+Prooflane is public, but broad runtime evidence and failure bundles remain
+private-only by default unless a path is explicitly allowlisted as public-safe.
+
+- Public boundary: [docs/reference/public-readiness.md](./docs/reference/public-readiness.md)
+- Public artifact policy:
+  [docs/reference/public-artifact-policy.md](./docs/reference/public-artifact-policy.md)
+- CI and branch-protection truth:
+  [docs/reference/ci-governance.md](./docs/reference/ci-governance.md)
+- GitHub-side metadata such as homepage, topics, social preview, and security
+  settings stay audit-backed and should be verified through the latest
+  public-surface or branch-protection audit artifacts instead of repo prose
+- Secret-backed live, desktop, and privileged governance workflows stay on
+  GitHub-hosted runners and bind the `owner-approved-sensitive` protected
+  environment instead of relying on any shared maintainer runner pool
+
+## Stack
+
+- Python = 3.12.x
+- Node.js = `20.x`
+- pnpm = `10.22.0`
+- Product UI: `apps/command-center/`
+- API control plane: `services/api/`
+- Orchestrator entry: `pnpm uiq <command>`
+- MCP adapter: `services/mcp-server/`
+- Canonical architecture:
+  [docs/architecture.md](./docs/architecture.md)
