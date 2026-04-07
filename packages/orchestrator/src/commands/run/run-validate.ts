@@ -43,7 +43,6 @@ import type { ProfileConfig, TargetConfig } from "./run-types.js";
 const FALLBACK_PROFILE_NAMES = [
   "pr",
   "nightly",
-  "weekly",
   "tauri.smoke",
   "swift.smoke",
   "tauri.soak",

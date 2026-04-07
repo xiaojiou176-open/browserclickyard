@@ -9,9 +9,9 @@ summary.
 Rendered from multiple tracked sources:
 
 - Primary topology source: `configs/governance/ci-governance.yaml`
-- Threshold sources: `configs/profiles/pr.yaml`, `configs/profiles/nightly.yaml`, `configs/profiles/weekly.yaml`
+- Threshold sources: `configs/profiles/pr.yaml`, `configs/profiles/nightly.yaml`
 - This page is a generated reference, not the canonical place to hand-edit CI facts.
-- Nightly/weekly required rows describe deterministic core only; Gemini, live external, AI review, mutation, and privileged audits must stay in optional or manual sections below.
+- Nightly required rows describe deterministic core only; live external, mutation, AI review, and other privileged observability checks stay in manual-only sections below.
 
 ## Aggregate Checks
 
@@ -20,7 +20,6 @@ Rendered from multiple tracked sources:
 | ci | `.github/workflows/ci.yml` | `required_ci_gate` | 1 | `ci-quick-gate` |
 | pr | `.github/workflows/pr.yml` | `pr_required_gate` | 1 | `pr-quick-gate` |
 | nightly | `.github/workflows/nightly.yml` | _single required job_ | 1 | `nightly-gate` |
-| weekly | `.github/workflows/weekly.yml` | _single required job_ | 1 | `weekly-gate` |
 
 ## Optional Jobs
 
@@ -29,14 +28,12 @@ Rendered from multiple tracked sources:
 | ci | `.github/workflows/ci.yml` | _none_ |
 | pr | `.github/workflows/pr.yml` | _none_ |
 | nightly | `.github/workflows/nightly.yml` | _none_ |
-| weekly | `.github/workflows/weekly.yml` | _none_ |
 
 ## Manual Dispatch Jobs
 
 | Scope | Workflow | workflow_dispatch-only Jobs |
 | --- | --- | --- |
 | nightly | `.github/workflows/nightly.yml` | `nightly-manual-observability` |
-| weekly | `.github/workflows/weekly.yml` | `weekly-manual-observability` |
 
 ## Branch Protection Policy
 
@@ -58,36 +55,34 @@ Rendered from multiple tracked sources:
 - ci: `hard_fail`
 - pr: `hard_fail`
 - nightly: `hard_fail`
-- weekly: `hard_fail`
 
 ## Allowed Informational Continue-on-error Steps
 
 | Workflow | Job | Step Names |
 | --- | --- | --- |
-| `.github/workflows/weekly.yml` | `weekly-manual-observability` | `Generate Release Notes (non-blocking)`, `Upload Release Notes Artifact (non-blocking)` |
+| _none_ | _none_ | _none_ |
 
 ## Deterministic Core Entry Points
 
 | Scope | Script Entry Point |
 | --- | --- |
 | nightly | `scripts/ci/run-nightly-deterministic-core.sh` |
-| weekly | `scripts/ci/run-weekly-deterministic-core.sh` |
 
 ## Threshold Summary
 
-| Threshold Key | pr | nightly | weekly |
-| --- | --- | --- | --- |
-| `consoleErrorMax` | `0` | `0` | `0` |
-| `pageErrorMax` | `0` | `0` | `0` |
-| `http5xxMax` | `0` | `0` | `1` |
-| `contractStatus` | `passed` | `passed` | `n/a` |
-| `dangerousActionHitsMax` | `n/a` | `n/a` | `n/a` |
-| `securityHighVulnMax` | `n/a` | `n/a` | `0` |
-| `a11ySeriousMax` | `0` | `0` | `0` |
-| `perfLcpMsMax` | `4000` | `5000` | `5000` |
-| `perfFcpMsMax` | `2500` | `3000` | `3000` |
-| `visualDiffPixelsMax` | `300` | `0` | `0` |
-| `loadFailedRequestsMax` | `n/a` | `n/a` | `0` |
-| `loadP95MsMax` | `n/a` | `n/a` | `250` |
-| `loadRpsMin` | `n/a` | `n/a` | `10` |
+| Threshold Key | pr | nightly |
+| --- | --- | --- |
+| `consoleErrorMax` | `0` | `0` |
+| `pageErrorMax` | `0` | `0` |
+| `http5xxMax` | `0` | `0` |
+| `contractStatus` | `passed` | `passed` |
+| `dangerousActionHitsMax` | `n/a` | `n/a` |
+| `securityHighVulnMax` | `n/a` | `0` |
+| `a11ySeriousMax` | `0` | `0` |
+| `perfLcpMsMax` | `4000` | `5000` |
+| `perfFcpMsMax` | `2500` | `3000` |
+| `visualDiffPixelsMax` | `300` | `0` |
+| `loadFailedRequestsMax` | `n/a` | `0` |
+| `loadP95MsMax` | `n/a` | `250` |
+| `loadRpsMin` | `n/a` | `10` |
 

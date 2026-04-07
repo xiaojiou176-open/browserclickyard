@@ -637,7 +637,7 @@ async function main(): Promise<void> {
 
   if (args.command === "load") {
     validateRunOverrides(args);
-    const profile = loadProfileConfig(args.profile ?? "weekly");
+    const profile = loadProfileConfig(args.profile ?? "nightly");
     const target = loadTargetConfig(args.target ?? "web.local");
     const effectiveBaseUrl = args.baseUrl ?? target.baseUrl;
     if (!effectiveBaseUrl) {
@@ -658,7 +658,7 @@ async function main(): Promise<void> {
   }
 
   if (args.command === "security") {
-    const profile = loadProfileConfig(args.profile ?? "weekly");
+    const profile = loadProfileConfig(args.profile ?? "nightly");
     const target = loadTargetConfig(args.target ?? "web.local");
     const _result = runSecurity(baseDir, resolveSecurityConfig(target, profile));
     return;

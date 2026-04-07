@@ -22,10 +22,13 @@ platform with a public code boundary and private-by-default runtime evidence.
 
 ## Gate Commands
 
-- `bash scripts/docs-gate.sh`
-- `bash scripts/lint-all.sh`
-- `bash scripts/test-matrix.sh`
-- `bash scripts/verify-all.sh`
+- `pnpm gate:repo:fast`
+- `pnpm test:matrix`
+- `pnpm verify:all`
+- `pnpm prepush:quality-gate`
+- `pnpm test:matrix:full`
+- `pnpm verify:all:parity`
+- `pnpm prepush:quality-gate:parity`
 
 ## Execution Notes
 

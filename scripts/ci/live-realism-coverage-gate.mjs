@@ -293,22 +293,10 @@ function main() {
     "run_manual_observability",
     failures,
   );
-  validateManualObservability(
-    ".github/workflows/weekly.yml",
-    "weekly-manual-observability",
-    "run_manual_observability",
-    failures,
-  );
   validateDeterministicNightlyWeekly(
     ".github/workflows/nightly.yml",
     "nightly-gate",
     ["desktop-regression-macos"],
-    failures,
-  );
-  validateDeterministicNightlyWeekly(
-    ".github/workflows/weekly.yml",
-    "weekly-gate",
-    ["weekly-manual-branch-protection-audit", "desktop-regression-macos"],
     failures,
   );
   validateBranchProtectionAudit(failures);

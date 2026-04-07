@@ -173,12 +173,12 @@ systems:
       - packages/orchestrator
       - scripts/thirdparty
     validation_commands:
-      - pnpm uiq engines:check --profile weekly
-    validation_profile: weekly
+      - pnpm uiq engines:check --profile nightly
+    validation_profile: nightly
     ci_mapping:
-      required_gate: weekly-gate
-      workflow: .github/workflows/weekly.yml
-    upgrade_trigger: weekly performance audit or CI image refresh
+      required_gate: nightly-gate
+      workflow: .github/workflows/nightly.yml
+    upgrade_trigger: nightly performance audit or CI image refresh
     rollback_path: pin CI image/toolchain back to previous known-good revision
     failure_attribution: repo engine orchestration vs host-managed k6 binary availability
     provenance: host managed binary delivered via CI/browser runtime image
@@ -203,12 +203,12 @@ systems:
       - packages/orchestrator
       - scripts/ci
     validation_commands:
-      - pnpm uiq engines:check --profile weekly
-    validation_profile: weekly
+      - pnpm uiq engines:check --profile nightly
+    validation_profile: nightly
     ci_mapping:
-      required_gate: weekly-gate
-      workflow: .github/workflows/weekly.yml
-    upgrade_trigger: weekly security audit or CI image refresh
+      required_gate: nightly-gate
+      workflow: .github/workflows/nightly.yml
+    upgrade_trigger: nightly security audit or CI image refresh
     rollback_path: pin CI image/toolchain back to previous known-good revision
     failure_attribution: repo security orchestration vs host-managed semgrep availability
     provenance: host managed binary delivered via CI/browser runtime image
@@ -295,10 +295,10 @@ systems:
       - automation
     validation_commands:
       - pnpm run automation:har:k6 -- --help
-    validation_profile: weekly
+    validation_profile: nightly
     ci_mapping:
-      required_gate: weekly-gate
-      workflow: .github/workflows/weekly.yml
+      required_gate: nightly-gate
+      workflow: .github/workflows/nightly.yml
     upgrade_trigger: wrapper contract change or load-conversion regression
     rollback_path: revert wrapper dependency/version and rerun help smoke
     failure_attribution: local wrapper contract vs har-to-k6 CLI behavior
@@ -326,10 +326,10 @@ systems:
       - packages/orchestrator
     validation_commands:
       - pnpm test:packages:runtime-target-macos
-    validation_profile: weekly
+    validation_profile: nightly
     ci_mapping:
-      required_gate: weekly-gate
-      workflow: .github/workflows/weekly.yml
+      required_gate: nightly-gate
+      workflow: .github/workflows/nightly.yml
     upgrade_trigger: desktop target contract change or desktop smoke regression
     rollback_path: revert runtime target change and rerun macOS runtime target tests
     failure_attribution: repo desktop target glue vs host managed Tauri runtime availability
@@ -357,10 +357,10 @@ systems:
       - packages/orchestrator
     validation_commands:
       - pnpm test:packages:runtime-target-macos
-    validation_profile: weekly
+    validation_profile: nightly
     ci_mapping:
-      required_gate: weekly-gate
-      workflow: .github/workflows/weekly.yml
+      required_gate: nightly-gate
+      workflow: .github/workflows/nightly.yml
     upgrade_trigger: desktop target contract change or desktop E2E regression
     rollback_path: revert driver/runtime change and rerun macOS runtime target tests
     failure_attribution: repo desktop driver glue vs host managed Xcode/XCUITest runtime
@@ -386,7 +386,6 @@ systems:
       - .github/workflows/ci.yml
       - .github/workflows/pr.yml
       - .github/workflows/nightly.yml
-      - .github/workflows/weekly.yml
     validation_commands:
       - bash scripts/docs-gate.sh
     validation_profile: ci
@@ -446,7 +445,6 @@ systems:
     glue_layers:
       - .github/actions/failure-bundle/action.yml
       - .github/workflows/nightly.yml
-      - .github/workflows/weekly.yml
       - .github/workflows/pr.yml
     validation_commands:
       - bash scripts/docs-gate.sh

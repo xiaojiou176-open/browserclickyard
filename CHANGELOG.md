@@ -2,6 +2,19 @@
 
 ## Unreleased
 
+- Replaced the legacy weekly verification lane with a nightly-first contract,
+  made the fast/light local entrypoints explicit, and added cleanup coverage
+  for stale `.runtime-cache/container-runs` scratch bridges so the default
+  repo-side verification path now matches the current stress-lab-first closure
+  model.
+- Split the default local quality commands from their parity counterparts so
+  `pnpm test:matrix`, `pnpm verify:all`, and `pnpm prepush:quality-gate`
+  stay fast/light by default, while `:full` / `:parity` entrypoints remain the
+  explicit heavy path for closeout-grade revalidation.
+- Absorbed the current Dependabot dependency tail into the closeout line by
+  advancing the Vite baseline to `7.3.2`, refreshing the locked `mypy` line to
+  `1.20.0`, and closing the associated security/update drift on the canonical
+  shipping branch instead of leaving the PRs hanging.
 - Recovered the MCP core registry/redaction sources from accidental mutation
   residue, aligned the mutation sandbox to use repo-safe command and dependency
   inputs, and fixed the coverage gate so backend XML output paths remain stable

@@ -177,7 +177,7 @@ uiq_prepare_container_gate_dirs() {
   UIQ_CONTAINER_GATE_HOST_STATE_DIR="$UIQ_CONTAINER_GATE_HOST_RUN_DIR/state"
   # Keep runner-temp isolated per gate run, but outside the workspace bind mount,
   # so /workspace and /tmp/uiq-runner do not point at overlapping host paths.
-  UIQ_CONTAINER_GATE_HOST_RUNNER_TEMP_ROOT="$shared_runner_temp_root/container-runs/$gate_name/$run_id"
+  UIQ_CONTAINER_GATE_HOST_RUNNER_TEMP_ROOT="$shared_runner_temp_root/$gate_name/$run_id"
 
   UIQ_CONTAINER_GATE_CONTAINER_RUN_DIR="$UIQ_RUNTIME_CACHE_CONTAINER_ROOT/container-gates/$gate_name/$run_id"
   UIQ_CONTAINER_GATE_CONTAINER_LOG_DIR="$UIQ_CONTAINER_GATE_CONTAINER_RUN_DIR/logs"
@@ -223,7 +223,7 @@ uiq_cleanup_current_container_gate_bridge() {
 
 uiq_prune_expired_container_gate_history() {
   local gate_root="${UIQ_CONTAINER_GATE_HOST_ROOT:-$UIQ_RUNTIME_CACHE_HOST_ROOT/container-gates}"
-  local runner_root="${UIQ_HOST_RUNNER_TEMP_ROOT}/container-runs"
+  local runner_root="${UIQ_HOST_RUNNER_TEMP_ROOT}"
 
   python3 - "$gate_root" "$runner_root" "$UIQ_CONTAINER_GATE_TTL_HOURS" <<'PY'
 from __future__ import annotations

@@ -83,7 +83,7 @@ function renderAggregateRows(config) {
       `| ${scope} | \`${aggregate.workflow}\` | \`${aggregate.job}\` | ${requiredJobs.length} | ${renderList(requiredJobs)} |`,
     );
   }
-  for (const scope of ["nightly", "weekly"]) {
+  for (const scope of ["nightly"]) {
     const requiredJobs = config.required_jobs?.[scope] ?? [];
     const workflow = `.github/workflows/${scope}.yml`;
     rows.push(
@@ -95,7 +95,7 @@ function renderAggregateRows(config) {
 
 function renderOptionalRows(config) {
   const rows = [];
-  for (const scope of ["ci", "pr", "nightly", "weekly"]) {
+  for (const scope of ["ci", "pr", "nightly"]) {
     const item = config.optional_jobs?.[scope];
     rows.push(
       `| ${scope} | \`${item?.workflow ?? "n/a"}\` | ${renderList(item?.jobs ?? [])} |`,
@@ -106,7 +106,7 @@ function renderOptionalRows(config) {
 
 function renderManualDispatchRows(config) {
   const rows = [];
-  for (const scope of ["nightly", "weekly"]) {
+  for (const scope of ["nightly"]) {
     const item = config.manual_dispatch_jobs?.[scope];
     rows.push(
       `| ${scope} | \`${item?.workflow ?? `.github/workflows/${scope}.yml`}\` | ${renderList(item?.jobs ?? [])} |`,
@@ -135,7 +135,7 @@ function renderContinueOnErrorRows(config) {
 function renderDeterministicCoreRows(config) {
   const entrypoints = config.policy_flags?.deterministic_core_entrypoints ?? {};
   const rows = [];
-  for (const scope of ["nightly", "weekly"]) {
+  for (const scope of ["nightly"]) {
     rows.push(`| ${scope} | \`${entrypoints[scope] ?? "_none_"}\` |`);
   }
   return rows;
@@ -143,7 +143,7 @@ function renderDeterministicCoreRows(config) {
 
 function renderThresholdRows(thresholdsByProfile) {
   return THRESHOLD_KEYS.map((key) => {
-    return `| \`${key}\` | \`${thresholdsByProfile.pr[key]}\` | \`${thresholdsByProfile.nightly[key]}\` | \`${thresholdsByProfile.weekly[key]}\` |`;
+    return `| \`${key}\` | \`${thresholdsByProfile.pr[key]}\` | \`${thresholdsByProfile.nightly[key]}\` |`;
   });
 }
 
@@ -151,7 +151,6 @@ function renderDoc(config, configPath) {
   const thresholdsByProfile = {
     pr: getProfileThresholds("pr"),
     nightly: getProfileThresholds("nightly"),
-    weekly: getProfileThresholds("weekly"),
   };
 
   const lines = [];
@@ -166,9 +165,9 @@ function renderDoc(config, configPath) {
   lines.push("Rendered from multiple tracked sources:");
   lines.push("");
   lines.push(`- Primary topology source: \`${configPath}\``);
-  lines.push("- Threshold sources: `configs/profiles/pr.yaml`, `configs/profiles/nightly.yaml`, `configs/profiles/weekly.yaml`");
+  lines.push("- Threshold sources: `configs/profiles/pr.yaml`, `configs/profiles/nightly.yaml`");
   lines.push("- This page is a generated reference, not the canonical place to hand-edit CI facts.");
-  lines.push("- Nightly/weekly required rows describe deterministic core only; Gemini, live external, AI review, mutation, and privileged audits must stay in optional or manual sections below.");
+  lines.push("- Nightly required rows describe deterministic core only; live external, mutation, AI review, and other privileged observability checks stay in manual-only sections below.");
   lines.push("");
   lines.push("## Aggregate Checks");
   lines.push("");
@@ -228,8 +227,8 @@ function renderDoc(config, configPath) {
   lines.push("");
   lines.push("## Threshold Summary");
   lines.push("");
-  lines.push("| Threshold Key | pr | nightly | weekly |");
-  lines.push("| --- | --- | --- | --- |");
+  lines.push("| Threshold Key | pr | nightly |");
+  lines.push("| --- | --- | --- |");
   lines.push(...renderThresholdRows(thresholdsByProfile));
   lines.push("");
   return `${lines.join("\n")}\n`;

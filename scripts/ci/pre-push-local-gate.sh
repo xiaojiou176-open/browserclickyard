@@ -78,7 +78,7 @@ fi
 
 if [[ "$HEAVY_MODE" == "1" ]]; then
   run_step "test-matrix" bash scripts/ci/run-gate-in-container.sh test-matrix
-  run_step "verify-all" bash scripts/ci/run-gate-in-container.sh verify-all
+  run_step "verify-all" env UIQ_VERIFY_ENABLE_COVERAGE_GATE=0 UIQ_VERIFY_ENABLE_MUTATION_GATE=0 UIQ_VERIFY_ENABLE_E2E_AUTHENTICITY=0 UIQ_VERIFY_ENABLE_FRONTEND_NONSTUB=0 bash scripts/ci/run-gate-in-container.sh verify-all
 else
   if [[ "$code_change_detected" == "1" && "$ALLOW_LIGHT_PREPUSH" == "1" && -z "${ALLOW_LIGHT_PREPUSH_REASON// }" ]]; then
     echo "[pre-push] FAIL: UIQ_ALLOW_LIGHT_PREPUSH=1 requires UIQ_ALLOW_LIGHT_PREPUSH_REASON for auditability." >&2

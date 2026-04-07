@@ -54,8 +54,10 @@ behind the current space-governance contract.
   node_modules, Python env, and browser-cache roots immediately after the gate
   exits cleanly.
 - Successful container-gate runs must delete the current run's
-  `container-runs` bridge immediately; stale bridges and gate breadcrumbs age
-  out on the 3-day maintenance TTL.
+  `.runtime-cache/container-runs/<gate>/<run_id>` bridge immediately; stale
+  bridges and gate breadcrumbs age out on the 3-day maintenance TTL.
+- Docker-config staging under `.runtime-cache/container-runs/uiq-docker-config`
+  is also scratch and must not survive beyond the same maintenance window.
 
 ## Cleanup Boundary
 
@@ -68,6 +70,9 @@ behind the current space-governance contract.
 - `./scripts/cleanup-runtime.sh --target .runtime-cache/container-gates
   --ttl-hours 72` is the explicit maintenance lane for stale container-gate run
   directories once the current proof loop has moved on.
+- `./scripts/cleanup-runtime.sh --target .runtime-cache/container-runs
+  --ttl-hours 72` is the explicit maintenance lane for stale runner-temp
+  bridges and Docker-config sidecars.
 - Repo-owned evidence or runtime-state surfaces such as `reports`,
   `automation`, `dev`, `metrics`, and `test-output` stay out of routine
   automatic cleanup unless an explicit higher-level retention rule says

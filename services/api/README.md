@@ -24,4 +24,5 @@ governance, and security-sensitive service logic.
 
 - `uv run --extra dev pytest -q`
 - `bash scripts/lint-all.sh`
-- `bash scripts/verify-all.sh`
+- `pnpm verify:all`
+- `pnpm verify:all:parity`

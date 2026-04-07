@@ -15,7 +15,13 @@ trap cleanup EXIT
 
 repo_dir="$tmp_dir/repo"
 heavy_env_log="$tmp_dir/heavy.env"
-mkdir -p "$repo_dir/scripts/ci" "$repo_dir/scripts/release" "$repo_dir/scripts" "$repo_dir/bin"
+mkdir -p \
+  "$repo_dir/scripts/ci" \
+  "$repo_dir/scripts/lib" \
+  "$repo_dir/scripts/release" \
+  "$repo_dir/scripts" \
+  "$repo_dir/bin" \
+  "$repo_dir/services/api"
 
 cp scripts/ci/pre-push-local-gate.sh "$repo_dir/scripts/ci/pre-push-local-gate.sh"
 cp scripts/ci/check-workflow-runner-governance.mjs "$repo_dir/scripts/ci/check-workflow-runner-governance.mjs"
@@ -50,6 +56,13 @@ set -euo pipefail
 exit 0
 SH
 
+cat >"$repo_dir/scripts/lib/node-governance-entry.sh" <<'SH'
+#!/usr/bin/env bash
+set -euo pipefail
+shift || true
+exec "$@"
+SH
+
 cat >"$repo_dir/scripts/test-matrix.sh" <<'SH'
 #!/usr/bin/env bash
 set -euo pipefail
@@ -72,6 +85,7 @@ SH
 chmod +x \
   "$repo_dir/scripts/ci/pre-push-local-gate.sh" \
   "$repo_dir/scripts/ci/run-gate-in-container.sh" \
+  "$repo_dir/scripts/lib/node-governance-entry.sh" \
   "$repo_dir/scripts/release/check-workflow-pnpm-version-guard.sh" \
   "$repo_dir/scripts/preflight.sh" \
   "$repo_dir/scripts/test-matrix.sh" \

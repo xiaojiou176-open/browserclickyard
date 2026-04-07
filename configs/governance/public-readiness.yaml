@@ -38,7 +38,6 @@ repo_side_confirmed:
       - .github/workflows/live-realism.yml
       - .github/workflows/desktop-smoke.yml
       - .github/workflows/nightly.yml
-      - .github/workflows/weekly.yml
       - .github/workflows/branch-protection-audit.yml
   - id: deep-water-english-gate
     claim: The scoped deep-water English closure gate still protects deep-water Command Center files, frontend E2E support, runtime-path reference docs, and runtime-path governance source files. A small allowlisted set of locale-aware Command Center operator surfaces is intentionally bilingual and is verified by app tests instead of being rejected by this English-purity gate. It is not a repo-wide no-non-English guarantee.

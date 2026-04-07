@@ -22,6 +22,9 @@ repository and must move together with manifest and lockfile changes.
 - The root workspace keeps `ajv` on the Ajv v8 line because the MCP SDK and
   `ajv-formats` validation chain require that major version during test-harness
   client initialization.
+- The current closeout baseline also advances root `vite` to `7.3.2` so the
+  default shipping branch no longer carries the open GitHub advisories tied to
+  the older `7.3.1` line.
 - When GitHub Dependabot reports a vulnerable transitive npm dependency, update
   the override baseline, regenerate `pnpm-lock.yaml`, and rerun repo gates
   before merge.
@@ -37,6 +40,7 @@ repository and must move together with manifest and lockfile changes.
 | Package | Current locked version |
 | --- | --- |
 | `fastapi` | `0.135.3` |
+| `mypy` | `1.20.0` |
 | `requests` | `2.33.1` |
 | `ruff` | `0.15.9` |
 | `schemathesis` | `4.15.0` |
@@ -46,7 +50,7 @@ repository and must move together with manifest and lockfile changes.
 
 | Workspace | `@types/node` | `@vitejs/plugin-react` | `playwright` family | Extra governed note |
 | --- | --- | --- | --- | --- |
-| repo root (`package.json`) | `25.5.2` | `4.7.0` | `1.59.1` (`playwright`, `@playwright/test`, `@playwright/experimental-ct-react`) | `@commitlint/config-conventional=20.5.0`, `react-router-dom=7.14.0` |
+| repo root (`package.json`) | `25.5.2` | `4.7.0` | `1.59.1` (`playwright`, `@playwright/test`, `@playwright/experimental-ct-react`) | `@commitlint/config-conventional=20.5.0`, `react-router-dom=7.14.0`, `vite=7.3.2` |
 | `apps/command-center/package.json` | n/a | `4.7.0` | `1.59.1` (`playwright`) | `@vitejs/plugin-react 5.x` is intentionally rejected for now after local smoke regression evidence |
 | `tooling/automation/package.json` | `25.5.2` | n/a | `1.59.1` (`playwright`, `@playwright/test`) | automation runtime stays on the same Playwright baseline as root |
 | `services/mcp-server/package.json` | `25.5.2` | n/a | n/a | MCP server keeps the same Node type baseline as root |

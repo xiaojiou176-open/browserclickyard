@@ -10,6 +10,8 @@ steps:
   - a11y
   - perf
   - visual
+  - load
+  - security
   - report
 gates:
   consoleErrorMax: 0
@@ -21,6 +23,10 @@ gates:
   perfLcpMsMax: 5000
   perfFcpMsMax: 3000
   visualDiffPixelsMax: 0
+  securityHighVulnMax: 0
+  loadFailedRequestsMax: 0
+  loadP95MsMax: 250
+  loadRpsMin: 10
 explore:
   engine: crawlee
   budgetSeconds: 300
@@ -46,6 +52,17 @@ determinism:
   reducedMotion: reduce
 diagnostics:
   maxItems: 20
+load:
+  vus: 12
+  durationSeconds: 20
+  requestTimeoutMs: 5000
+  engines:
+    - builtin
+    - k6
+security:
+  engine: semgrep
+  maxFileSizeKb: 512
+  rulesFile: configs/security-rules.yaml
 perf:
   preset: mobile
   engine: lhci
@@ -69,4 +86,6 @@ enginePolicy:
   required:
     - crawlee
     - lostpixel
+    - semgrep
+    - k6
   failOnBlocked: true

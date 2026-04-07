@@ -58,13 +58,19 @@ If `sg` is unavailable, record the waiver and use the unified fallback command.
 | --- | --- | --- |
 | Docs and governance work | `docs/ai/agent-guide.md` + `docs/index.md` | `bash scripts/docs-gate.sh` |
 | Code changes | `docs/ai/agent-guide.md` + `docs/architecture.md` | `bash scripts/lint-all.sh` |
-| Test-system changes | `docs/ai/agent-guide.md` + `docs/reference/ci-governance.md` | `bash scripts/test-matrix.sh` |
-| Pre-delivery acceptance | `docs/ai/agent-guide.md` | `bash scripts/verify-all.sh` |
+| Test-system changes | `docs/ai/agent-guide.md` + `docs/reference/ci-governance.md` | `pnpm test:matrix` |
+| Pre-delivery acceptance | `docs/ai/agent-guide.md` | `pnpm verify:all` |
 
 ## Canonical Gate Commands
 
 - `pnpm gate:repo:fast`
+- `pnpm test:matrix`
+- `pnpm test:matrix:full`
 - `pnpm doctor:repo`
+- `pnpm verify:all`
+- `pnpm verify:all:parity`
+- `pnpm prepush:quality-gate`
+- `pnpm prepush:quality-gate:parity`
 - `pnpm gate:github:security-alerts`
 - `pnpm gate:workflow:zizmor`
 - `pnpm gate:security:trivy`

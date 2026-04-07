@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
     inputs:
       run_manual_observability:
-        description: Run optional Gemini, live, and AI nightly checks
+        description: Run optional Gemini, live, mutation, and deep nightly checks
         required: false
         default: false
         type: boolean
@@ -141,6 +141,12 @@ jobs:
         env:
           UIQ_LIVE_LLM_ENABLED: "true"
         run: pnpm test:live:llm
+      - name: Mutation gate (manual nightly)
+        run: pnpm mutation:effective
+      - name: Nightly real backend MCP verification (manual)
+        env:
+          UIQ_ENABLE_REAL_BACKEND_TESTS: "true"
+        run: pnpm test:mcp-server:real
       - name: Trust active pnpm bin directory for orchestrator runtime guard
         shell: bash
         run: |
