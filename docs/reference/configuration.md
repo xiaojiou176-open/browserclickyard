@@ -133,6 +133,7 @@ The generated configuration reference and the env-governance report pipeline sha
 | `UIQ_ALLOW_LIGHT_PREPUSH` | tests | no | no | `0` | Explicitly allow light pre-push mode when code-impacting changes are detected. |
 | `UIQ_ALLOW_LIGHT_PREPUSH_REASON` | tests | no | no | (empty) | Required reason when UIQ_ALLOW_LIGHT_PREPUSH=1 for auditable exemptions. |
 | `UIQ_CAPTURE_API_MOCK` | tests | no | no | `0` | Enable API mock routing for capture/explore/chaos in local CI web target. |
+| `UIQ_SKIP_SHARED_MODULE_LINK_REPAIR` | tests | no | no | `0` | Skip shared module link repair for targeted smoke and self-test lanes that only validate repo governance contracts. |
 | `UIQ_TEST_MATRIX_ALLOW_CMD_OVERRIDE` | tests | no | no | `0` | Allow test-matrix suite command overrides (intended for controlled self-tests). |
 | `UIQ_WEB_PORT` | tests | no | no | `4173` | Governed env variable detected by automated env scan (tests scope). |
 | `OTP_DEDUPE_REDIS_PREFIX` | vonage | no | no | `otp:vonage:dedupe` | Redis key prefix for Vonage OTP dedupe. |
@@ -147,3 +148,67 @@ The generated configuration reference and the env-governance report pipeline sha
 | `VONAGE_SIGNATURE_ALGO` | vonage | no | no | `sha256` | Vonage signature algorithm. |
 | `VONAGE_SIGNATURE_MAX_SKEW_SECONDS` | vonage | no | no | `600` | Max callback timestamp skew. |
 | `VONAGE_SIGNATURE_SECRET` | vonage | no | yes | (empty) | Vonage callback signature secret. |
+
+## Platform-injected Runtime Variables
+
+These names are intentionally allowed by env governance as CI, container, or runtime-injected values. They are contract-tracked, but they are not user-supplied `.env.example` entries.
+
+### Exact Names
+
+- `ABORT_COMMAND`
+- `AGENT_TOOLSDIRECTORY`
+- `CHROME_PATH`
+- `CI`
+- `COMMAND_TOWER_EVIDENCE_MAX_BYTES`
+- `COMMAND_TOWER_EVIDENCE_TIMELINE_DEFAULT_LIMIT`
+- `COMMAND_TOWER_EVIDENCE_TIMELINE_MAX_LIMIT`
+- `GITHUB_ACTIONS`
+- `GITHUB_BASE_REF`
+- `GITHUB_EVENT_NAME`
+- `GITHUB_REF`
+- `GITHUB_REPOSITORY`
+- `GITHUB_STEP_SUMMARY`
+- `GITHUB_WORKSPACE`
+- `HOME`
+- `LANG`
+- `LAST_RUN_AT`
+- `LC_ALL`
+- `LINE_LIMIT`
+- `MAX_BEHIND`
+- `PATH`
+- `PYTEST_CURRENT_TEST`
+- `PYTEST_XDIST_WORKER`
+- `ROOT_DIR`
+- `RUNNER_TEMP`
+- `RUNNER_TOOL_CACHE`
+- `RUNNER_WORKSPACE`
+- `RUNTIME_CACHE_DIR`
+- `RUNTIME_LOG_DIR`
+- `SCOPE`
+- `STARTED_AT`
+- `STATE_PATH`
+- `STATUS`
+- `STRATEGY`
+- `SYNC_BRANCH_DATE`
+- `TERM`
+- `TRACING_ENABLED`
+- `TRACING_EXPORTER`
+- `TRACING_OTLP_ENDPOINT`
+- `TRACING_OTLP_HEADERS`
+- `TRACING_SERVICE_NAME`
+- `__STRYKER_ACTIVE_MUTANT__`
+
+### Allowed Prefixes
+
+- `AI_REVIEW_`
+- `AUTOMATION_GLOBAL_`
+- `AUTOMATION_RUNTIME_`
+- `GEMINI_`
+- `GOOGLE_`
+- `PLAYWRIGHT_`
+- `PNPM_`
+- `RECON_`
+- `TM_`
+- `UIQ_`
+- `VITE_`
+- `npm_`
