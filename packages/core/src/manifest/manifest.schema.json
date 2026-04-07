@@ -1,0 +1,547 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://uiq.local/schemas/manifest.v1.1.json",
+  "title": "UIQ Manifest v1.1",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "runId",
+    "target",
+    "profile",
+    "git",
+    "timing",
+    "execution",
+    "states",
+    "evidenceIndex",
+    "reports",
+    "summary",
+    "gateResults",
+    "toolchain"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "1.1"
+    },
+    "schemaCompatibility": {
+      "type": "string",
+      "enum": ["v1.1", "legacy_v1"]
+    },
+    "runId": { "type": "string", "minLength": 1 },
+    "target": {
+      "type": "object",
+      "required": ["type", "name"],
+      "properties": {
+        "type": { "type": "string" },
+        "name": { "type": "string" },
+        "baseUrl": { "type": "string" },
+        "app": { "type": "string" },
+        "bundleId": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "profile": { "type": "string", "minLength": 1 },
+    "git": {
+      "type": "object",
+      "required": ["branch", "commit", "dirty"],
+      "properties": {
+        "branch": { "type": "string" },
+        "commit": { "type": "string" },
+        "dirty": { "type": "boolean" }
+      },
+      "additionalProperties": false
+    },
+    "timing": {
+      "type": "object",
+      "required": ["startedAt", "finishedAt", "durationMs"],
+      "properties": {
+        "startedAt": { "type": "string" },
+        "finishedAt": { "type": "string" },
+        "durationMs": { "type": "number", "minimum": 0 }
+      },
+      "additionalProperties": false
+    },
+    "execution": {
+      "type": "object",
+      "required": ["maxParallelTasks", "stagesMs", "criticalPath"],
+      "properties": {
+        "maxParallelTasks": { "type": "number", "minimum": 1 },
+        "stagesMs": {
+          "type": "object",
+          "additionalProperties": { "type": "number", "minimum": 0 }
+        },
+        "criticalPath": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      },
+      "additionalProperties": false
+    },
+    "states": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "source", "steps", "artifacts"],
+        "properties": {
+          "id": { "type": "string" },
+          "source": { "type": "string", "enum": ["routes", "discovery", "stories", "manual"] },
+          "url": { "type": "string" },
+          "steps": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "artifacts": {
+            "type": "object",
+            "properties": {
+              "screenshot": { "type": "string" },
+              "dom": { "type": "string" },
+              "trace": { "type": "string" },
+              "network": { "type": "string" },
+              "log": { "type": "string" },
+              "video": { "type": "string" }
+            },
+            "additionalProperties": true
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "evidenceIndex": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "source", "kind", "path"],
+        "properties": {
+          "id": { "type": "string", "minLength": 1 },
+          "source": { "type": "string", "enum": ["state", "report", "gate", "diagnostic"] },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "screenshot",
+              "dom",
+              "trace",
+              "network",
+              "log",
+              "video",
+              "report",
+              "metric",
+              "other"
+            ]
+          },
+          "path": { "type": "string", "minLength": 1 }
+        },
+        "additionalProperties": false
+      }
+    },
+    "reports": {
+      "type": "object",
+      "properties": {
+        "a11y": { "type": "string" },
+        "perf": { "type": "string" },
+        "visual": { "type": "string" },
+        "aiReview": { "type": "string" },
+        "security": { "type": "string" },
+        "load": { "type": "string" },
+        "desktopBusiness": { "type": "string" },
+        "fixPlan": { "type": "string" },
+        "fixResult": { "type": "string" },
+        "postFixRegression": { "type": "string" },
+        "report": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "stateModel": {
+      "type": "object",
+      "properties": {
+        "modelType": { "type": "string", "enum": ["web", "desktop"] },
+        "configuredRoutes": { "type": "number", "minimum": 0 },
+        "configuredStories": { "type": "number", "minimum": 0 },
+        "configuredTotal": { "type": "number", "minimum": 0 },
+        "capturedRoutes": { "type": "number", "minimum": 0 },
+        "capturedDiscovery": { "type": "number", "minimum": 0 },
+        "capturedStories": { "type": "number", "minimum": 0 },
+        "configuredDesktopScenarios": { "type": "number", "minimum": 0 },
+        "capturedDesktopScenarios": { "type": "number", "minimum": 0 },
+        "configuredDesktopScenarioIds": { "type": "array", "items": { "type": "string" } },
+        "capturedDesktopScenarioIds": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": true
+    },
+    "summary": {
+      "type": "object",
+      "required": [
+        "consoleError",
+        "pageError",
+        "http5xx",
+        "aiModel",
+        "promptVersion",
+        "cacheStats",
+        "computerUseSafetyConfirmations"
+      ],
+      "properties": {
+        "consoleError": { "type": "number", "minimum": 0 },
+        "pageError": { "type": "number", "minimum": 0 },
+        "http5xx": { "type": "number", "minimum": 0 },
+        "highVuln": { "type": "number", "minimum": 0 },
+        "a11ySerious": { "type": "number", "minimum": 0 },
+        "perfLcpMs": { "type": "number", "minimum": 0 },
+        "perfFcpMs": { "type": "number", "minimum": 0 },
+        "visualDiffPixels": { "type": "number", "minimum": 0 },
+        "loadFailedRequests": { "type": "number", "minimum": 0 },
+        "loadP95Ms": { "type": "number", "minimum": 0 },
+        "loadRps": { "type": "number", "minimum": 0 },
+        "dangerousActionHits": { "type": "number", "minimum": 0 },
+        "aiReviewFindings": { "type": "number", "minimum": 0 },
+        "aiReviewHighOrAbove": { "type": "number", "minimum": 0 },
+        "blockedByMissingEngineCount": { "type": "number", "minimum": 0 },
+        "aiModel": { "type": "string", "minLength": 1 },
+        "promptVersion": { "type": "string" },
+        "fixIterations": { "type": "number", "minimum": 0 },
+        "fixConverged": { "type": "boolean" },
+        "cacheStats": {
+          "type": "object",
+          "required": ["hit", "miss", "hitRate"],
+          "properties": {
+            "hit": { "type": "number", "minimum": 0 },
+            "miss": { "type": "number", "minimum": 0 },
+            "hits": { "type": "number", "minimum": 0 },
+            "misses": { "type": "number", "minimum": 0 },
+            "hitRate": { "type": "number", "minimum": 0 }
+          },
+          "additionalProperties": true
+        },
+        "computerUseSafetyConfirmations": { "type": "number", "minimum": 0 },
+        "engineAvailability": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string",
+            "enum": ["available", "missing", "not_checked"]
+          }
+        }
+      },
+      "additionalProperties": true
+    },
+    "diagnostics": {
+      "type": "object",
+      "properties": {
+        "capture": {
+          "type": "object",
+          "properties": {
+            "consoleErrors": { "type": "array", "items": { "type": "string" } },
+            "pageErrors": { "type": "array", "items": { "type": "string" } },
+            "http5xxUrls": { "type": "array", "items": { "type": "string" } },
+            "truncation": { "type": "object", "additionalProperties": true }
+          },
+          "additionalProperties": true
+        },
+        "explore": {
+          "type": "object",
+          "properties": {
+            "engineUsed": { "type": "string", "enum": ["builtin", "crawlee"] },
+            "consoleErrors": { "type": "array", "items": { "type": "string" } },
+            "pageErrors": { "type": "array", "items": { "type": "string" } },
+            "http5xxUrls": { "type": "array", "items": { "type": "string" } },
+            "truncation": { "type": "object", "additionalProperties": true }
+          },
+          "additionalProperties": true
+        },
+        "chaos": {
+          "type": "object",
+          "properties": {
+            "consoleErrors": { "type": "array", "items": { "type": "string" } },
+            "pageErrors": { "type": "array", "items": { "type": "string" } },
+            "http5xxUrls": { "type": "array", "items": { "type": "string" } },
+            "truncation": { "type": "object", "additionalProperties": true }
+          },
+          "additionalProperties": true
+        },
+        "load": {
+          "type": "object",
+          "properties": {
+            "totalRequests": { "type": "number", "minimum": 0 },
+            "failedRequests": { "type": "number", "minimum": 0 },
+            "http5xx": { "type": "number", "minimum": 0 },
+            "requestsPerSecond": { "type": "number", "minimum": 0 },
+            "engines": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "engine": { "type": "string" },
+                  "status": { "type": "string", "enum": ["ok", "failed", "blocked"] },
+                  "detail": { "type": "string" }
+                },
+                "additionalProperties": true
+              }
+            }
+          },
+          "additionalProperties": true
+        },
+        "tests": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "runtime": {
+          "type": "object",
+          "properties": {
+            "autostart": { "type": "boolean" },
+            "started": { "type": "boolean" },
+            "healthcheckPassed": { "type": "boolean" },
+            "healthcheckUrl": { "type": "string" }
+          },
+          "additionalProperties": true
+        },
+        "a11y": {
+          "type": "object",
+          "properties": {
+            "engine": { "type": "string" },
+            "standard": { "type": "string" },
+            "counts": { "type": "object", "additionalProperties": true }
+          },
+          "additionalProperties": true
+        },
+        "perf": {
+          "type": "object",
+          "properties": {
+            "engine": { "type": "string" },
+            "preset": { "type": "string" },
+            "metrics": { "type": "object", "additionalProperties": true }
+          },
+          "additionalProperties": true
+        },
+        "visual": {
+          "type": "object",
+          "properties": {
+            "engine": { "type": "string" },
+            "engineUsed": { "type": "string", "enum": ["builtin", "lostpixel", "backstop"] },
+            "mode": { "type": "string" },
+            "baselineCreated": { "type": "boolean" },
+            "diffPixels": { "type": "number", "minimum": 0 },
+            "totalPixels": { "type": "number", "minimum": 0 },
+            "diffRatio": { "type": "number", "minimum": 0 },
+            "baselinePath": { "type": "string" },
+            "currentPath": { "type": "string" },
+            "diffPath": { "type": "string" }
+          },
+          "additionalProperties": true
+        },
+        "aiReview": {
+          "type": "object",
+          "properties": {
+            "enabled": { "type": "boolean" },
+            "maxArtifacts": { "type": "number", "minimum": 1 },
+            "severityThreshold": {
+              "type": "string",
+              "enum": ["critical", "high", "medium", "low"]
+            },
+            "findings": { "type": "number", "minimum": 0 },
+            "highOrAbove": { "type": "number", "minimum": 0 },
+            "reportPath": { "type": "string" },
+            "markdownPath": { "type": "string" }
+          },
+          "additionalProperties": true
+        },
+        "security": {
+          "type": "object",
+          "properties": {
+            "executionStatus": { "type": "string", "enum": ["ok", "failed", "blocked"] },
+            "blockedReason": { "type": "string" },
+            "errorMessage": { "type": "string" },
+            "totalIssueCount": { "type": "number", "minimum": 0 },
+            "dedupedIssueCount": { "type": "number", "minimum": 0 },
+            "ticketCount": { "type": "number", "minimum": 0 },
+            "topTickets": {
+              "type": "array",
+              "items": { "type": "object", "additionalProperties": true }
+            },
+            "highVulnCount": { "type": "number", "minimum": 0 },
+            "mediumVulnCount": { "type": "number", "minimum": 0 },
+            "lowVulnCount": { "type": "number", "minimum": 0 },
+            "clusters": { "type": "object", "additionalProperties": true }
+          },
+          "additionalProperties": true
+        },
+        "desktopReadiness": {
+          "type": "object",
+          "properties": {
+            "targetType": { "type": "string" },
+            "status": { "type": "string", "enum": ["passed", "blocked"] },
+            "checks": {
+              "type": "array",
+              "items": { "type": "object", "additionalProperties": true }
+            },
+            "reportPath": { "type": "string" }
+          },
+          "additionalProperties": true
+        },
+        "desktopSmoke": {
+          "type": "object",
+          "properties": {
+            "targetType": { "type": "string" },
+            "status": { "type": "string", "enum": ["passed", "blocked"] },
+            "started": { "type": "boolean" },
+            "activated": { "type": "boolean" },
+            "screenshotPath": { "type": "string" },
+            "quit": { "type": "boolean" },
+            "detail": { "type": "string" },
+            "reportPath": { "type": "string" }
+          },
+          "additionalProperties": true
+        },
+        "desktopE2E": {
+          "type": "object",
+          "properties": {
+            "targetType": { "type": "string" },
+            "status": { "type": "string", "enum": ["passed", "blocked"] },
+            "checks": {
+              "type": "array",
+              "items": { "type": "object", "additionalProperties": true }
+            },
+            "screenshotPath": { "type": "string" },
+            "reportPath": { "type": "string" }
+          },
+          "additionalProperties": true
+        },
+        "desktopBusiness": {
+          "type": "object",
+          "properties": {
+            "targetType": { "type": "string" },
+            "status": { "type": "string", "enum": ["passed", "blocked"] },
+            "checks": {
+              "type": "array",
+              "items": { "type": "object", "additionalProperties": true }
+            },
+            "screenshotPaths": { "type": "array", "items": { "type": "string" } },
+            "replay": {
+              "type": "array",
+              "items": { "type": "object", "additionalProperties": true }
+            },
+            "logPath": { "type": "string" },
+            "reportPath": { "type": "string" }
+          },
+          "additionalProperties": true
+        },
+        "desktopSoak": {
+          "type": "object",
+          "properties": {
+            "targetType": { "type": "string" },
+            "status": { "type": "string", "enum": ["passed", "blocked"] },
+            "durationSeconds": { "type": "number", "minimum": 0 },
+            "intervalSeconds": { "type": "number", "minimum": 0 },
+            "appName": { "type": "string" },
+            "crashCount": { "type": "number", "minimum": 0 },
+            "rssGrowthMb": { "type": "number" },
+            "rssMaxMb": { "type": "number", "minimum": 0 },
+            "cpuAvgPercent": { "type": "number", "minimum": 0 },
+            "samples": {
+              "type": "array",
+              "items": { "type": "object", "additionalProperties": true }
+            },
+            "reportPath": { "type": "string" }
+          },
+          "additionalProperties": true
+        },
+        "http5xxUrls": { "type": "array", "items": { "type": "string" } },
+        "truncation": { "type": "object", "additionalProperties": true },
+        "engineAvailability": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string",
+            "enum": ["available", "missing", "not_checked"]
+          }
+        }
+      },
+      "additionalProperties": true
+    },
+    "runEnvironment": {
+      "type": "object",
+      "properties": {
+        "autostart": { "type": "boolean" },
+        "started": { "type": "boolean" },
+        "healthcheckPassed": { "type": "boolean" },
+        "healthcheckUrl": { "type": "string" },
+        "healthcheckReason": { "type": "string" },
+        "healthcheckDetail": { "type": "string" },
+        "host": { "type": "string" },
+        "node": { "type": "string" },
+        "ci": { "type": "boolean" }
+      },
+      "additionalProperties": true
+    },
+    "toolVersions": {
+      "type": "object",
+      "properties": {
+        "node": { "type": "string" },
+        "a11y": { "type": "string" },
+        "perf": { "type": "string" },
+        "load": { "type": "array", "items": { "type": "string" } },
+        "security": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "proof": {
+      "type": "object",
+      "properties": {
+        "coveragePath": { "type": "string" },
+        "stabilityPath": { "type": "string" },
+        "gapsPath": { "type": "string" },
+        "reproPath": { "type": "string" },
+        "summary": {
+          "type": "object",
+          "properties": {
+            "configuredCoverageRatio": { "type": "number", "minimum": 0 },
+            "gatePassRatio": { "type": "number", "minimum": 0 },
+            "stabilityStatus": { "type": "string", "enum": ["stable", "degraded", "failed"] }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    },
+    "gateResults": {
+      "type": "object",
+      "required": ["status", "checks"],
+      "properties": {
+        "status": { "type": "string", "enum": ["passed", "failed", "blocked"] },
+        "checks": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "id",
+              "expected",
+              "actual",
+              "severity",
+              "status",
+              "reasonCode",
+              "evidencePath"
+            ],
+            "properties": {
+              "id": { "type": "string" },
+              "acId": { "type": "string" },
+              "expected": {},
+              "actual": {},
+              "severity": { "type": "string", "enum": ["BLOCKER", "MAJOR", "MINOR"] },
+              "status": { "type": "string", "enum": ["passed", "failed", "blocked"] },
+              "reasonCode": { "type": "string" },
+              "evidencePath": { "type": "string" }
+            },
+            "additionalProperties": false
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "toolchain": {
+      "type": "object",
+      "required": ["node"],
+      "properties": {
+        "node": { "type": "string" },
+        "playwright": { "type": "string" },
+        "driver": { "type": "string" }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": false
+}
