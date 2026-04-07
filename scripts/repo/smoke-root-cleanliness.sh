@@ -19,11 +19,11 @@ BEFORE="$(mktemp)"
 AFTER="$(mktemp)"
 trap 'cleanup_node_artifacts; rm -f "$BEFORE" "$AFTER"' EXIT
 
-uiq_repair_shared_module_links "$ROOT_DIR"
+UIQ_SKIP_SHARED_MODULE_LINK_REPAIR=1 uiq_repair_shared_module_links "$ROOT_DIR"
 
 snapshot >"$BEFORE"
 
-COMMANDS="${UIQ_ROOT_SMOKE_COMMANDS:-bash scripts/lib/node-governance-entry.sh scripts/ci/check-root-allowlist.mjs && bash scripts/lib/node-governance-entry.sh scripts/ci/check-cache-governance.mjs && bash scripts/lib/node-governance-entry.sh scripts/ci/check-no-nested-runtime-cache.mjs && bash scripts/lib/node-governance-entry.sh scripts/ci/check-workspace-runtime-pollution.mjs && bash scripts/lib/node-governance-entry.sh scripts/ci/check-config-governance-convergence.mjs}"
+COMMANDS="${UIQ_ROOT_SMOKE_COMMANDS:-UIQ_SKIP_SHARED_MODULE_LINK_REPAIR=1 bash scripts/lib/node-governance-entry.sh scripts/ci/check-root-allowlist.mjs && UIQ_SKIP_SHARED_MODULE_LINK_REPAIR=1 bash scripts/lib/node-governance-entry.sh scripts/ci/check-cache-governance.mjs && UIQ_SKIP_SHARED_MODULE_LINK_REPAIR=1 bash scripts/lib/node-governance-entry.sh scripts/ci/check-no-nested-runtime-cache.mjs && UIQ_SKIP_SHARED_MODULE_LINK_REPAIR=1 bash scripts/lib/node-governance-entry.sh scripts/ci/check-workspace-runtime-pollution.mjs && UIQ_SKIP_SHARED_MODULE_LINK_REPAIR=1 bash scripts/lib/node-governance-entry.sh scripts/ci/check-config-governance-convergence.mjs}"
 echo "[smoke-root-cleanliness] running: $COMMANDS"
 bash -lc "$COMMANDS"
 
