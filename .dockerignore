@@ -1,10 +1,14 @@
 .git
 .github
+.agent
+.agents
 .claude
 .codex
 .env
 .env.*
 !.env.example
+.venv
+**/.venv
 .runtime-cache
 artifacts
 node_modules
