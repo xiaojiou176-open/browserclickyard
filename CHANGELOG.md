@@ -7,9 +7,10 @@
   for stale `.runtime-cache/container-runs` scratch bridges so the default
   repo-side verification path now matches the current stress-lab-first closure
   model.
-- Taught `smoke-root-cleanliness` to reuse the shared-link repair it already
-  performs before launching nested repo-governance helpers, so the fast gate
-  no longer pays the same node-topology repair cost once per subcheck.
+- Taught `smoke-root-cleanliness` to establish the governed workspace
+  `node_modules` topology before taking its root snapshot, then reuse that
+  shared-link repair while nested repo-governance helpers skip duplicate repair
+  and relink work.
 - Split the default local quality commands from their parity counterparts so
   `pnpm test:matrix`, `pnpm verify:all`, and `pnpm prepush:quality-gate`
   stay fast/light by default, while `:full` / `:parity` entrypoints remain the
