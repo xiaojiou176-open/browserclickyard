@@ -38,7 +38,7 @@
     "ajv": "^6.14.0",
     "curlconverter": "^4.12.0",
     "eslint": "^9.23.0",
-    "globals": "^16.0.0",
+    "globals": "^17.4.0",
     "har-to-k6": "^0.14.10",
     "playwright": "^1.59.1",
     "tsx": "^4.19.2",
