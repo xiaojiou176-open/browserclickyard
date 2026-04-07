@@ -151,7 +151,7 @@ The generated configuration reference and the env-governance report pipeline sha
 
 ## Platform-injected Runtime Variables
 
-These names are intentionally allowed by env governance as CI, container, or runtime-injected values. They are contract-tracked, but they are not user-supplied `.env.example` entries.
+These names are intentionally allowed by env governance as CI, container, or runtime-injected values. They are contract-tracked, but they are not user-supplied `.env.example` entries or settings that maintainers should hand-copy into local env files.
 
 ### Exact Names
 
