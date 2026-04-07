@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "updated_at": "2026-02-26",
+  "notes": "Baseline budgets for env reduction governance. New changes must not regress these ceilings.",
+  "budgets": {
+    "declared_max": 144,
+    "declared_but_unused_max": 0,
+    "used_but_undeclared_max": 0,
+    "deprecated_aliases_max": 0
+  }
+}

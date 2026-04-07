@@ -1,0 +1,10 @@
+name: tauri.macos
+type: tauri
+driver: tauri-webdriver
+# Desktop target must be explicit at runtime via CLI --app.
+# If missing, desktop_readiness/desktop_smoke/desktop_e2e/desktop_soak
+# must return blocked with reasonCode: desktop.tauri.app.missing.
+app: ""
+desktopSoak:
+  durationSeconds: 30
+  intervalSeconds: 5

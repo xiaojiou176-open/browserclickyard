@@ -1,0 +1,521 @@
+schema_version: 2
+systems:
+  - system_id: mcp_sdk
+    display_name: "@modelcontextprotocol/sdk"
+    category: protocol
+    source_type: package
+    locator_type: package
+    locator_value: "@modelcontextprotocol/sdk@1.26.0"
+    version_pin_kind: exact-version
+    integration_owner: uiq-platform
+    upgrade_owner: uiq-platform
+    contract_type: public_contract
+    contract_surface:
+      - MCP tool registration
+      - run artifact read helpers
+    glue_layers:
+      - services/mcp-server
+      - packages/orchestrator
+    validation_commands:
+      - pnpm mcp:test
+      - pnpm mcp:smoke
+    validation_profile: ci
+    ci_mapping:
+      required_gate: mcp_real_backend_gate
+      workflow: .github/workflows/ci.yml
+    upgrade_trigger: monthly tooling review or security advisory
+    rollback_path: revert package bump and rerun mcp:test plus mcp:smoke
+    failure_attribution: repo glue failure vs MCP SDK contract drift vs local runtime wiring
+    provenance: pnpm-lock pinned package resolved from root workspace
+    sync_policy: version pinned in root package.json and validated on every MCP contract change
+    local_tracking_path: services/mcp-server
+    customizations: []
+    private_coupling_forbidden_patterns:
+      - "@modelcontextprotocol/sdk/.*/dist"
+      - "@modelcontextprotocol/sdk/.*/src"
+  - system_id: playwright
+    display_name: Playwright
+    category: browser-engine
+    source_type: package
+    locator_type: package
+    locator_value: "playwright@1.58.2"
+    version_pin_kind: exact-version
+    integration_owner: uiq-platform
+    upgrade_owner: uiq-platform
+    contract_type: public_contract
+    contract_surface:
+      - web e2e
+      - component tests
+      - automation replay
+    glue_layers:
+      - automation
+      - tests/frontend-e2e
+      - tests/web-harness/tests/e2e
+    validation_commands:
+      - pnpm test:e2e:frontend:smoke
+      - pnpm test:ct
+    validation_profile: ci
+    ci_mapping:
+      required_gate: harness_web_e2e
+      workflow: .github/workflows/ci.yml
+    upgrade_trigger: monthly tooling review or browser regression investigation
+    rollback_path: revert dependency bump and rerun component plus frontend e2e smoke
+    failure_attribution: repo test/runtime wiring vs Playwright engine/runtime regression
+    provenance: pnpm-lock pinned package plus runner-temp browser cache
+    sync_policy: root and workspace Playwright versions must stay aligned by major/minor
+    local_tracking_path: tests/frontend-e2e
+    customizations: []
+    private_coupling_forbidden_patterns:
+      - "playwright/lib/"
+      - "@playwright/test/lib/"
+  - system_id: crawlee
+    display_name: Crawlee
+    category: browser-engine
+    source_type: package
+    locator_type: package
+    locator_value: "crawlee@3.15.3"
+    version_pin_kind: exact-version
+    integration_owner: uiq-platform
+    upgrade_owner: uiq-platform
+    contract_type: public_contract
+    contract_surface:
+      - explore engine policy
+    glue_layers:
+      - packages/orchestrator
+      - scripts/ai
+    validation_commands:
+      - pnpm uiq engines:check --profile pr
+    validation_profile: pr
+    ci_mapping:
+      required_gate: pr-run-gate
+      workflow: .github/workflows/pr.yml
+    upgrade_trigger: monthly tooling review or explore-engine regression
+    rollback_path: revert dependency bump and rerun engines:check
+    failure_attribution: orchestrator glue policy vs Crawlee engine behavior
+    provenance: pnpm-lock pinned package from root workspace
+    sync_policy: tracked as required engine policy input
+    local_tracking_path: packages/orchestrator
+    customizations: []
+    private_coupling_forbidden_patterns:
+      - "from [\"']crawlee/.+"
+  - system_id: backstop
+    display_name: BackstopJS
+    category: analysis-engine
+    source_type: package
+    locator_type: package
+    locator_value: "backstopjs@6.3.25"
+    version_pin_kind: exact-version
+    integration_owner: uiq-platform
+    upgrade_owner: uiq-platform
+    contract_type: public_contract
+    contract_surface:
+      - visual engine policy
+    glue_layers:
+      - packages/orchestrator
+    validation_commands:
+      - pnpm uiq engines:check --profile nightly
+    validation_profile: nightly
+    ci_mapping:
+      required_gate: nightly-gate
+      workflow: .github/workflows/nightly.yml
+    upgrade_trigger: monthly tooling review or visual baseline regression
+    rollback_path: revert dependency bump and rerun engines:check
+    failure_attribution: orchestrator glue policy vs BackstopJS visual engine behavior
+    provenance: pnpm-lock pinned package from root workspace
+    sync_policy: treated as optional visual backend with explicit engine checks
+    local_tracking_path: packages/orchestrator
+    customizations: []
+    private_coupling_forbidden_patterns:
+      - "backstopjs/core/"
+  - system_id: lost_pixel
+    display_name: Lost Pixel
+    category: analysis-engine
+    source_type: package
+    locator_type: package
+    locator_value: "lost-pixel@3.22.0"
+    version_pin_kind: exact-version
+    integration_owner: uiq-platform
+    upgrade_owner: uiq-platform
+    contract_type: public_contract
+    contract_surface:
+      - visual engine policy
+    glue_layers:
+      - packages/orchestrator
+    validation_commands:
+      - pnpm uiq engines:check --profile nightly
+    validation_profile: nightly
+    ci_mapping:
+      required_gate: nightly-gate
+      workflow: .github/workflows/nightly.yml
+    upgrade_trigger: monthly tooling review or visual diff instability
+    rollback_path: revert dependency bump and rerun engines:check
+    failure_attribution: orchestrator glue policy vs Lost Pixel visual engine behavior
+    provenance: pnpm-lock pinned package from root workspace
+    sync_policy: optional visual engine with explicit readiness check
+    local_tracking_path: packages/orchestrator
+    customizations: []
+    private_coupling_forbidden_patterns:
+      - "lost-pixel/dist/"
+  - system_id: k6
+    display_name: k6
+    category: analysis-engine
+    source_type: binary
+    locator_type: binary
+    locator_value: "k6"
+    version_pin_kind: host-managed-exception
+    host_managed_reference: ci-browser image build revision
+    integration_owner: uiq-platform
+    upgrade_owner: uiq-platform
+    contract_type: public_contract
+    contract_surface:
+      - load engine policy
+    glue_layers:
+      - packages/orchestrator
+      - scripts/thirdparty
+    validation_commands:
+      - pnpm uiq engines:check --profile weekly
+    validation_profile: weekly
+    ci_mapping:
+      required_gate: weekly-gate
+      workflow: .github/workflows/weekly.yml
+    upgrade_trigger: weekly performance audit or CI image refresh
+    rollback_path: pin CI image/toolchain back to previous known-good revision
+    failure_attribution: repo engine orchestration vs host-managed k6 binary availability
+    provenance: host managed binary delivered via CI/browser runtime image
+    sync_policy: host-managed binary must remain declared in engine readiness contract
+    local_tracking_path: packages/orchestrator
+    customizations: []
+    private_coupling_forbidden_patterns: []
+  - system_id: semgrep
+    display_name: Semgrep
+    category: analysis-engine
+    source_type: binary
+    locator_type: binary
+    locator_value: "semgrep"
+    version_pin_kind: host-managed-exception
+    host_managed_reference: ci-browser image build revision
+    integration_owner: uiq-platform
+    upgrade_owner: uiq-platform
+    contract_type: public_contract
+    contract_surface:
+      - security engine policy
+    glue_layers:
+      - packages/orchestrator
+      - scripts/ci
+    validation_commands:
+      - pnpm uiq engines:check --profile weekly
+    validation_profile: weekly
+    ci_mapping:
+      required_gate: weekly-gate
+      workflow: .github/workflows/weekly.yml
+    upgrade_trigger: weekly security audit or CI image refresh
+    rollback_path: pin CI image/toolchain back to previous known-good revision
+    failure_attribution: repo security orchestration vs host-managed semgrep availability
+    provenance: host managed binary delivered via CI/browser runtime image
+    sync_policy: host-managed binary must remain declared in engine readiness contract
+    local_tracking_path: scripts/ci
+    customizations: []
+    private_coupling_forbidden_patterns: []
+  - system_id: gemini
+    display_name: Gemini / Google GenAI
+    category: ai-provider
+    source_type: package
+    locator_type: package
+    locator_value: "@google/genai@1.42.0"
+    version_pin_kind: workspace-lock
+    integration_owner: uiq-platform
+    upgrade_owner: uiq-platform
+    contract_type: public_contract
+    contract_surface:
+      - provider readiness
+      - ai review reporting
+    glue_layers:
+      - scripts/ai
+      - automation
+      - packages/orchestrator
+    validation_commands:
+      - node scripts/ai/check-provider-readiness.mjs
+    validation_profile: ci
+    ci_mapping:
+      required_gate: live_smoke_required
+      workflow: .github/workflows/ci.yml
+    upgrade_trigger: provider API change, security advisory, or model rollout
+    rollback_path: revert provider-specific config and rerun provider readiness check
+    failure_attribution: repo provider glue vs Gemini API/auth/quota behavior
+    provenance: pnpm-lock pinned SDK plus external Gemini API service
+    sync_policy: provider readiness must stay green before live AI gates run
+    local_tracking_path: scripts/ai
+    customizations: []
+    private_coupling_forbidden_patterns:
+      - "@google/genai/.*/dist"
+      - "google-genai/.*/dist"
+  - system_id: curlconverter
+    display_name: curlconverter
+    category: external-cli
+    source_type: package
+    locator_type: package
+    locator_value: "curlconverter@automation-workspace-lock"
+    version_pin_kind: workspace-lock
+    integration_owner: uiq-platform
+    upgrade_owner: uiq-platform
+    contract_type: public_contract
+    contract_surface:
+      - external tool wrapper
+    glue_layers:
+      - scripts/thirdparty
+      - automation
+    validation_commands:
+      - pnpm run automation:convert:curl -- --help
+    validation_profile: ci
+    ci_mapping:
+      required_gate: frontend
+      workflow: .github/workflows/ci.yml
+    upgrade_trigger: wrapper contract change or automation conversion regression
+    rollback_path: revert wrapper dependency/version and rerun help smoke
+    failure_attribution: local wrapper contract vs curlconverter CLI behavior
+    provenance: automation workspace lock plus safe wrapper contract
+    sync_policy: use safe wrapper entrypoints only
+    local_tracking_path: scripts/thirdparty
+    customizations: []
+    private_coupling_forbidden_patterns: []
+  - system_id: har_to_k6
+    display_name: har-to-k6
+    category: external-cli
+    source_type: package
+    locator_type: package
+    locator_value: "har-to-k6@automation-workspace-lock"
+    version_pin_kind: workspace-lock
+    integration_owner: uiq-platform
+    upgrade_owner: uiq-platform
+    contract_type: public_contract
+    contract_surface:
+      - external tool wrapper
+    glue_layers:
+      - scripts/thirdparty
+      - automation
+    validation_commands:
+      - pnpm run automation:har:k6 -- --help
+    validation_profile: weekly
+    ci_mapping:
+      required_gate: weekly-gate
+      workflow: .github/workflows/weekly.yml
+    upgrade_trigger: wrapper contract change or load-conversion regression
+    rollback_path: revert wrapper dependency/version and rerun help smoke
+    failure_attribution: local wrapper contract vs har-to-k6 CLI behavior
+    provenance: automation workspace lock plus safe wrapper contract
+    sync_policy: use safe wrapper entrypoints only
+    local_tracking_path: scripts/thirdparty
+    customizations: []
+    private_coupling_forbidden_patterns: []
+  - system_id: tauri_runtime
+    display_name: Tauri runtime
+    category: desktop-runtime
+    source_type: runtime
+    locator_type: runtime
+    locator_value: "tauri"
+    version_pin_kind: host-managed-exception
+    host_managed_reference: desktop target runtime registry revision
+    integration_owner: uiq-platform
+    upgrade_owner: uiq-platform
+    contract_type: semi_public
+    contract_surface:
+      - desktop readiness
+      - desktop smoke
+    glue_layers:
+      - packages/drivers
+      - packages/orchestrator
+    validation_commands:
+      - pnpm test:packages:runtime-target-macos
+    validation_profile: weekly
+    ci_mapping:
+      required_gate: weekly-gate
+      workflow: .github/workflows/weekly.yml
+    upgrade_trigger: desktop target contract change or desktop smoke regression
+    rollback_path: revert runtime target change and rerun macOS runtime target tests
+    failure_attribution: repo desktop target glue vs host managed Tauri runtime availability
+    provenance: host-managed desktop runtime registry and target capability contract
+    sync_policy: target runtime contract must stay aligned with driver capability registry
+    local_tracking_path: packages/drivers
+    customizations: []
+    private_coupling_forbidden_patterns: []
+  - system_id: swift_driver
+    display_name: Swift / macOS driver
+    category: desktop-runtime
+    source_type: runtime
+    locator_type: runtime
+    locator_value: "swift-macos-xcuitest"
+    version_pin_kind: host-managed-exception
+    host_managed_reference: host-managed xcode image revision
+    integration_owner: uiq-platform
+    upgrade_owner: uiq-platform
+    contract_type: semi_public
+    contract_surface:
+      - desktop readiness
+      - desktop e2e
+    glue_layers:
+      - packages/drivers
+      - packages/orchestrator
+    validation_commands:
+      - pnpm test:packages:runtime-target-macos
+    validation_profile: weekly
+    ci_mapping:
+      required_gate: weekly-gate
+      workflow: .github/workflows/weekly.yml
+    upgrade_trigger: desktop target contract change or desktop E2E regression
+    rollback_path: revert driver/runtime change and rerun macOS runtime target tests
+    failure_attribution: repo desktop driver glue vs host managed Xcode/XCUITest runtime
+    provenance: host-managed Xcode image and target capability contract
+    sync_policy: target runtime contract must stay aligned with driver capability registry
+    local_tracking_path: packages/drivers
+    customizations: []
+    private_coupling_forbidden_patterns: []
+  - system_id: actions_checkout
+    display_name: actions/checkout
+    category: ci-integration
+    source_type: github-action
+    locator_type: github-action
+    locator_value: "actions/checkout@64ffef1ea610c4052efefeb955034987fb104bc4"
+    version_pin_kind: exact-version
+    integration_owner: uiq-platform
+    upgrade_owner: uiq-platform
+    contract_type: public_contract
+    contract_surface:
+      - CI checkout semantics
+      - clean worktree bootstrap
+    glue_layers:
+      - .github/workflows/ci.yml
+      - .github/workflows/pr.yml
+      - .github/workflows/nightly.yml
+      - .github/workflows/weekly.yml
+    validation_commands:
+      - bash scripts/docs-gate.sh
+    validation_profile: ci
+    ci_mapping:
+      required_gate: workflow_lint
+      workflow: .github/workflows/ci.yml
+    upgrade_trigger: monthly workflow dependency review
+    rollback_path: revert pinned checkout action revision and rerun docs-gate
+    failure_attribution: workflow topology failure vs checkout action contract regression
+    provenance: full SHA pinned GitHub Action
+    sync_policy: workflow dependencies must stay full-SHA pinned
+    local_tracking_path: .github/workflows
+    customizations: []
+    private_coupling_forbidden_patterns: []
+  - system_id: actions_cache
+    display_name: actions/cache
+    category: ci-integration
+    source_type: github-action
+    locator_type: github-action
+    locator_value: "actions/cache@1bd1e32a3bdc45362d1e726936510720a7c30a57"
+    version_pin_kind: exact-version
+    integration_owner: uiq-platform
+    upgrade_owner: uiq-platform
+    contract_type: public_contract
+    contract_surface:
+      - CI cache restore and save semantics
+    glue_layers:
+      - .github/actions/setup-python-smart/action.yml
+      - .github/actions/setup-playwright/action.yml
+    validation_commands:
+      - node scripts/ci/check-workflow-runner-governance.mjs
+    validation_profile: ci
+    ci_mapping:
+      required_gate: workflow_lint
+      workflow: .github/workflows/ci.yml
+    upgrade_trigger: monthly workflow dependency review
+    rollback_path: revert pinned cache action revision and rerun workflow governance checks
+    failure_attribution: workflow cache path failure vs cache action contract regression
+    provenance: full SHA pinned GitHub Action
+    sync_policy: cache paths must stay repo-external for machine caches
+    local_tracking_path: .github/actions
+    customizations: []
+    private_coupling_forbidden_patterns: []
+  - system_id: actions_upload_artifact
+    display_name: actions/upload-artifact
+    category: ci-integration
+    source_type: github-action
+    locator_type: github-action
+    locator_value: "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02"
+    version_pin_kind: exact-version
+    integration_owner: uiq-platform
+    upgrade_owner: uiq-platform
+    contract_type: public_contract
+    contract_surface:
+      - CI artifact publication
+      - failure bundle upload
+    glue_layers:
+      - .github/actions/failure-bundle/action.yml
+      - .github/workflows/nightly.yml
+      - .github/workflows/weekly.yml
+      - .github/workflows/pr.yml
+    validation_commands:
+      - bash scripts/docs-gate.sh
+    validation_profile: ci
+    ci_mapping:
+      required_gate: workflow_lint
+      workflow: .github/workflows/ci.yml
+    upgrade_trigger: monthly workflow dependency review
+    rollback_path: revert pinned upload-artifact revision and rerun docs-gate
+    failure_attribution: artifact publication path failure vs upload action contract regression
+    provenance: full SHA pinned GitHub Action
+    sync_policy: artifact upload paths must resolve under .runtime-cache/artifacts
+    local_tracking_path: .github/workflows
+    customizations: []
+    private_coupling_forbidden_patterns: []
+  - system_id: docker_node_base_image
+    display_name: node:20-bookworm-slim
+    category: image
+    source_type: image
+    locator_type: image
+    locator_value: "node:20-bookworm-slim@dockerhub-tag"
+    version_pin_kind: exact-version
+    integration_owner: uiq-platform
+    upgrade_owner: uiq-platform
+    contract_type: public_contract
+    contract_surface:
+      - CI Node runtime baseline
+    glue_layers:
+      - docker/ci/base.Dockerfile
+    validation_commands:
+      - node scripts/ci/check-python-baseline.mjs
+    validation_profile: ci
+    ci_mapping:
+      required_gate: workflow_lint
+      workflow: .github/workflows/ci.yml
+    upgrade_trigger: monthly base image review or toolchain regression
+    rollback_path: revert Dockerfile base image change and rerun docs-gate plus workflow lint
+    failure_attribution: container toolchain drift vs upstream image baseline regression
+    provenance: pinned Docker image tag declared in Dockerfile
+    sync_policy: base image changes must stay aligned with Dockerfile and governance docs
+    local_tracking_path: docker/ci/base.Dockerfile
+    customizations: []
+    private_coupling_forbidden_patterns: []
+  - system_id: docker_python_base_image
+    display_name: python:3.12-slim-bookworm
+    category: image
+    source_type: image
+    locator_type: image
+    locator_value: "python:3.12-slim-bookworm@dockerhub-tag"
+    version_pin_kind: exact-version
+    integration_owner: uiq-platform
+    upgrade_owner: uiq-platform
+    contract_type: public_contract
+    contract_surface:
+      - CI and backend Python runtime baseline
+    glue_layers:
+      - docker/ci/base.Dockerfile
+      - services/api/Dockerfile
+    validation_commands:
+      - node scripts/ci/check-python-baseline.mjs
+    validation_profile: ci
+    ci_mapping:
+      required_gate: workflow_lint
+      workflow: .github/workflows/ci.yml
+    upgrade_trigger: monthly base image review or Python baseline regression
+    rollback_path: revert Dockerfile base image change and rerun python baseline gate
+    failure_attribution: Python baseline drift vs upstream image baseline regression
+    provenance: pinned Docker image tag declared in Dockerfiles
+    sync_policy: Python baseline must stay aligned across backend and CI images
+    local_tracking_path: docker/ci/base.Dockerfile
+    customizations: []
+    private_coupling_forbidden_patterns: []

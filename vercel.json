@@ -1,0 +1,6 @@
+{
+  "buildCommand": "cd apps/command-center && pnpm install && pnpm run build",
+  "outputDirectory": "apps/command-center/dist",
+  "installCommand": "pnpm install",
+  "framework": "vite"
+}

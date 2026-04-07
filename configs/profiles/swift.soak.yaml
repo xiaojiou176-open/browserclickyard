@@ -1,0 +1,26 @@
+name: swift.soak
+steps:
+  - desktop_readiness
+  - desktop_smoke
+  - desktop_e2e
+  - desktop_soak
+  - security
+  - report
+gates:
+  consoleErrorMax: 0
+  pageErrorMax: 0
+  http5xxMax: 0
+  securityHighVulnMax: 0
+security:
+  engine: builtin
+  maxFileSizeKb: 512
+  rulesFile: configs/security-rules.yaml
+desktopE2E:
+  keyboardInteractionRequired: false
+desktopSoak:
+  durationSeconds: 30
+  intervalSeconds: 5
+  gates:
+    rssGrowthMbMax: 120
+    cpuAvgPercentMax: 90
+    crashCountMax: 0

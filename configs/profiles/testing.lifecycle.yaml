@@ -1,0 +1,44 @@
+version: 1
+updated_at: "2026-02-26"
+description: >
+  Wave 2 test-parameter migration. Non-runtime test knobs were removed from
+  ENV contract and are governed here as profile/config values.
+
+lifecycle:
+  source_of_truth: config_only
+  injection_boundary: test_entrypoint_only
+  env_policy: >
+    Do not re-introduce removed test knobs as env vars. Use this profile file
+    and CLI/test runner options instead.
+
+defaults:
+  matrix:
+    suites:
+      backend: true
+      frontend_e2e: true
+      frontend_unit: true
+      automation_check: true
+      orchestrator_mcp: true
+      web_e2e: true
+    mode: parallel
+  workers:
+    playwright_e2e: "50%"
+    playwright_ct: "50%"
+    unit_min: 1
+    unit_max: 4
+    unit_file_parallelism: true
+  ports:
+    e2e: 4173
+    frontend_e2e: 4281
+    ct: 4174
+  desktop:
+    web_only_steps:
+      - web_a11y
+      - web_performance
+      - web_smoke
+    desktop_only_steps:
+      - desktop_readiness
+      - desktop_smoke
+      - desktop_e2e
+      - desktop_business_regression
+      - desktop_soak

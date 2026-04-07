@@ -1,0 +1,77 @@
+schema_version: 1
+runtime_root: .runtime-cache
+path_contract:
+  log_roots:
+    - .runtime-cache/logs
+    - .runtime-cache/logs/runtime
+    - .runtime-cache/logs/automation
+    - .runtime-cache/logs/test-matrix
+    - .runtime-cache/logs/frontend-e2e
+    - .runtime-cache/logs/ci
+  artifact_roots:
+    - .runtime-cache/artifacts/runs
+    - .runtime-cache/artifacts/ci
+    - .runtime-cache/artifacts/config
+    - .runtime-cache/artifacts/proof-campaigns
+  report_roots:
+    - .runtime-cache/reports
+    - .runtime-cache/reports/playwright
+    - .runtime-cache/reports/mutation
+  runtime_data_roots:
+    - .runtime-cache/automation
+    - .runtime-cache/cache
+    - .runtime-cache/container-runs
+    - .runtime-cache/temp
+    - .runtime-cache/dev
+    - .runtime-cache/metrics
+    - .runtime-cache/coverage
+    - .runtime-cache/container-gates
+    - .runtime-cache/docs-gate
+    - .runtime-cache/lint-all
+    - .runtime-cache/pytest-cache
+    - .runtime-cache/test-output
+    - .runtime-cache/test-results
+    - .runtime-cache/backups
+forbidden_nested_runtime_roots:
+  - tooling/automation/.runtime-cache
+  - tests/frontend-e2e/.runtime-cache
+  - tests/web-harness/tests/e2e/.runtime-cache
+  - tests/web-harness/tests/ct/.runtime-cache
+ci_path_contract:
+  raw_text_logs:
+    - .runtime-cache/logs/ci
+  structured_reports:
+    - .runtime-cache/artifacts/ci
+  forbidden_legacy_paths:
+    - .runtime-cache/ci
+machine_cache_contract:
+  forbidden_repo_paths:
+    - .venv
+    - .runtime-cache/ms-playwright
+  external_roots:
+    - UIQ_NODE_MODULES_DIR
+    - UIQ_PNPM_STORE_DIR
+    - UIQ_PYTHON_ENV_ROOT
+    - UV_CACHE_DIR
+    - PIP_CACHE_DIR
+    - PLAYWRIGHT_BROWSERS_PATH
+shared_dependency_contract:
+  authoritative_workspace_node_root: node_modules
+  repo_family_node_fallback: ${XDG_CACHE_HOME:-$HOME/.cache}/uiq/node-modules
+  runtime_bridge_root: /tmp/uiq-runner/uiq-node-modules
+  runtime_bridge_must_not_dangle: true
+  notes:
+    - Repo-local node_modules is the authoritative Node root for the current public workspace.
+    - Repo-family ~/.cache/uiq/node-modules remains a fallback/shared cache layer, not the primary workspace truth.
+    - Runtime bridge roots under .runtime-cache/container-runs are scratch surfaces; successful gate runs must clear the current run bridge immediately, and stale run roots age out on the 3-day TTL.
+    - Contract tests that temporarily rebind node_modules must restore the repo-local authoritative root before exit so later gates do not inherit a scratch topology.
+drift_contract:
+  unmanaged_runtime_root_patterns:
+    - .runtime-cache/pnpm-install-safe.*
+  forbidden_workspace_artifact_names:
+    - .runtime-cache
+    - mutants
+  notes:
+    - Repo-local install sandboxes under the runtime root are unmanaged drift, not valid steady-state runtime classes.
+    - Workspace-local runtime roots and source-tree mutation workspaces must not survive command completion.
+    - Transient node-governance-entry concurrency fixtures under .runtime-cache/node-governance-entry-concurrency.* are runtime pollution, not durable runtime classes, and must self-clean on every exit path.

@@ -1,0 +1,49 @@
+builtinRules:
+  - id: hardcoded.secret
+    severity: HIGH
+    message: Possible hardcoded secret/token/password.
+    pattern: '(api[_-]?key|token|password|secret)\s*[:=]\s*["''`][^"''`]{8,}["''`]'
+    flags: i
+  - id: dangerous.eval
+    severity: HIGH
+    message: Use of eval/new Function is high risk.
+    pattern: '\b(eval\s*\(|new\s+Function\s*\()'
+  - id: childprocess.exec
+    severity: MEDIUM
+    message: child_process exec/execSync/spawn usage requires strict validation.
+    pattern: '(?<!\.)\b(exec|execSync|execFile|execFileSync|spawn|spawnSync)\s*\('
+  - id: insecure.http
+    severity: LOW
+    message: HTTP URL found; verify transport security requirements.
+    pattern: 'http://'
+
+ignorePatterns:
+  - '^\.codex/'
+  - '^\.runtime-cache/'
+  - '^\.lighthouseci/'
+  - '^\.venv/'
+  - '^node_modules/'
+  - '^我和ChatGPT的对话\.md$'
+  - '^我和多个AI的对话\.md$'
+
+componentMap:
+  - prefix: tests/web-harness/
+    component: web-app
+  - prefix: apps/api/
+    component: api-app
+  - prefix: packages/orchestrator/
+    component: orchestrator
+  - prefix: packages/core/
+    component: core
+  - prefix: packages/drivers/
+    component: drivers
+  - prefix: packages/probes/
+    component: probes
+  - prefix: contracts/
+    component: contracts
+  - prefix: docs/
+    component: docs
+  - prefix: configs/profiles/
+    component: profiles
+  - prefix: configs/targets/
+    component: targets

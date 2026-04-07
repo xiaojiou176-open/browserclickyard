@@ -1,0 +1,77 @@
+name: weekly
+steps:
+  - unit
+  - ct
+  - e2e
+  - capture
+  - explore
+  - chaos
+  - a11y
+  - perf
+  - visual
+  - load
+  - security
+  - report
+gates:
+  consoleErrorMax: 0
+  pageErrorMax: 0
+  http5xxMax: 1
+  flakeRateMax: 0.08
+  a11ySeriousMax: 0
+  perfLcpMsMax: 5000
+  perfFcpMsMax: 3000
+  visualDiffPixelsMax: 0
+  securityHighVulnMax: 0
+  loadFailedRequestsMax: 0
+  loadP95MsMax: 250
+  loadRpsMin: 10
+explore:
+  engine: crawlee
+  budgetSeconds: 600
+  maxDepth: 5
+  maxStates: 80
+chaos:
+  seed: 989898
+  budgetSeconds: 480
+  eventRatio:
+    click: 50
+    input: 25
+    scroll: 15
+    keyboard: 10
+load:
+  vus: 12
+  durationSeconds: 20
+  requestTimeoutMs: 5000
+  engines:
+    - builtin
+    - k6
+security:
+  engine: semgrep
+  maxFileSizeKb: 512
+  rulesFile: configs/security-rules.yaml
+perf:
+  preset: mobile
+  engine: lhci
+a11y:
+  standard: wcag2aa
+  maxIssues: 500
+  engine: axe
+visual:
+  engine: lostpixel
+  mode: diff
+aiReview:
+  enabled: true
+  maxArtifacts: 40
+  emitIssue: false
+  emitPrComment: false
+  severityThreshold: high
+geminiAccuracyMin: 0.85
+geminiParallelConsistencyMin: 0.82
+geminiSampleSizeMin: 12
+enginePolicy:
+  required:
+    - crawlee
+    - lostpixel
+    - semgrep
+    - k6
+  failOnBlocked: true

@@ -1,0 +1,12 @@
+version: 1
+updated_at: "2026-02-26"
+description: >
+  Phase B tail decisions are currently cleared.
+  declaredButUnused has reached 0; no active tail items remain.
+
+decisions: {}
+
+archive:
+  - date: "2026-02-26"
+    action: "completed"
+    note: "All 18 previously tracked tail items were resolved and removed from contract."

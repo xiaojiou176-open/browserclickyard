@@ -1,0 +1,31 @@
+version: 1
+updated_at: "2026-02-26"
+description: >
+  Wave 1 P0 runtime whitelist. These keys are the minimum baseline for
+  day-to-day local run + CI + live smoke, and should stay within 20-35 keys.
+
+p0_required:
+  - APP_ENV
+  - LOG_LEVEL
+  - AUTOMATION_API_TOKEN
+  - BACKEND_PORT
+  - BASE_URL
+  - CORS_ALLOWED_ORIGINS
+  - TRUSTED_HOSTS
+  - UIQ_BASE_URL
+  - UIQ_MCP_API_BASE_URL
+  - UIQ_MCP_BACKEND_PORT
+  - UIQ_MCP_API_TIMEOUT_MS
+  - AI_PROVIDER
+  - AI_SPEED_MODE
+  - GEMINI_API_KEY
+  - GEMINI_MODEL
+  - GEMINI_FAST_MODEL
+  - GEMINI_EMBEDDING_MODEL
+  - GEMINI_THINKING_LEVEL
+  - GEMINI_INCLUDE_THOUGHTS
+  - PROVIDER_POLICY_PATH
+
+notes:
+  - No alias keys allowed in P0.
+  - Any new P0 key must include owner + justification in env-owner-map.

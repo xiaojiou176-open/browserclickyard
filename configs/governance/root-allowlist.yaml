@@ -1,0 +1,77 @@
+schema_version: 1
+tracked_root:
+  allowed_directories:
+    responsibility:
+      - apps
+      - services
+      - contracts
+      - tooling
+      - packages
+      - tests
+    governance:
+      - configs
+      - .devcontainer
+      - docker
+      - docs
+      - scripts
+    vcs:
+      - .github
+    runtime:
+      - .runtime-cache
+      - node_modules
+  allowed_files:
+    - .dockerignore
+    - .env.example
+    - .gitleaks.toml
+    - .gitignore
+    - .markdownlint-cli2.yaml
+    - .npmrc
+    - .pre-commit-config.yaml
+    - .secrets.baseline
+    - .stylelintrc.json
+    - AGENTS.md
+    - biome.json
+    - CHANGELOG.md
+    - CITATION.cff
+    - CLAUDE.md
+    - CODE_OF_CONDUCT.md
+    - commitlint.config.cjs
+    - CONTRIBUTING.md
+    - docker-compose.yml
+    - justfile
+    - LICENSE
+    - Makefile
+    - package.json
+    - pnpm-lock.yaml
+    - pnpm-workspace.yaml
+    - pyproject.toml
+    - README.md
+    - SECURITY.md
+    - SUPPORT.md
+    - tsconfig.json
+    - turbo.json
+    - uv.lock
+    - vercel.json
+  shared_environment_tolerated:
+    - .git
+    - .agents
+    - .env
+    - .env.local
+    - .vscode
+    - .codex
+    - .cursorrules
+  disallowed_runtime_outputs:
+    - .mutmut-cache
+    - .coverage
+    - .coverage.*
+    - .pytest_cache
+    - .ruff_cache
+    - ui_automation_control_plane.egg-info
+    - coverage
+    - coverage.xml
+    - htmlcov
+    - mutants
+    - playwright-report
+    - stryker.log
+    - test-results
+    - .hypothesis

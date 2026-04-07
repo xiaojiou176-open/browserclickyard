@@ -1,0 +1,8 @@
+routes:
+  - id: route_home
+    path: /
+    source: routes
+  - id: route_register
+    path: /register
+    source: routes
+stories: []

@@ -1,0 +1,28 @@
+{
+  "name": "uiq-ci-browser-devcontainer",
+  "dockerComposeFile": [
+    "../docker/compose.ci.yml",
+    "compose.yaml"
+  ],
+  "service": "devcontainer",
+  "workspaceFolder": "/workspace",
+  "containerEnv": {
+    "UIQ_CONTAINER_GATE_NAME": "devcontainer"
+  },
+  "shutdownAction": "stopCompose",
+  "overrideCommand": false,
+  "postCreateCommand": "pnpm gate:lock:drift && pnpm install --frozen-lockfile && uv sync --frozen --extra dev",
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "bash"
+      },
+      "extensions": [
+        "ms-python.python",
+        "ms-playwright.playwright",
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode"
+      ]
+    }
+  }
+}

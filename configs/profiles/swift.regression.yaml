@@ -1,0 +1,22 @@
+name: swift.regression
+steps:
+  - desktop_readiness
+  - desktop_smoke
+  - desktop_e2e
+  - desktop_business_regression
+  - security
+  - report
+gates:
+  consoleErrorMax: 0
+  pageErrorMax: 0
+  http5xxMax: 0
+  securityHighVulnMax: 0
+security:
+  engine: builtin
+  maxFileSizeKb: 512
+  rulesFile: configs/security-rules.yaml
+desktopE2E:
+  keyboardInteractionRequired: false
+enginePolicy:
+  required: []
+  failOnBlocked: true

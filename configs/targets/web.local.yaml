@@ -1,0 +1,68 @@
+name: web.local
+type: web
+driver: web-playwright
+baseUrl: http://127.0.0.1:43173
+start:
+  web: pnpm --dir apps/command-center dev --host 127.0.0.1 --port 43173 --strictPort
+healthcheck:
+  url: http://127.0.0.1:43173/
+scope:
+  domains:
+    - http://127.0.0.1:43173
+explore:
+  budgetSeconds: 180
+  maxDepth: 2
+  maxStates: 20
+  denylist:
+    - delete
+    - remove
+    - pay
+    - submit
+    - purchase
+    - send
+    - commit
+    - drop
+chaos:
+  seed: 20260001
+  budgetSeconds: 120
+  eventRatio:
+    click: 60
+    input: 20
+    scroll: 10
+    keyboard: 10
+diagnostics:
+  maxItems: 20
+load:
+  vus: 6
+  durationSeconds: 15
+  requestTimeoutMs: 8000
+  engines:
+    - builtin
+    - artillery
+    - k6
+a11y:
+  standard: wcag2aa
+  maxIssues: 200
+  engine: axe
+perf:
+  preset: desktop
+  engine: lhci
+visual:
+  mode: diff
+gates:
+  # Local guardrails: keep constraints, but tolerate known localhost noise.
+  consoleErrorMax: 120
+  pageErrorMax: 3
+  http5xxMax: 2
+  a11ySeriousMax: 1
+  visualDiffPixelsMax: 3000
+  perfEngineReadyRequired: false
+  visualBaselineReadyRequired: false
+  exploreUnderExploredRequired: true
+  exploreMinDiscoveredStates: 1
+security:
+  engine: builtin
+  maxFileSizeKb: 512
+  rulesFile: configs/security-rules.yaml
+  excludeDirs:
+    - coverage

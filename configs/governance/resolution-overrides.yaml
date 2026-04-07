@@ -1,0 +1,36 @@
+schema_version: 1
+package_manager: pnpm
+source_of_truth:
+  manifest: package.json
+  path: pnpm.overrides
+overrides:
+  - package: fast-xml-parser
+    resolution: 5.3.8
+    rationale: security and parser baseline convergence
+  - package: tmp
+    resolution: 0.2.5
+    rationale: security baseline convergence
+  - package: hono
+    resolution: 4.12.4
+    rationale: framework baseline convergence
+  - package: "@hono/node-server"
+    resolution: 1.19.10
+    rationale: hono ecosystem baseline convergence
+  - package: express-rate-limit
+    resolution: 8.2.2
+    rationale: security baseline convergence
+  - package: basic-ftp
+    resolution: 5.2.0
+    rationale: security baseline convergence
+  - package: minimatch
+    resolution: 10.2.3
+    rationale: glob engine security baseline convergence
+  - package: rollup
+    resolution: 4.59.0
+    rationale: bundler convergence across workspaces
+  - package: "@modelcontextprotocol/sdk"
+    resolution: 1.26.0
+    rationale: MCP contract convergence across root and services/mcp-server
+  - package: js-yaml
+    resolution: 4.1.1
+    rationale: parser security baseline convergence

@@ -1,0 +1,72 @@
+name: nightly
+steps:
+  - unit
+  - contract
+  - ct
+  - e2e
+  - capture
+  - explore
+  - chaos
+  - a11y
+  - perf
+  - visual
+  - report
+gates:
+  consoleErrorMax: 0
+  pageErrorMax: 0
+  http5xxMax: 0
+  flakeRateMax: 0.05
+  contractStatus: passed
+  a11ySeriousMax: 0
+  perfLcpMsMax: 5000
+  perfFcpMsMax: 3000
+  visualDiffPixelsMax: 0
+explore:
+  engine: crawlee
+  budgetSeconds: 300
+  maxDepth: 4
+  maxStates: 40
+  seed: 424242
+  denylist:
+    - export
+    - destroy
+chaos:
+  seed: 424242
+  budgetSeconds: 210
+  eventRatio:
+    click: 28
+    input: 24
+    scroll: 30
+    keyboard: 18
+determinism:
+  timezone: UTC
+  locale: en-US
+  seed: 424242
+  disableAnimations: true
+  reducedMotion: reduce
+diagnostics:
+  maxItems: 20
+perf:
+  preset: mobile
+  engine: lhci
+a11y:
+  standard: wcag2aa
+  maxIssues: 400
+  engine: axe
+visual:
+  engine: lostpixel
+  mode: diff
+aiReview:
+  enabled: true
+  maxArtifacts: 40
+  emitIssue: false
+  emitPrComment: false
+  severityThreshold: high
+geminiAccuracyMin: 0.8
+geminiParallelConsistencyMin: 0.78
+geminiSampleSizeMin: 8
+enginePolicy:
+  required:
+    - crawlee
+    - lostpixel
+  failOnBlocked: true

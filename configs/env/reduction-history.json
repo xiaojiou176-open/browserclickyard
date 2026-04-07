@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "updated_at": "2026-03-09",
+  "samples": [
+    {
+      "date": "2026-02-26",
+      "declared": 150,
+      "declaredButUnused": 0,
+      "usedButUndeclared": 0,
+      "deprecatedAliases": 0
+    },
+    {
+      "date": "2026-03-02",
+      "declared": 107,
+      "declaredButUnused": 0,
+      "usedButUndeclared": 0,
+      "deprecatedAliases": 0
+    },
+    {
+      "date": "2026-03-09",
+      "declared": 143,
+      "declaredButUnused": 0,
+      "usedButUndeclared": 0,
+      "deprecatedAliases": 0
+    }
+  ]
+}

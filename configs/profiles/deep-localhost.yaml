@@ -1,0 +1,61 @@
+name: deep-localhost
+steps:
+  - e2e
+  - capture
+  - explore
+  - chaos
+  - a11y
+  - perf
+  - visual
+  - load
+  - report
+tests:
+  e2eSuite: generic
+gates:
+  consoleErrorMax: 0
+  pageErrorMax: 0
+  http5xxMax: 0
+  a11ySeriousMax: 0
+  perfLcpMsMax: 5000
+  perfFcpMsMax: 3000
+  visualDiffPixelsMax: 0
+  loadFailedRequestsMax: 0
+  loadP95MsMax: 2500
+  loadRpsMin: 1
+explore:
+  budgetSeconds: 420
+  maxDepth: 5
+  maxStates: 80
+chaos:
+  seed: 424242
+  budgetSeconds: 300
+  eventRatio:
+    click: 30
+    input: 25
+    scroll: 30
+    keyboard: 15
+load:
+  vus: 12
+  durationSeconds: 60
+  requestTimeoutMs: 8000
+  engines:
+    - builtin
+    - artillery
+    - k6
+determinism:
+  timezone: UTC
+  locale: en-US
+  seed: 424242
+  disableAnimations: true
+  reducedMotion: reduce
+diagnostics:
+  maxItems: 50
+perf:
+  preset: mobile
+  engine: lhci
+a11y:
+  standard: wcag2aa
+  maxIssues: 500
+  engine: axe
+visual:
+  mode: diff

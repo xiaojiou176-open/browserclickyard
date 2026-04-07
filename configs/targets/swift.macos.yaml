@@ -1,0 +1,9 @@
+name: swift.macos
+type: swift
+driver: macos-xcuitest
+# Desktop target must be explicit at runtime via CLI --bundle-id.
+# If missing, readiness/report reasonCode will be: desktop.swift.bundle.missing
+bundleId: ""
+desktopSoak:
+  durationSeconds: 30
+  intervalSeconds: 5

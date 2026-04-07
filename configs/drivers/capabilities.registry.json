@@ -1,0 +1,43 @@
+{
+  "drivers": {
+    "web-playwright": {
+      "driverId": "web-playwright",
+      "targetTypes": ["web"],
+      "capabilities": {
+        "navigate": true,
+        "interact": true,
+        "capture": true,
+        "logs": true,
+        "network": true,
+        "trace": true,
+        "lifecycle": false
+      }
+    },
+    "tauri-webdriver": {
+      "driverId": "tauri-webdriver",
+      "targetTypes": ["tauri"],
+      "capabilities": {
+        "navigate": true,
+        "interact": true,
+        "capture": true,
+        "logs": true,
+        "network": false,
+        "trace": false,
+        "lifecycle": true
+      }
+    },
+    "macos-xcuitest": {
+      "driverId": "macos-xcuitest",
+      "targetTypes": ["swift"],
+      "capabilities": {
+        "navigate": false,
+        "interact": true,
+        "capture": true,
+        "logs": true,
+        "network": false,
+        "trace": false,
+        "lifecycle": true
+      }
+    }
+  }
+}
