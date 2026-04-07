@@ -188,10 +188,15 @@ uiq_prepare_container_gate_dirs() {
     "$UIQ_RUNTIME_CACHE_HOST_ROOT" \
     "$UIQ_HOST_RUNNER_TEMP_ROOT" \
     "$UIQ_CONTAINER_GATE_HOST_RUNNER_TEMP_ROOT" \
+    "$UIQ_CONTAINER_GATE_HOST_RUNNER_TEMP_ROOT/uiq-node-modules" \
     "$UIQ_CONTAINER_GATE_HOST_ROOT" \
     "$UIQ_CONTAINER_GATE_HOST_LOG_DIR" \
     "$UIQ_CONTAINER_GATE_HOST_ARTIFACT_DIR" \
     "$UIQ_CONTAINER_GATE_HOST_STATE_DIR"
+
+  # Pre-create the node_modules bridge so Docker does not materialize it as a
+  # root-owned bind target that non-root CI browser users cannot write to.
+  chmod 0777 "$UIQ_CONTAINER_GATE_HOST_RUNNER_TEMP_ROOT/uiq-node-modules"
 
   export UIQ_CONTAINER_GATE_RUN_ID
   export UIQ_CONTAINER_GATE_HOST_ROOT
