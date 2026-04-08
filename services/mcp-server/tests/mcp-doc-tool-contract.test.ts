@@ -28,6 +28,13 @@ const LEGACY_DESCRIPTION_FIELDS = [
 ] as const;
 
 const CJK_PATTERN = /[\u3400-\u9fff]/u;
+const PRODUCT_VALUE_PROPOSITION =
+  "Prooflane is an AI-native WebUI stress lab for localhost-first browser experiments, with governed proof and agent-ready workflows when results need deeper review.";
+const CANONICAL_PACKAGE_TOOL_GROUPS = "advanced,analysis,proof";
+const PRODUCT_VALUE_PROPOSITION_PATTERN = new RegExp(
+  PRODUCT_VALUE_PROPOSITION.replace(/[.*+?^${}()|[\]\\]/g, "\\$&").replace(/\s+/g, "[\\s>]+"),
+  "i",
+);
 
 function extractRunTools(source: string): string[] {
   const names = new Set<string>();
@@ -120,6 +127,14 @@ function extractNamedDescriptions(source: string): Map<string, string> {
       (match) => [match[1], match[2]] as const,
     ),
   );
+}
+
+function matchesPattern(source: string, pattern: string | RegExp): boolean {
+  return typeof pattern === "string" ? source.includes(pattern) : pattern.test(source);
+}
+
+function patternLabel(pattern: string | RegExp): string {
+  return typeof pattern === "string" ? pattern : pattern.toString();
 }
 
 test("docs tool lists are bidirectionally aligned with mcp registration", () => {
@@ -250,6 +265,153 @@ test("run override fields in docs match runOverrideSchema and avoid legacy drift
   assert.ok(
     /UIQ_MCP_TOOL_GROUPS\s*=\s*advanced,register,proof,analysis/i.test(quickstartDoc),
     "docs/how-to/mcp-quickstart-1pager.md must document optional group opt-in for advanced capabilities",
+  );
+});
+
+test("publish-ready package truth stays aligned across docs, skill scaffold, and metadata", () => {
+  const repoRoot = resolve(import.meta.dirname, "../../../");
+  const packageJson = JSON.parse(
+    readFileSync(resolve(repoRoot, "services/mcp-server/package.json"), "utf8"),
+  );
+  const packageName = packageJson.name;
+  const binName = Object.keys(packageJson.bin ?? {})[0];
+  const docs = [
+    {
+      path: "README.md",
+      patterns: [packageName, binName, /ready in repo, not published yet/i],
+    },
+    {
+      path: "DISTRIBUTION.md",
+      patterns: [
+        packageName,
+        binName,
+        /npx\s+-y\s+@uiq\/mcp-server/i,
+        /pnpm dlx @uiq\/mcp-server/i,
+        /Docker Truth Today/,
+      ],
+    },
+    {
+      path: "INTEGRATIONS.md",
+      patterns: [
+        packageName,
+        binName,
+        /stdio only/i,
+        /does \*\*not\*\* use OAuth|does not use OAuth/i,
+        "UIQ_MCP_API_BASE_URL",
+        "UIQ_MCP_TOOL_GROUPS",
+        CANONICAL_PACKAGE_TOOL_GROUPS,
+      ],
+    },
+    {
+      path: "docs/mcp.md",
+      patterns: [
+        packageName,
+        binName,
+        /stdio only/i,
+        /does \*\*not\*\* use OAuth|does not use OAuth/i,
+        "UIQ_MCP_API_BASE_URL",
+        "UIQ_MCP_TOOL_GROUPS",
+        CANONICAL_PACKAGE_TOOL_GROUPS,
+      ],
+    },
+    {
+      path: "docs/how-to/mcp-clients-setup.md",
+      patterns: [
+        packageName,
+        binName,
+        /does \*\*not\*\* use OAuth|does not use OAuth/i,
+        "UIQ_MCP_API_BASE_URL",
+        "UIQ_MCP_TOOL_GROUPS",
+        CANONICAL_PACKAGE_TOOL_GROUPS,
+        "\"cwd\": \"/ABSOLUTE/PATH/TO/REPO\"",
+      ],
+    },
+    {
+      path: "docs/how-to/mcp-quickstart-1pager.md",
+      patterns: [
+        packageName,
+        binName,
+        /does \*\*not\*\* use OAuth|does not use OAuth/i,
+        "UIQ_MCP_API_BASE_URL",
+        "UIQ_MCP_TOOL_GROUPS",
+        CANONICAL_PACKAGE_TOOL_GROUPS,
+      ],
+    },
+    {
+      path: "docs/reference/integration-entrypoints.md",
+      patterns: [
+        packageName,
+        binName,
+        /Real MCP server with stdio transport/,
+        /does \*\*not\*\* use OAuth|does not use OAuth/i,
+      ],
+    },
+    {
+      path: "docs/skills/prooflane-mcp/SKILL.md",
+      patterns: [
+        packageName,
+        binName,
+        /generic in-repo scaffold/i,
+        /does \*\*not\*\* use OAuth|does not use OAuth/i,
+        "UIQ_MCP_API_BASE_URL",
+        "UIQ_MCP_TOOL_GROUPS",
+        CANONICAL_PACKAGE_TOOL_GROUPS,
+        /not published yet/i,
+      ],
+    },
+    {
+      path: "docs/skills/prooflane-mcp/manifest.yaml",
+      patterns: [
+        /^name:\s*prooflane-mcp$/m,
+        /^protocol:\s*stdio$/m,
+        packageName,
+        "UIQ_MCP_API_BASE_URL",
+        "UIQ_MCP_TOOL_GROUPS",
+        CANONICAL_PACKAGE_TOOL_GROUPS,
+      ],
+    },
+  ];
+
+  assert.equal(packageName, "@uiq/mcp-server");
+  assert.equal(binName, "prooflane-mcp");
+  assert.equal(packageJson.publishConfig?.access, "public");
+  assert.deepEqual(packageJson.files, ["dist", "README.md", ".env.example"]);
+  assert.equal(packageJson.engines?.node, ">=20");
+  assert.ok(packageJson.scripts?.prepack, "package.json must define a prepack build hook");
+  assert.match(
+    packageJson.scripts?.["package:smoke"] ?? "",
+    /npm pack --dry-run/,
+    "package:smoke must verify the pack path",
+  );
+
+  for (const doc of docs) {
+    const text = readFileSync(resolve(repoRoot, doc.path), "utf8");
+    for (const pattern of doc.patterns) {
+      assert.ok(
+        matchesPattern(text, pattern),
+        `${doc.path} missing publish-ready truth: ${patternLabel(pattern)}`,
+      );
+    }
+  }
+});
+
+test("front door value proposition stays aligned with command-center metadata", () => {
+  const repoRoot = resolve(import.meta.dirname, "../../../");
+  const readme = readFileSync(resolve(repoRoot, "README.md"), "utf8");
+  const indexHtml = readFileSync(resolve(repoRoot, "apps/command-center/index.html"), "utf8");
+
+  assert.ok(
+    PRODUCT_VALUE_PROPOSITION_PATTERN.test(readme),
+    "README.md must contain the canonical product value proposition",
+  );
+  assert.ok(
+    indexHtml.includes(PRODUCT_VALUE_PROPOSITION),
+    "apps/command-center/index.html must reuse the canonical product value proposition",
+  );
+  assert.match(
+    indexHtml,
+    /<title>Prooflane \| AI-native WebUI stress lab<\/title>/,
+    "apps/command-center/index.html title must stay product-first and aligned",
   );
 });
 

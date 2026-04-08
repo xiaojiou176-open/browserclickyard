@@ -20,7 +20,7 @@ Think of it like an airport signboard:
 | Entry path | What it is for today | Current truth | Good fit |
 | --- | --- | --- | --- |
 | `contracts/openapi/api.yaml` + HTTP | Direct service, CLI, or builder integration | Canonical API contract | Builders who want the most portable and explicit path |
-| `pnpm mcp:start` | Agent-facing adapter over existing ledgers and governed artifacts | Real MCP server with stdio transport and read-mostly review/runtime tools | MCP-capable agents and operator copilots |
+| `pnpm mcp:start` | Agent-facing adapter over existing ledgers and governed artifacts | Real MCP server with stdio transport and read-mostly review/runtime tools; publish-ready package target is `@uiq/mcp-server` with planned `prooflane-mcp` CLI shape | MCP-capable agents and operator copilots |
 | `apps/command-center/src/hooks/useApiClient.ts` + `useProofApi.ts` | First-party frontend wiring | Real internal client layer used by the product UI | Repo contributors who want examples of current fetch/header patterns |
 | `tests/web-harness/src/api-gen/**` | Generated fetch wrappers for shared harness/test surfaces | Real generated code, but scoped to the web harness and selected API families | Contributors extending tests, mocks, or contract checks inside this repo |
 
@@ -51,6 +51,15 @@ Why:
 - MCP already exposes a real adapter layer.
 - It is the cleanest path for agents that need runtime, artifact, proof, or review context.
 - It avoids scraping UI screens or reverse-engineering product state.
+
+Packaging truth:
+
+- repo-native entry today: `pnpm mcp:start`
+- publish-ready artifact target: `@uiq/mcp-server`
+- planned CLI / bin name: `prooflane-mcp`
+- protocol today: **stdio only**
+- local stdio startup does **not** use OAuth
+- the package command shape is documented, but **not published yet**
 
 Search-friendly but still truthful phrasing:
 
