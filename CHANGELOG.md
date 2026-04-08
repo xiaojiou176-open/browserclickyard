@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Refreshed the transitive security baseline again after the first GitHub
+  release by advancing `hono` to `4.12.12`, `@hono/node-server` to `1.19.13`,
+  and hard-pinning vulnerable `vite@6.4.1` / `vite@7.3.1` resolution paths to
+  the patched `6.4.2` / `7.3.2` lines in the root override policy.
 - Replaced the legacy weekly verification lane with a nightly-first contract,
   made the fast/light local entrypoints explicit, and added cleanup coverage
   for stale `.runtime-cache/container-runs` scratch bridges so the default
