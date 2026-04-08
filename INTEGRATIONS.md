@@ -9,7 +9,9 @@ This page keeps the integration story truthful and compact.
 | GitHub Pages | Live | `https://xiaojiou176-open.github.io/ui-automation-control-plane/` |
 | HTTP / OpenAPI | Live, repo-native | `docs/reference/integration-entrypoints.md`, `docs/reference/universal-api.md` |
 | MCP server | Live, repo-native | `pnpm mcp:start` |
+| MCP package shape | Publish-ready, not published | `@uiq/mcp-server` -> `prooflane-mcp` |
 | Codex / Claude Code / other MCP hosts | Supported through MCP config, not a marketplace listing | `docs/how-to/mcp-clients-setup.md` |
+| Generic skill scaffold | Ready in repo, not marketplace-published | `docs/skills/prooflane-mcp/SKILL.md` |
 
 ## What Does Not Exist Yet
 
@@ -18,9 +20,21 @@ This page keeps the integration story truthful and compact.
 | npm package | Not published |
 | PyPI package | Not published |
 | Official plugin marketplace listing | Not published |
+| Public Skills marketplace listing | Not published |
+| Public Docker image | Not published |
 | Separate starter bundle distribution | Not published |
 
+## MCP Transport And Auth Truth
+
+- Publish-ready MCP package target: `@uiq/mcp-server`
+- Planned CLI / bin name: `prooflane-mcp`
+- MCP transport today: **stdio only**
+- Auth boundary today: local stdio startup does **not** use OAuth; protected
+  HTTP/API and automation surfaces keep the existing token/header contract
+
 ## MCP Client Setup
+
+### Repo-native today
 
 Use the local repo as the MCP server source of truth.
 
@@ -30,22 +44,9 @@ Use the local repo as the MCP server source of truth.
     "uiq": {
       "command": "pnpm",
       "args": ["mcp:start"],
-      "cwd": "/ABSOLUTE/PATH/TO/REPO"
-    }
-  }
-}
-```
-
-If you need the deeper review-oriented tools:
-
-```json
-{
-  "mcpServers": {
-    "uiq": {
-      "command": "pnpm",
-      "args": ["mcp:start"],
       "cwd": "/ABSOLUTE/PATH/TO/REPO",
       "env": {
+        "UIQ_MCP_API_BASE_URL": "http://127.0.0.1:18080",
         "UIQ_MCP_TOOL_GROUPS": "advanced,analysis,proof"
       }
     }
@@ -53,17 +54,43 @@ If you need the deeper review-oriented tools:
 }
 ```
 
+### Publish-ready package shape (not live yet)
+
+```json
+{
+  "mcpServers": {
+    "uiq": {
+      "command": "npx",
+      "args": ["-y", "@uiq/mcp-server"],
+      "env": {
+        "UIQ_MCP_API_BASE_URL": "http://127.0.0.1:18080",
+        "UIQ_MCP_TOOL_GROUPS": "advanced,analysis,proof"
+      }
+    }
+  }
+}
+```
+
+That package command shape is **ready**, but it is **not published yet**. The
+package keeps the scoped name `@uiq/mcp-server` in this pass, while the bin
+inside it remains `prooflane-mcp`.
+
 ## Truthful Wording
 
 It is truthful to say:
 
-- Prooflane works with Codex, Claude Code, and other MCP-capable clients
-  through a repo-owned MCP server.
+- Prooflane works with Codex, Claude Code, OpenClaw, and other MCP-capable
+  clients through a repo-owned MCP server.
+- The publish-ready MCP artifact target is `@uiq/mcp-server`.
+- The planned CLI name is `prooflane-mcp`.
+- MCP today means **stdio**, not SSE or Streamable HTTP.
 
 It is **not** truthful to say:
 
 - there is already an official marketplace plugin
+- there is already a published `prooflane-mcp` package
 - there is already a separately distributed starter bundle
+- there is already a public Docker image
 - MCP is the only supported integration path
 
 ## Canonical References

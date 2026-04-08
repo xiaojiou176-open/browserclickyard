@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+- Promoted `services/mcp-server` into the only publish-ready MCP artifact
+  target for this repo by completing scoped package metadata
+  (`@uiq/mcp-server`), the `prooflane-mcp` bin contract, prepack + pack-smoke
+  verification, truthful repo/package launch docs, and a generic in-repo Skill
+  scaffold under `docs/skills/prooflane-mcp/` without overclaiming registry or
+  marketplace publication.
 - Refreshed the transitive security baseline again after the first GitHub
   release by advancing `hono` to `4.12.12`, `@hono/node-server` to `1.19.13`,
   and hard-pinning vulnerable `vite@6.4.1` / `vite@7.3.1` resolution paths to

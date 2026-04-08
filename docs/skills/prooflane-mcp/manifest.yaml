@@ -1,0 +1,47 @@
+name: prooflane-mcp
+version: 0.1.0
+summary: >
+  Generic skill scaffold for teaching an agent to clone, install, configure,
+  verify, and use the Prooflane repo-native MCP server and local product paths.
+protocol: stdio
+installation:
+  repo: https://github.com/xiaojiou176-open/ui-automation-control-plane
+  steps:
+    - git clone https://github.com/xiaojiou176-open/ui-automation-control-plane.git
+    - cd ui-automation-control-plane
+    - ./scripts/setup.sh
+configuration:
+  repo_native:
+    command: pnpm
+    args:
+      - mcp:start
+    cwd: /ABSOLUTE/PATH/TO/REPO
+    env:
+      UIQ_MCP_API_BASE_URL: http://127.0.0.1:18080
+      UIQ_MCP_TOOL_GROUPS: advanced,analysis,proof
+  publish_ready_shape:
+    command: npx
+    args:
+      - -y
+      - "@uiq/mcp-server"
+    env:
+      UIQ_MCP_API_BASE_URL: http://127.0.0.1:18080
+      UIQ_MCP_TOOL_GROUPS: advanced,analysis,proof
+    note: publish-ready scoped package shape only; not published yet; bin inside remains prooflane-mcp
+verification:
+  steps:
+    - pnpm mcp:check
+    - pnpm mcp:build
+    - pnpm mcp:package:smoke
+    - pnpm mcp:doc:contract
+    - pnpm mcp:smoke
+supported_agents:
+  - Codex
+  - Claude Code
+  - OpenClaw
+  - generic-mcp-client
+capabilities:
+  - local stress-lab first-look
+  - repo-native stdio MCP startup
+  - governed run and proof path orientation
+  - truthful distribution boundary guidance

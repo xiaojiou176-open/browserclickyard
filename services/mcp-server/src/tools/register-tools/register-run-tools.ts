@@ -3,8 +3,10 @@
 import { resolve } from "node:path";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import * as z from "zod";
-import { buildModelTargetCapabilities } from "../../../../../packages/orchestrator/src/commands/catalog.js";
 import { apiRequest, backendBaseUrl, backendToken } from "../../core/api-client.js";
+import {
+  buildModelTargetCapabilities,
+} from "../../core/model-target-capabilities.js";
 import {
   ensureDirReady,
   readUtf8,

@@ -8,6 +8,16 @@
 - Running the same read-mostly loop from Codex, Claude Code, or another
   MCP-capable client without pretending Prooflane is a generic assistant.
 
+## Installation Truth
+
+- Repo-native start today: `pnpm mcp:start`
+- Publish-ready package target: `@uiq/mcp-server`
+- Planned CLI / bin name: `prooflane-mcp`
+- Protocol today: **stdio only**
+- Local stdio startup does **not** use OAuth
+- `npx -y @uiq/mcp-server` / `pnpm dlx @uiq/mcp-server` is the truthful
+  package-launch shape, but it is **not published yet**
+
 ## Layering Map
 
 - Default: this page + the standard path in `docs/how-to/mcp-clients-setup.md`.
@@ -91,9 +101,48 @@ Use this when an MCP-capable client needs a fast answer to:
 
 - Default env (client side):
   - `UIQ_MCP_PERFECT_MODE=true`
+- Backend lane:
+  - `UIQ_MCP_API_BASE_URL=http://127.0.0.1:18080`
 - Optional groups (only when needed):
   - `UIQ_MCP_TOOL_GROUPS=advanced,register,proof,analysis`
 - Provider policy: Gemini-only.
+
+## Minimal Config Seed
+
+### Repo-native today
+
+```json
+{
+  "mcpServers": {
+    "uiq": {
+      "command": "pnpm",
+      "args": ["mcp:start"],
+      "cwd": "/ABSOLUTE/PATH/TO/REPO",
+      "env": {
+        "UIQ_MCP_API_BASE_URL": "http://127.0.0.1:18080",
+        "UIQ_MCP_TOOL_GROUPS": "advanced,analysis,proof"
+      }
+    }
+  }
+}
+```
+
+### Publish-ready package shape (not live yet)
+
+```json
+{
+  "mcpServers": {
+    "uiq": {
+      "command": "npx",
+      "args": ["-y", "@uiq/mcp-server"],
+      "env": {
+        "UIQ_MCP_API_BASE_URL": "http://127.0.0.1:18080",
+        "UIQ_MCP_TOOL_GROUPS": "advanced,analysis,proof"
+      }
+    }
+  }
+}
+```
 
 ## Next Docs
 

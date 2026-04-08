@@ -12,8 +12,12 @@ that has not happened yet.
 
 - **Live now**: GitHub repository, GitHub Pages, Discussions, release notes,
   MCP docs, public-safe guided demo, and proof docs.
-- **Ready but not live yet**: PyPI, npm, plugin marketplaces, public Skills
-  registry packaging, and other external distribution listings.
+- **Ready but not live yet**: the publish-ready MCP package
+  `@uiq/mcp-server`, the planned `prooflane-mcp` CLI shape, the generic
+  in-repo skill scaffold, and other external distribution listings that are
+  prepared but not published.
+- **Not published yet**: npm, PyPI, public Skills marketplace listings, public
+  Docker images, and hosted SaaS claims.
 - Distribution-ready summaries live in [DISTRIBUTION.md](../DISTRIBUTION.md)
   and [INTEGRATIONS.md](../INTEGRATIONS.md).
 
@@ -112,6 +116,8 @@ architecture stack:
 - [docs/how-to/mcp-clients-setup.md](./how-to/mcp-clients-setup.md):
   client setup
 - [docs/mcp.md](./mcp.md): full MCP contract
+- [docs/skills/prooflane-mcp/SKILL.md](./skills/prooflane-mcp/SKILL.md):
+  generic in-repo skill scaffold for `@uiq/mcp-server` / `prooflane-mcp`
 
 Suggested roles:
 
