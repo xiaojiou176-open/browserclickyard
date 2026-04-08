@@ -9,12 +9,34 @@ surfaces.
 
 - `./scripts/setup.sh`
 
-## Required checks before PR
+## Default local checks before PR
 
 - `pnpm gate:repo:fast`
-- `pnpm doctor:repo`
-- `pnpm gate:delivery:fast`
-- `pnpm audit:oss:redaction`
+- `pnpm test:matrix`
+- `pnpm verify:all`
+- `pnpm prepush:quality-gate`
+
+## Verification Layers
+
+Prooflane deliberately keeps the local default path lighter than the cloud
+paths.
+
+- **pre-commit**: `.pre-commit-config.yaml` runs lightweight correctness,
+  docs, and secret guards before code leaves your workstation.
+- **pre-push**: `pnpm prepush:quality-gate` is the default light local path;
+  use `pnpm prepush:quality-gate:parity` only when you need the full parity
+  lane locally.
+- **hosted PR / CI**: `.github/workflows/pr.yml` and `.github/workflows/ci.yml`
+  carry the heavier required cloud checks.
+- **nightly**: `.github/workflows/nightly.yml` owns the deterministic nightly
+  gate plus deeper manual-only observability.
+- **manual**: protected-environment workflow_dispatch lanes handle the truly
+  heavy or sensitive checks such as live external, desktop, and privileged
+  audits.
+
+Use `pnpm test:matrix:full`, `pnpm verify:all:parity`, `pnpm doctor:repo`,
+`pnpm gate:delivery:fast`, and `pnpm audit:oss:redaction` when the change
+really needs parity, release-boundary, or public-claim acceptance.
 
 ## Pull request requirements
 

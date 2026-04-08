@@ -4,14 +4,13 @@
 > governed proof and agent-ready workflows when results need deeper review.
 
 [Start with results](./docs/get-started.md) ·
+[Distribution status](./DISTRIBUTION.md) ·
+[Integrations](./INTEGRATIONS.md) ·
 [Guided demo](./docs/examples/public-stress-lab-guided-demo.md) ·
-[Agent review loop](./docs/how-to/mcp-agent-review-loop.md) ·
 [Why Prooflane](./docs/why-prooflane.md) ·
 [Proof center](./docs/proof-center.md) ·
-[Public proof sample](./docs/examples/public-proof-sample/README.md) ·
+[MCP path](./docs/how-to/mcp-agent-review-loop.md) ·
 [First public release notes](./docs/releases/v0.1.0-public-launch.md) ·
-[Historical closure snapshot](./docs/releases/v0.1.0-public-closure.md) ·
-[FAQ](./docs/faq.md) ·
 [Docs](./docs/index.md) ·
 [Releases](https://github.com/xiaojiou176-open/ui-automation-control-plane/releases) ·
 [Discussions](https://github.com/xiaojiou176-open/ui-automation-control-plane/discussions)
@@ -20,14 +19,26 @@
 
 ## Product In Three Layers
 
-Use this shortcut if you want the product category, the heat hook, and the
- outcome in one glance.
+Use this shortcut if you want the product category, the first practical win,
+and the deeper layer in one glance.
 
 | Layer | Phrase | What it means |
 | --- | --- | --- |
 | Category | **AI-native WebUI stress lab** | Start from a target URL and run browser experiments without stitching together ad hoc scripts and CI fragments. |
-| Heat hook | **MCP server for Codex, Claude Code, and other MCP-capable clients** | Prooflane exposes read-mostly MCP tools/resources that those clients can call; this is MCP compatibility and discoverability wording, not a partnership claim. |
-| Result word | **Readable result path** | Read a release brief, similar failures, report paths, and manual-gate context from the same runtime before you escalate. |
+| First win | **Target-first experiment -> readable result** | Use the stress-lab shell to point at a local WebUI, choose a lab mode, and read one clear result path before you open deeper review. |
+| Deeper layer | **Governed proof + agent-ready workflows** | MCP, AI review, proof campaigns, and release briefs stay behind the first experiment result instead of replacing the front door story. |
+
+## Distribution Truth Today
+
+Prooflane is **distribution-ready on GitHub today**, but it is not claiming
+registry or marketplace distribution that has not happened yet.
+
+- **Live now**: GitHub repository, GitHub Pages, release notes, Discussions,
+  issue templates, MCP documentation, and public-safe proof/demo docs.
+- **Ready but not live yet**: PyPI, npm, plugin marketplaces, public Skills
+  registry packaging, and other package-registry distribution surfaces.
+- **Manual later**: custom GitHub social preview upload still belongs to
+  GitHub Settings rather than a tracked repo action.
 
 ## New Here?
 

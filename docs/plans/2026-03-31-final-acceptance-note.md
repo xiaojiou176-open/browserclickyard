@@ -50,9 +50,8 @@ Prooflane now tells one clear outside story:
   MCP SDK's Ajv v8 expectation and giving the smoke harness a deterministic
   stub backend + higher test-only rate-limit budget
 - `bash scripts/docs-gate.sh`: pass after targeted cleanup of generated residue
-- `bash scripts/lint-all.sh`: fail in the current environment because Docker
-  daemon access is unavailable (`Cannot connect to the Docker daemon at
-  unix://$HOME/.docker/run/docker.sock`)
+- `bash scripts/lint-all.sh`: fail in the current environment because local
+  Docker daemon access is unavailable from the current workstation setup
 
 ## Real Blockers And Non-Blockers
 

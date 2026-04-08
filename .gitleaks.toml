@@ -6,6 +6,12 @@ useDefault = true
 [allowlist]
 description = "Ignore generated/test/sample artifacts, detect-secrets baselines, and common non-secret placeholders"
 paths = [
+  '''(^|/)\.agent/''',
+  '''(^|/)\.agents/''',
+  '''(^|/)\.codex/''',
+  '''(^|/)\.claude/''',
+  '''(^|/)\.serena/''',
+  '''(^|/)\.opencode/''',
   '''(^|/)\.runtime-cache/''',
   '''(^|/)artifacts/''',
   '''(^|/)coverage/''',

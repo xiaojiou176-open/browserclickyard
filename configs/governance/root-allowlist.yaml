@@ -37,7 +37,9 @@ tracked_root:
     - CODE_OF_CONDUCT.md
     - commitlint.config.cjs
     - CONTRIBUTING.md
+    - DISTRIBUTION.md
     - docker-compose.yml
+    - INTEGRATIONS.md
     - justfile
     - LICENSE
     - Makefile
@@ -53,13 +55,17 @@ tracked_root:
     - uv.lock
     - vercel.json
   shared_environment_tolerated:
+    - .agent
     - .git
     - .agents
+    - .claude
     - .env
     - .env.local
     - .vscode
     - .codex
     - .cursorrules
+    - .opencode
+    - .serena
   disallowed_runtime_outputs:
     - .mutmut-cache
     - .coverage

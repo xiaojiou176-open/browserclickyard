@@ -4,6 +4,25 @@ This is the public navigation map for Prooflane. Start with the layer that
 matches the WebUI-testing job you actually want to do, then go deeper only when
 you need more detail.
 
+## Distribution Truth Today
+
+Prooflane is already publishable through **GitHub + GitHub Pages + public-safe
+docs**, but it is not claiming package-registry or marketplace distribution
+that has not happened yet.
+
+- **Live now**: GitHub repository, GitHub Pages, Discussions, release notes,
+  MCP docs, public-safe guided demo, and proof docs.
+- **Ready but not live yet**: PyPI, npm, plugin marketplaces, public Skills
+  registry packaging, and other external distribution listings.
+- Distribution-ready summaries live in [DISTRIBUTION.md](../DISTRIBUTION.md)
+  and [INTEGRATIONS.md](../INTEGRATIONS.md).
+
+Use these two short pages when you want the truth without reading the full
+architecture stack:
+
+- [../DISTRIBUTION.md](../DISTRIBUTION.md)
+- [../INTEGRATIONS.md](../INTEGRATIONS.md)
+
 ## Start Here
 
 | If you are trying to... | Read this first | Then go here |
