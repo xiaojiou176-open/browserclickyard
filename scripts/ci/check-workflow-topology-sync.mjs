@@ -47,7 +47,7 @@ function loadWorkflowJobs(workflowPath) {
 
 function collectRequiredJobs(config) {
   const result = [];
-  for (const scope of ["ci", "pr", "nightly", "weekly"]) {
+  for (const scope of ["ci", "pr", "nightly"]) {
     for (const jobName of config.required_jobs?.[scope] ?? []) {
       const workflowPath =
         scope === "ci" || scope === "pr"
@@ -124,7 +124,7 @@ function main() {
     }
   }
 
-  for (const scope of ["nightly", "weekly"]) {
+  for (const scope of ["nightly"]) {
     const workflowPath = `.github/workflows/${scope}.yml`;
     const jobs = loadWorkflowJobs(workflowPath);
     for (const jobName of config.required_jobs?.[scope] ?? []) {

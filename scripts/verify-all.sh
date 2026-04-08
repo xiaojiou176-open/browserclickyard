@@ -118,6 +118,8 @@ ENABLE_COVERAGE_GATE="$(to_bool "${UIQ_VERIFY_ENABLE_COVERAGE_GATE:-1}")"
 CI_CONTEXT="$(to_bool "${CI:-}")"
 DEFAULT_MUTATION_GATE="1"
 ENABLE_MUTATION_GATE="$(to_bool "${UIQ_VERIFY_ENABLE_MUTATION_GATE:-$DEFAULT_MUTATION_GATE}")"
+ENABLE_E2E_AUTHENTICITY="$(to_bool "${UIQ_VERIFY_ENABLE_E2E_AUTHENTICITY:-1}")"
+ENABLE_FRONTEND_NONSTUB="$(to_bool "${UIQ_VERIFY_ENABLE_FRONTEND_NONSTUB:-1}")"
 BRANCH_PROTECTION_STRICT="$(to_bool "${UIQ_VERIFY_BRANCH_PROTECTION_STRICT:-0}")"
 PARALLEL_OPTIONAL_GATES="$(to_bool "${UIQ_VERIFY_PARALLEL_OPTIONAL_GATES:-1}")"
 ENABLE_TAURI_GATE="$(to_bool "${UIQ_VERIFY_ENABLE_TAURI_GATE:-0}")"
@@ -323,18 +325,26 @@ echo "[7/14] optional coverage/mutation gates"
 run_optional_gates
 
 echo "[8/14] e2e authenticity gate"
-"${ROOT_DIR}/scripts/lib/pnpm-safe.sh" gate:e2e:authenticity
+if [[ "$ENABLE_E2E_AUTHENTICITY" == "1" ]]; then
+  "${ROOT_DIR}/scripts/lib/pnpm-safe.sh" gate:e2e:authenticity
+else
+  echo "Skipping e2e authenticity gate: UIQ_VERIFY_ENABLE_E2E_AUTHENTICITY=0"
+fi
 
 echo "[9/14] frontend nonstub e2e"
-NONSTUB_BACKEND_PORT="${UIQ_FRONTEND_E2E_NONSTUB_BACKEND_PORT:-28173}"
-NONSTUB_AUTOMATION_TOKEN="$(resolve_nonstub_automation_token)"
-export UIQ_AUTOMATION_TOKEN="${NONSTUB_AUTOMATION_TOKEN}"
-export AUTOMATION_API_TOKEN="${NONSTUB_AUTOMATION_TOKEN}"
-export AUTOMATION_TOKEN="${NONSTUB_AUTOMATION_TOKEN}"
-UIQ_FRONTEND_E2E_NONSTUB_BACKEND_PORT="${NONSTUB_BACKEND_PORT}" \
-BACKEND_PORT="${NONSTUB_BACKEND_PORT}" \
-VITE_DEFAULT_BASE_URL="http://127.0.0.1:${NONSTUB_BACKEND_PORT}" \
-"${ROOT_DIR}/scripts/lib/pnpm-safe.sh" test:e2e:frontend:nonstub
+if [[ "$ENABLE_FRONTEND_NONSTUB" == "1" ]]; then
+  NONSTUB_BACKEND_PORT="${UIQ_FRONTEND_E2E_NONSTUB_BACKEND_PORT:-28173}"
+  NONSTUB_AUTOMATION_TOKEN="$(resolve_nonstub_automation_token)"
+  export UIQ_AUTOMATION_TOKEN="${NONSTUB_AUTOMATION_TOKEN}"
+  export AUTOMATION_API_TOKEN="${NONSTUB_AUTOMATION_TOKEN}"
+  export AUTOMATION_TOKEN="${NONSTUB_AUTOMATION_TOKEN}"
+  UIQ_FRONTEND_E2E_NONSTUB_BACKEND_PORT="${NONSTUB_BACKEND_PORT}" \
+  BACKEND_PORT="${NONSTUB_BACKEND_PORT}" \
+  VITE_DEFAULT_BASE_URL="http://127.0.0.1:${NONSTUB_BACKEND_PORT}" \
+  "${ROOT_DIR}/scripts/lib/pnpm-safe.sh" test:e2e:frontend:nonstub
+else
+  echo "Skipping frontend nonstub e2e: UIQ_VERIFY_ENABLE_FRONTEND_NONSTUB=0"
+fi
 
 echo "[10/14] web pr profile"
 UIQ_WEB_PORT="$WEB_RUNTIME_PORT" "${ROOT_DIR}/scripts/lib/pnpm-safe.sh" uiq run --profile pr --target web.ci --run-id "$WEB_RUN_ID" --base-url "$WEB_RUNTIME_BASE_URL"

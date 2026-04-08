@@ -12,7 +12,6 @@ const REQUIRED_FILES = {
   ciWorkflow: ".github/workflows/ci.yml",
   prWorkflow: ".github/workflows/pr.yml",
   nightlyWorkflow: ".github/workflows/nightly.yml",
-  weeklyWorkflow: ".github/workflows/weekly.yml",
   desktopWorkflow: ".github/workflows/desktop-smoke.yml",
   liveRealismWorkflow: ".github/workflows/live-realism.yml",
   releaseWorkflow: ".github/workflows/release-candidate.yml",
@@ -57,7 +56,6 @@ function gate6Heartbeat() {
   const ci = readUtf8(REQUIRED_FILES.ciWorkflow);
   const pr = readUtf8(REQUIRED_FILES.prWorkflow);
   const nightly = readUtf8(REQUIRED_FILES.nightlyWorkflow);
-  const weekly = readUtf8(REQUIRED_FILES.weeklyWorkflow);
   const desktop = readUtf8(REQUIRED_FILES.desktopWorkflow);
   const live = readUtf8(REQUIRED_FILES.liveRealismWorkflow);
   const release = readUtf8(REQUIRED_FILES.releaseWorkflow);
@@ -67,7 +65,6 @@ function gate6Heartbeat() {
     [REQUIRED_FILES.ciWorkflow, ci],
     [REQUIRED_FILES.prWorkflow, pr],
     [REQUIRED_FILES.nightlyWorkflow, nightly],
-    [REQUIRED_FILES.weeklyWorkflow, weekly],
     [REQUIRED_FILES.desktopWorkflow, desktop],
     [REQUIRED_FILES.liveRealismWorkflow, live],
     [REQUIRED_FILES.releaseWorkflow, release],
@@ -101,7 +98,6 @@ function gate6Heartbeat() {
 function gate7ShortBeforeLong() {
   const pr = readUtf8(REQUIRED_FILES.prWorkflow);
   const nightly = readUtf8(REQUIRED_FILES.nightlyWorkflow);
-  const weekly = readUtf8(REQUIRED_FILES.weeklyWorkflow);
   const desktop = readUtf8(REQUIRED_FILES.desktopWorkflow);
   const release = readUtf8(REQUIRED_FILES.releaseWorkflow);
 
@@ -113,10 +109,6 @@ function gate7ShortBeforeLong() {
     {
       label: "Nightly workflow: frontend-e2e-smoke -> Run Nightly Profile",
       ok: ensureOrder(nightly, "frontend-e2e-smoke", "Run Nightly Profile"),
-    },
-    {
-      label: "Weekly workflow: Test truthiness gate -> Run Weekly Profile",
-      ok: ensureOrder(weekly, "Test truthiness gate", "Run Weekly Profile"),
     },
     {
       label: "Desktop workflow matrix contains smoke and soak",

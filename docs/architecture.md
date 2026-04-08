@@ -272,9 +272,7 @@ first, then enable profile/target usage. Missing registry data is blocking.
 - Source of truth: `configs/profiles/*.yaml` (profile name must match filename stem).
 - `pr`: `unit + contract + ct + e2e + capture + a11y + perf + visual + report`
 - `nightly`:
-  `unit + contract + ct + e2e + capture + explore + chaos + a11y + perf + visual + report`
-- `weekly`:
-  `unit + ct + e2e + capture + explore + chaos + a11y + perf + visual + load + security + report`
+  `unit + contract + ct + e2e + capture + explore + chaos + a11y + perf + visual + load + security + report`
 - `tauri.smoke`:
   `desktop_readiness + desktop_smoke + desktop_e2e + security + report`
 - `swift.smoke`:
@@ -312,9 +310,12 @@ first, then enable profile/target usage. Missing registry data is blocking.
   `tauri_app_path` for the tauri matrix leg and `swift_bundle_id` for the
   swift matrix leg. These inputs are part of the current contract, not
   optional hints.
-- Canonical parity command contract:
-  `bash scripts/ci/run-gate-in-container.sh <docs-gate|lint-all|test-matrix|verify-all>`
-  and `UIQ_PREPUSH_HEAVY=1 pnpm prepush:quality-gate`.
+- Default local verification contract:
+  `pnpm test:matrix`, `pnpm verify:all`, and `pnpm prepush:quality-gate`.
+- Explicit parity contract:
+  `bash scripts/ci/run-gate-in-container.sh <docs-gate|lint-all|test-matrix|verify-all>`,
+  `pnpm test:matrix:full`, `pnpm verify:all:parity`, and
+  `pnpm prepush:quality-gate:parity`.
 - Shared-link repair verdict contract: `scripts/lib/node-toolchain.sh` is the
   single owner for deciding whether shared-link repair failures are
   hard-blocking or degradable, and wrapper/gate scripts must consume that
@@ -345,10 +346,11 @@ first, then enable profile/target usage. Missing registry data is blocking.
 - `verify-all` auth contract: frontend non-stub gates must inject one
   non-placeholder automation token into both backend and frontend env; weak
   placeholders such as `replace-with-strong-token` are invalid for this lane.
-- Fast/light pre-push (`pnpm prepush:quality-gate` without heavy) is explicitly
-  non-parity; with code changes it must either escalate to heavy parity or
-  declare explicit light override (`UIQ_ALLOW_LIGHT_PREPUSH=1` +
-  `UIQ_ALLOW_LIGHT_PREPUSH_REASON`).
+- `pnpm prepush:quality-gate` is the default fast/light local entry and is
+  explicitly non-parity; `pnpm prepush:quality-gate:parity` is the explicit
+  full-parity path. Low-level script execution still requires the same explicit
+  light override contract (`UIQ_ALLOW_LIGHT_PREPUSH=1` +
+  `UIQ_ALLOW_LIGHT_PREPUSH_REASON`) whenever code changes bypass heavy parity.
 - Tool caches must stay off the checkout worktree during CI runs.
   Repo-owned artifacts and reports may live under `.runtime-cache/`, but
   `pre-commit`, pnpm store, `uv`/`pip`, Playwright browser caches, and runner

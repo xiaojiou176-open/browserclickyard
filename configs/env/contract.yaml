@@ -28,6 +28,8 @@ allow_undeclared_exact:
   - RUNTIME_CACHE_DIR
   - RUNTIME_LOG_DIR
   - ROOT_DIR
+  - RUNNER_TEMP
+  - RUNNER_WORKSPACE
   - RUNNER_TOOL_CACHE
   - SCOPE
   - STARTED_AT
@@ -673,6 +675,12 @@ variables:
     required: false
     sensitive: false
     description: Allow test-matrix suite command overrides (intended for controlled self-tests).
+  - name: UIQ_SKIP_SHARED_MODULE_LINK_REPAIR
+    section: tests
+    default: 0
+    required: false
+    sensitive: false
+    description: Skip shared module link repair for targeted smoke and self-test lanes that only validate repo governance contracts.
   - name: AUTOMATION_BACKEND_PORT
     section: runtime
     default: 17380

@@ -114,6 +114,8 @@ export function renderEnvExample(contract: EnvContract): string {
 
 export function renderConfigurationDoc(contract: EnvContract): string {
   const variables = normalizeContract(contract);
+  const allowUndeclaredExact = [...(contract.allow_undeclared_exact ?? [])].sort();
+  const allowUndeclaredPrefixes = [...(contract.allow_undeclared_prefixes ?? [])].sort();
   const lines: string[] = [];
   lines.push("# Reference: Configuration");
   lines.push("");
@@ -134,6 +136,30 @@ export function renderConfigurationDoc(contract: EnvContract): string {
   }
 
   lines.push("");
+  if (allowUndeclaredExact.length > 0 || allowUndeclaredPrefixes.length > 0) {
+    lines.push("## Platform-injected Runtime Variables");
+    lines.push("");
+    lines.push(
+      "These names are intentionally allowed by env governance as CI, container, or runtime-injected values. They are contract-tracked, but they are not user-supplied `.env.example` entries or settings that maintainers should hand-copy into local env files.",
+    );
+    lines.push("");
+    if (allowUndeclaredExact.length > 0) {
+      lines.push("### Exact Names");
+      lines.push("");
+      for (const name of allowUndeclaredExact) {
+        lines.push(`- \`${name}\``);
+      }
+      lines.push("");
+    }
+    if (allowUndeclaredPrefixes.length > 0) {
+      lines.push("### Allowed Prefixes");
+      lines.push("");
+      for (const prefix of allowUndeclaredPrefixes) {
+        lines.push(`- \`${prefix}\``);
+      }
+      lines.push("");
+    }
+  }
   return lines.join("\n");
 }
 

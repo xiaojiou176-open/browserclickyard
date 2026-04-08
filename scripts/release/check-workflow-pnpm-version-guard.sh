@@ -10,7 +10,6 @@ package_manager_workflows=(
   ".github/workflows/ci.yml"
   ".github/workflows/pr.yml"
   ".github/workflows/nightly.yml"
-  ".github/workflows/weekly.yml"
   ".github/workflows/desktop-smoke.yml"
   ".github/workflows/live-realism.yml"
   ".github/workflows/release-candidate.yml"

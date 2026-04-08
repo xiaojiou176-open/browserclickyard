@@ -13,7 +13,6 @@ NIGHTLY_WORKFLOW_PATH = REPO_ROOT / ".github/workflows/nightly.yml"
 CI_WORKFLOW_PATH = REPO_ROOT / ".github/workflows/ci.yml"
 PR_WORKFLOW_PATH = REPO_ROOT / ".github/workflows/pr.yml"
 NIGHTLY_WORKFLOW_PATH = REPO_ROOT / ".github/workflows/nightly.yml"
-WEEKLY_WORKFLOW_PATH = REPO_ROOT / ".github/workflows/weekly.yml"
 DESKTOP_WORKFLOW_PATH = REPO_ROOT / ".github/workflows/desktop-smoke.yml"
 LIVE_REALISM_WORKFLOW_PATH = REPO_ROOT / ".github/workflows/live-realism.yml"
 RELEASE_CANDIDATE_WORKFLOW_PATH = REPO_ROOT / ".github/workflows/release-candidate.yml"
@@ -38,7 +37,6 @@ def _all_self_hosted_workflow_paths() -> tuple[Path, ...]:
         CI_WORKFLOW_PATH,
         PR_WORKFLOW_PATH,
         NIGHTLY_WORKFLOW_PATH,
-        WEEKLY_WORKFLOW_PATH,
         DESKTOP_WORKFLOW_PATH,
         LIVE_REALISM_WORKFLOW_PATH,
         RELEASE_CANDIDATE_WORKFLOW_PATH,

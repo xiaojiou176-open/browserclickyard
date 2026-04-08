@@ -16,7 +16,7 @@ const failureBundleActionText = readFileSync(
 const workflowFiles = [
   ".github/workflows/ci.yml",
   ".github/workflows/pr.yml",
-  ".github/workflows/weekly.yml",
+  ".github/workflows/nightly.yml",
   ".github/workflows/release-candidate.yml",
   ".github/workflows/branch-protection-audit.yml",
 ];

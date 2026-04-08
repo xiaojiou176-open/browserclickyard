@@ -26,8 +26,11 @@ unset UIQ_FRONTEND_E2E_PORT
 
 export UIQ_TEST_LOG_DIR="$tmp_dir/logs"
 export UIQ_CONTAINER_GATE_NAME="test-matrix"
+export UIQ_SKIP_SHARED_MODULE_LINK_REPAIR="1"
 export UIQ_TEST_MATRIX_CMD_APPS_WEB_E2E="true"
 export UIQ_TEST_MATRIX_CMD_FRONTEND_E2E="true"
+export UIQ_TEST_MATRIX_CMD_FRONTEND_E2E_NONSTUB="true"
+export UIQ_TEST_MATRIX_CMD_E2E_AUTHENTICITY_GATE="true"
 export UIQ_TEST_MATRIX_CMD_FRONTEND_UNIT="true"
 export UIQ_TEST_MATRIX_CMD_BACKEND_PYTEST="true"
 export UIQ_TEST_MATRIX_CMD_TEST_TRUTH_GATE="true"
@@ -45,7 +48,7 @@ if ! grep -Fq "ports: web_e2e=4173 frontend_e2e=43173" <<<"$output"; then
   exit 1
 fi
 
-for suite in apps-web-e2e frontend-e2e frontend-unit backend-pytest test-truth-gate orchestrator-mcp-gate; do
+for suite in apps-web-e2e frontend-e2e e2e-authenticity-gate frontend-unit backend-pytest test-truth-gate orchestrator-mcp-gate; do
   if ! grep -Fq "[run] $suite" <<<"$output"; then
     echo "expected default-enabled suite '$suite' to run" >&2
     printf '%s\n' "$output" >&2
@@ -67,6 +70,12 @@ fi
 
 if ! grep -Fq "[run] mutation-gate" <<<"$output"; then
   echo "expected mutation-gate to run by default" >&2
+  printf '%s\n' "$output" >&2
+  exit 1
+fi
+
+if ! grep -Fq "[run] coverage-gate" <<<"$output"; then
+  echo "expected coverage-gate to run by default" >&2
   printf '%s\n' "$output" >&2
   exit 1
 fi

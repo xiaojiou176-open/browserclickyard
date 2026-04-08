@@ -7,7 +7,6 @@ source "$ROOT_DIR/scripts/lib/heartbeat.sh"
 
 RUN_ID_BASE="${RUN_ID_BASE:-${1:-matrix-$(date +%Y%m%d%H%M%S)-$$}}"
 NIGHTLY_RUN_ID="${RUN_ID_BASE}-nightly"
-WEEKLY_RUN_ID="${RUN_ID_BASE}-weekly"
 DESKTOP_RUN_ID_PREFIX="${RUN_ID_BASE}-desktop"
 SEEN_RUN_IDS=""
 SHORT_GATE_ENABLED="${UIQ_RUN_MATRIX_SHORT_GATE_ENABLED:-1}"
@@ -31,7 +30,6 @@ ensure_unique_run_id() {
 }
 
 ensure_unique_run_id "$NIGHTLY_RUN_ID"
-ensure_unique_run_id "$WEEKLY_RUN_ID"
 
 if [[ "$SHORT_GATE_ENABLED" == "1" ]]; then
   echo "[short-gate] ${SHORT_GATE_CMD}"
@@ -42,7 +40,6 @@ fi
 
 echo "matrix.run_id_base=${RUN_ID_BASE}"
 echo "nightly.run_id=${NIGHTLY_RUN_ID}"
-echo "weekly.run_id=${WEEKLY_RUN_ID}"
 echo "desktop.run_id_prefix=${DESKTOP_RUN_ID_PREFIX}"
 
 pids=()
@@ -57,15 +54,6 @@ pid="$!"
 pids+=("$pid")
 names+=("nightly")
 heartbeat_pids+=("$(uiq_start_pid_heartbeat "run-matrix.nightly" "$pid" "$(uiq_read_heartbeat_interval)")")
-
-(
-  echo "[weekly] start"
-  pnpm uiq run --profile weekly --target web.ci --run-id "$WEEKLY_RUN_ID"
-) &
-pid="$!"
-pids+=("$pid")
-names+=("weekly")
-heartbeat_pids+=("$(uiq_start_pid_heartbeat "run-matrix.weekly" "$pid" "$(uiq_read_heartbeat_interval)")")
 
 (
   echo "[desktop] start"
@@ -95,4 +83,3 @@ fi
 
 echo "matrix complete"
 echo "nightly_manifest=.runtime-cache/artifacts/runs/${NIGHTLY_RUN_ID}/manifest.json"
-echo "weekly_manifest=.runtime-cache/artifacts/runs/${WEEKLY_RUN_ID}/manifest.json"
