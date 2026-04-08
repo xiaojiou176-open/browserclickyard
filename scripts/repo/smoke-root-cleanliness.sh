@@ -19,9 +19,11 @@ BEFORE="$(mktemp)"
 AFTER="$(mktemp)"
 trap 'cleanup_node_artifacts; rm -f "$BEFORE" "$AFTER"' EXIT
 
-uiq_repair_shared_module_links "$ROOT_DIR"
 if ! uiq_workspace_node_modules_topology_ready "$ROOT_DIR" "$UIQ_NODE_MODULES_DIR"; then
-  uiq_link_workspace_node_modules "$ROOT_DIR"
+  uiq_repair_shared_module_links "$ROOT_DIR"
+  if ! uiq_workspace_node_modules_topology_ready "$ROOT_DIR" "$UIQ_NODE_MODULES_DIR"; then
+    uiq_link_workspace_node_modules "$ROOT_DIR"
+  fi
 fi
 
 snapshot >"$BEFORE"

@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Taught `smoke-root-cleanliness` to skip shared-link repair when the governed
+  workspace `node_modules` topology is already healthy, so repo-fast/doctor
+  smoke paths stop repeating the same expensive repair loop during closeout.
 - Refreshed the transitive security baseline again after the first GitHub
   release by advancing `hono` to `4.12.12`, `@hono/node-server` to `1.19.13`,
   and hard-pinning vulnerable `vite@6.4.1` / `vite@7.3.1` resolution paths to
