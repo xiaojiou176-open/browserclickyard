@@ -67,14 +67,6 @@
       "reason": "Transitive via tooling chain (vite/rollup); temporary exception while upstream lockset convergence is in progress."
     },
     {
-      "id": "GHSA-5rq4-664w-9x2c",
-      "package": "basic-ftp",
-      "severity": "critical",
-      "ticket": "SEC-2150",
-      "expiresOn": "2026-03-31",
-      "reason": "Transitive via lighthouse->puppeteer tooling path; tracked until upstream remediation lands."
-    },
-    {
       "id": "GHSA-7r86-cg39-jmmj",
       "package": "minimatch",
       "severity": "high",

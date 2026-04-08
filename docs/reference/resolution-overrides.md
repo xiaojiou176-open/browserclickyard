@@ -12,9 +12,8 @@ Generated from `configs/governance/resolution-overrides.yaml`. Do not edit this 
 | `hono` | `4.12.4` | framework baseline convergence |
 | `@hono/node-server` | `1.19.10` | hono ecosystem baseline convergence |
 | `express-rate-limit` | `8.2.2` | security baseline convergence |
-| `basic-ftp` | `5.2.0` | security baseline convergence |
+| `basic-ftp` | `5.2.1` | security baseline convergence |
 | `minimatch` | `10.2.3` | glob engine security baseline convergence |
 | `rollup` | `4.59.0` | bundler convergence across workspaces |
 | `@modelcontextprotocol/sdk` | `1.26.0` | MCP contract convergence across root and services/mcp-server |
 | `js-yaml` | `4.1.1` | parser security baseline convergence |
-

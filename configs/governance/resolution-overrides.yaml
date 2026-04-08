@@ -20,7 +20,7 @@ overrides:
     resolution: 8.2.2
     rationale: security baseline convergence
   - package: basic-ftp
-    resolution: 5.2.0
+    resolution: 5.2.1
     rationale: security baseline convergence
   - package: minimatch
     resolution: 10.2.3

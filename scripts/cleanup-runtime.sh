@@ -19,6 +19,7 @@ REPORT_OUT=""
 MANAGED_SUBDIRS=()
 PROTECTED_SUBDIRS=()
 REPORT_ROWS="$(mktemp)"
+FAST_DIR_TARGETS=("container-gates" "container-runs")
 
 runtime_governance_query() {
   node "$ROOT_DIR/scripts/lib/runtime-governance.mjs" "$@"
@@ -111,6 +112,107 @@ file_mtime() {
   else
     stat -f%m "$path"
   fi
+}
+
+dir_size_bytes() {
+  local path="$1"
+  local size_kb=""
+  size_kb="$(du -sk "$path" 2>/dev/null | awk '{print $1}')"
+  if [[ -z "$size_kb" ]]; then
+    echo "0"
+    return 0
+  fi
+  awk -v kb="$size_kb" 'BEGIN { printf "%.0f", kb * 1024 }'
+}
+
+looks_like_run_id() {
+  local value="$1"
+  [[ "$value" =~ ^[0-9]{8}-[0-9]{6}-[0-9]+$ ]]
+}
+
+fast_dir_target() {
+  local dir_name="$1"
+  local candidate=""
+  for candidate in "${FAST_DIR_TARGETS[@]}"; do
+    if [[ "$candidate" == "$dir_name" ]]; then
+      return 0
+    fi
+  done
+  return 1
+}
+
+append_manifest_row() {
+  local mtime="$1"
+  local size="$2"
+  local kind="$3"
+  local path="$4"
+  printf '%s\t%s\t%s\t%s\n' "$mtime" "$size" "$kind" "$path" >>"$manifest"
+}
+
+append_file_candidate() {
+  local path="$1"
+  local size=""
+  local mtime=""
+  size="$(file_size "$path")"
+  mtime="$(file_mtime "$path")"
+  append_manifest_row "$mtime" "$size" "file" "$path"
+}
+
+append_dir_candidate() {
+  local path="$1"
+  local size=""
+  local mtime=""
+  size="$(dir_size_bytes "$path")"
+  mtime="$(file_mtime "$path")"
+  append_manifest_row "$mtime" "$size" "dir" "$path"
+}
+
+collect_file_cleanup_units() {
+  local dir="$1"
+  while IFS= read -r -d '' file; do
+    append_file_candidate "$file"
+  done < <(find "$dir" -type f -print0)
+}
+
+collect_run_scoped_cleanup_units() {
+  local dir="$1"
+  local top_entry=""
+  local child=""
+  local grandchild=""
+  local immediate_run_found=0
+  local nested_run_found=0
+
+  while IFS= read -r -d '' top_entry; do
+    immediate_run_found=0
+    while IFS= read -r -d '' child; do
+      if looks_like_run_id "$(basename "$child")"; then
+        append_dir_candidate "$child"
+        immediate_run_found=1
+      fi
+    done < <(find "$top_entry" -mindepth 1 -maxdepth 1 -type d -print0)
+    if (( immediate_run_found )); then
+      continue
+    fi
+
+    nested_run_found=0
+    while IFS= read -r -d '' child; do
+      while IFS= read -r -d '' grandchild; do
+        if looks_like_run_id "$(basename "$grandchild")"; then
+          append_dir_candidate "$grandchild"
+          nested_run_found=1
+        fi
+      done < <(find "$child" -mindepth 1 -maxdepth 1 -type d -print0)
+    done < <(find "$top_entry" -mindepth 1 -maxdepth 1 -type d -print0)
+    if (( nested_run_found )); then
+      continue
+    fi
+
+    append_dir_candidate "$top_entry"
+  done < <(find "$dir" -mindepth 1 -maxdepth 1 -type d -print0)
+
+  while IFS= read -r -d '' top_file; do
+    append_file_candidate "$top_file"
+  done < <(find "$dir" -mindepth 1 -maxdepth 1 -type f -print0)
 }
 
 bytes_human() {
@@ -302,11 +404,12 @@ if (( ${#candidate_dirs[@]} == 0 )); then
 fi
 
 for dir in "${candidate_dirs[@]}"; do
-  while IFS= read -r -d '' file; do
-    size="$(file_size "$file")"
-    mtime="$(file_mtime "$file")"
-    printf '%s\t%s\t%s\n' "$mtime" "$size" "$file" >>"$manifest"
-  done < <(find "$dir" -type f -print0)
+  dir_name="$(basename "$dir")"
+  if fast_dir_target "$dir_name"; then
+    collect_run_scoped_cleanup_units "$dir"
+  else
+    collect_file_cleanup_units "$dir"
+  fi
 done
 
 if [[ ! -s "$manifest" ]]; then
@@ -319,16 +422,18 @@ LC_ALL=C sort -n -k1,1 "$manifest" >"$sorted_manifest"
 declare -a row_size
 declare -a row_path
 declare -a row_reason
+declare -a row_kind
 
 index=0
 total_before=0
 ttl_delete_bytes=0
 now_epoch="$(date +%s)"
 
-while IFS=$'\t' read -r mtime size path; do
+while IFS=$'\t' read -r mtime size kind path; do
   row_size[index]="$size"
   row_path[index]="$path"
   row_reason[index]=""
+  row_kind[index]="$kind"
 
   total_before=$((total_before + size))
   age_seconds=$((now_epoch - mtime))
@@ -375,15 +480,19 @@ for i in "${!row_path[@]}"; do
 
   delete_count=$((delete_count + 1))
   delete_bytes=$((delete_bytes + row_size[i]))
-  printf '%s\t%s\t%s\n' "${row_reason[i]}" "${row_size[i]}" "${row_path[i]}" >>"$REPORT_ROWS"
+  printf '%s\t%s\t%s\t%s\n' "${row_reason[i]}" "${row_size[i]}" "${row_kind[i]}" "${row_path[i]}" >>"$REPORT_ROWS"
 
   if (( DRY_RUN == 1 )); then
-    echo "[cleanup-runtime] [dry-run] delete ($reason): ${row_path[i]}"
+    echo "[cleanup-runtime] [dry-run] delete ($reason, ${row_kind[i]}): ${row_path[i]}"
     continue
   fi
 
-  rm -f -- "${row_path[i]}"
-  echo "[cleanup-runtime] deleted ($reason): ${row_path[i]}"
+  if [[ "${row_kind[i]}" == "dir" ]]; then
+    rm -rf -- "${row_path[i]}"
+  else
+    rm -f -- "${row_path[i]}"
+  fi
+  echo "[cleanup-runtime] deleted ($reason, ${row_kind[i]}): ${row_path[i]}"
 done
 
 if (( DRY_RUN == 0 )); then
@@ -433,11 +542,12 @@ if rows_path.exists():
     for line in rows_path.read_text(encoding="utf-8").splitlines():
         if not line:
             continue
-        reason, size_bytes, path = (line.split("\t", 2) + ["", "", ""])[:3]
+        reason, size_bytes, kind, path = (line.split("\t", 3) + ["", "", "", ""])[:4]
         payload["selected"].append(
             {
                 "reason": reason,
                 "sizeBytes": int(size_bytes) if size_bytes else 0,
+                "kind": kind,
                 "path": path,
             }
         )
