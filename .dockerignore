@@ -4,6 +4,8 @@
 .agents
 .claude
 .codex
+.opencode
+.serena
 .env
 .env.*
 !.env.example
