@@ -1,19 +1,13 @@
 # Prooflane
 
-> An AI-native WebUI stress lab for localhost-first browser experiments, with
-> governed proof and agent-ready workflows when results need deeper review.
+> Prooflane is an AI-native WebUI stress lab for localhost-first browser
+> experiments, with governed proof and agent-ready workflows when results need
+> deeper review.
 
 [Start with results](./docs/get-started.md) ·
-[Distribution status](./DISTRIBUTION.md) ·
-[Integrations](./INTEGRATIONS.md) ·
-[Guided demo](./docs/examples/public-stress-lab-guided-demo.md) ·
-[Why Prooflane](./docs/why-prooflane.md) ·
-[Proof center](./docs/proof-center.md) ·
-[MCP path](./docs/how-to/mcp-agent-review-loop.md) ·
-[First public release notes](./docs/releases/v0.1.0-public-launch.md) ·
-[Docs](./docs/index.md) ·
-[Releases](https://github.com/xiaojiou176-open/ui-automation-control-plane/releases) ·
-[Discussions](https://github.com/xiaojiou176-open/ui-automation-control-plane/discussions)
+[MCP quickstart](./docs/how-to/mcp-quickstart-1pager.md) ·
+[Distribution truth](./DISTRIBUTION.md) ·
+[Docs map](./docs/index.md)
 
 ![Prooflane studio preview card](./docs/assets/prooflane-studio-preview.svg)
 
@@ -34,9 +28,14 @@ Prooflane is **distribution-ready on GitHub today**, but it is not claiming
 registry or marketplace distribution that has not happened yet.
 
 - **Live now**: GitHub repository, GitHub Pages, release notes, Discussions,
-  issue templates, MCP documentation, and public-safe proof/demo docs.
-- **Ready but not live yet**: PyPI, npm, plugin marketplaces, public Skills
-  registry packaging, and other package-registry distribution surfaces.
+  issue templates, the localhost-first stress-lab path, governed runs, the
+  repo-native MCP command `pnpm mcp:start`, and public-safe proof/demo docs.
+- **Ready but not live yet**: the publish-ready MCP package
+  `@uiq/mcp-server`, the planned `prooflane-mcp` CLI shape, and the generic
+  in-repo Skill scaffold at `docs/skills/prooflane-mcp/`.
+- **Not published yet**: PyPI, npm registry distribution, plugin marketplaces,
+  public Skills registry listings, public Docker images, and hosted SaaS
+  distribution claims.
 - **Manual later**: custom GitHub social preview upload still belongs to
   GitHub Settings rather than a tracked repo action.
 
@@ -49,6 +48,9 @@ whether Prooflane is for you.
   [public-safe guided demo](./docs/examples/public-stress-lab-guided-demo.md).
 - **Want to see the real shell locally?** Go to
   [docs/get-started.md](./docs/get-started.md).
+- **Want the publish-ready MCP artifact truth?** Read
+  [INTEGRATIONS.md](./INTEGRATIONS.md) for `@uiq/mcp-server` and
+  `prooflane-mcp`.
 - **Want the deeper governed layer?** Use
   [docs/proof-center.md](./docs/proof-center.md) and
   [docs/mcp.md](./docs/mcp.md).
@@ -186,6 +188,14 @@ references come after the first visible win.
 | Connect the platform through MCP | `pnpm mcp:start` | The core Prooflane tool surface for MCP-capable clients |
 
 For a step-by-step path, go to [docs/get-started.md](./docs/get-started.md).
+
+MCP packaging note:
+
+- the publish-ready artifact target is `@uiq/mcp-server`
+- the planned CLI name is `prooflane-mcp`
+- the truthful package-launch shape is `npx -y @uiq/mcp-server` or
+  `pnpm dlx @uiq/mcp-server`
+- that package shape is **ready in repo, not published yet**
 
 ## Current Route B Boundary
 

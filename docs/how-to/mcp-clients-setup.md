@@ -10,6 +10,16 @@ This setup works with MCP-capable clients such as **Codex**, **Claude Code**,
 or any other MCP host that can launch a stdio server. That is a protocol
 compatibility statement, not a partnership claim.
 
+## Installation Truth
+
+- Publish-ready package target: `@uiq/mcp-server`
+- Planned CLI / bin name: `prooflane-mcp`
+- Protocol today: **stdio only**
+- Auth boundary today: local stdio startup does **not** use OAuth; protected
+  HTTP/API and automation surfaces keep the existing token/header contract
+- The truthful package-launch shape is `npx -y @uiq/mcp-server` /
+  `pnpm dlx @uiq/mcp-server`, and it is **not published yet**
+
 ## Default Behavior: Core 12
 
 By default the server exposes only the 12 core tools below. No extra env is required:
@@ -48,6 +58,8 @@ Either legacy switch enables every optional group.
 
 ## MCP Config Template
 
+### Repo-native today
+
 ```json
 {
   "mcpServers": {
@@ -56,12 +68,33 @@ Either legacy switch enables every optional group.
       "args": ["mcp:start"],
       "cwd": "/ABSOLUTE/PATH/TO/REPO",
       "env": {
-        "UIQ_MCP_TOOL_GROUPS": "advanced,analysis"
+        "UIQ_MCP_API_BASE_URL": "http://127.0.0.1:18080",
+        "UIQ_MCP_TOOL_GROUPS": "advanced,analysis,proof"
       }
     }
   }
 }
 ```
+
+### Publish-ready package shape (not live yet)
+
+```json
+{
+  "mcpServers": {
+    "uiq": {
+      "command": "npx",
+      "args": ["-y", "@uiq/mcp-server"],
+      "env": {
+        "UIQ_MCP_API_BASE_URL": "http://127.0.0.1:18080",
+        "UIQ_MCP_TOOL_GROUPS": "advanced,analysis,proof"
+      }
+    }
+  }
+}
+```
+
+That second config shape is the future package path for `@uiq/mcp-server`. It
+is ready to document, but it is **not published yet**.
 
 ## Full Registered Tool Inventory (40)
 
@@ -206,6 +239,7 @@ Legacy fields `browser/platform/device/headless/timeout/env` are intentionally e
 
 ## Resources
 
+- Generic skill scaffold: `docs/skills/prooflane-mcp/SKILL.md`
 - `uiq://runs/latest/manifest`
 - `uiq://runs/latest/summary`
 - `uiq://review/latest-release-brief`

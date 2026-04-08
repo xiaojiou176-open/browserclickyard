@@ -1,13 +1,54 @@
 {
   "name": "@uiq/mcp-server",
   "version": "0.1.0",
-  "private": true,
+  "description": "Prooflane MCP server for read-mostly governed run, artifact, and review workflows.",
+  "license": "MIT",
+  "homepage": "https://xiaojiou176-open.github.io/ui-automation-control-plane/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xiaojiou176-open/ui-automation-control-plane.git",
+    "directory": "services/mcp-server"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "prooflane",
+    "ai-agents",
+    "webui-testing",
+    "stdio"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "main": "./dist/core.js",
+  "types": "./dist/core.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/core.d.ts",
+      "import": "./dist/core.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "bin": {
+    "prooflane-mcp": "./dist/server.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    ".env.example"
+  ],
   "packageManager": "pnpm@10.22.0+sha512.bf049efe995b28f527fd2b41ae0474ce29186f7edcb3bf545087bd61fbbebb2bf75362d1307fda09c2d288e1e499787ac12d4fcb617a974718a6051f2eee741c",
   "type": "module",
   "scripts": {
     "start": "bash ../../scripts/lib/node-bin.sh tsx src/server.ts",
+    "build": "bash ../../scripts/lib/node-bin.sh tsc -p tsconfig.build.json",
+    "prepack": "bash ../../scripts/lib/node-bin.sh tsc -p tsconfig.build.json",
     "check": "bash ../../scripts/lib/node-bin.sh tsc -p tsconfig.json --noEmit",
-    "test": "bash ../../scripts/lib/node-bin.sh tsx --test tests/mcp-*.test.ts"
+    "test": "bash ../../scripts/lib/node-bin.sh tsx --test tests/mcp-*.test.ts",
+    "package:smoke": "npm pack --dry-run >/dev/null && node scripts/smoke-built-bin.mjs"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.26.0",

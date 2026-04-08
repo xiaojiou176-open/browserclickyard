@@ -36,6 +36,13 @@ const LEGACY_DESCRIPTION_FIELDS = [
 ] as const;
 
 const CJK_PATTERN = /[\u3400-\u9fff]/u;
+const PRODUCT_VALUE_PROPOSITION =
+  "Prooflane is an AI-native WebUI stress lab for localhost-first browser experiments, with governed proof and agent-ready workflows when results need deeper review.";
+const CANONICAL_PACKAGE_TOOL_GROUPS = "advanced,analysis,proof";
+const PRODUCT_VALUE_PROPOSITION_PATTERN = new RegExp(
+  PRODUCT_VALUE_PROPOSITION.replace(/[.*+?^${}()|[\]\\]/g, "\\$&").replace(/\s+/g, "[\\s>]+"),
+  "i",
+);
 
 function extractRunTools(source: string): string[] {
   const names = new Set<string>();
@@ -125,6 +132,14 @@ function extractNamedDescriptions(source: string): Map<string, string> {
       (match) => [match[1], match[2]] as const,
     ),
   );
+}
+
+function matchesPattern(source: string, pattern: string | RegExp): boolean {
+  return typeof pattern === "string" ? source.includes(pattern) : pattern.test(source);
+}
+
+function patternLabel(pattern: string | RegExp): string {
+  return typeof pattern === "string" ? pattern : pattern.toString();
 }
 
 function diff(
@@ -222,6 +237,17 @@ function checkDescriptionSource(sourcePath: string, sourceText: string): DocDrif
   return { docPath: sourcePath, issues };
 }
 
+function checkRequiredPatterns(
+  docPath: string,
+  docText: string,
+  patterns: Array<string | RegExp>,
+): DocDrift {
+  const issues = patterns
+    .filter((pattern) => !matchesPattern(docText, pattern))
+    .map((pattern) => `missing required truth: ${patternLabel(pattern)}`);
+  return { docPath, issues };
+}
+
 function main(): void {
   const repoRoot = resolve(".");
   const registryPath = resolve(repoRoot, "services/mcp-server/src/core/registry.ts");
@@ -242,6 +268,14 @@ function main(): void {
     repoRoot,
     "services/mcp-server/src/tools/register-tools/register-api-tools.ts",
   );
+  const packageJsonPath = resolve(repoRoot, "services/mcp-server/package.json");
+  const readmePath = resolve(repoRoot, "README.md");
+  const distributionPath = resolve(repoRoot, "DISTRIBUTION.md");
+  const integrationsPath = resolve(repoRoot, "INTEGRATIONS.md");
+  const entrypointsPath = resolve(repoRoot, "docs/reference/integration-entrypoints.md");
+  const skillPath = resolve(repoRoot, "docs/skills/prooflane-mcp/SKILL.md");
+  const manifestPath = resolve(repoRoot, "docs/skills/prooflane-mcp/manifest.yaml");
+  const indexHtmlPath = resolve(repoRoot, "apps/command-center/index.html");
   const docPaths = [
     resolve(repoRoot, "docs/mcp.md"),
     resolve(repoRoot, "docs/how-to/mcp-clients-setup.md"),
@@ -254,6 +288,9 @@ function main(): void {
   const runToolsSource = readFileSync(runToolsPath, "utf8");
   const closedLoopToolsSource = readFileSync(closedLoopToolsPath, "utf8");
   const apiToolsSource = readFileSync(apiToolsPath, "utf8");
+  const packageJson = JSON.parse(readFileSync(packageJsonPath, "utf8"));
+  const packageName = packageJson.name;
+  const binName = Object.keys(packageJson.bin ?? {})[0];
   const registeredTools = Array.from(
     new Set([
       ...extractRunTools(runToolsSource),
@@ -268,6 +305,32 @@ function main(): void {
   const descriptionDrift = checkDescriptionSource(descriptionsPath, descriptionsSource);
   if (descriptionDrift.issues.length > 0) {
     drifts.push(descriptionDrift);
+  }
+
+  const packageMetadataIssues: string[] = [];
+  if (packageName !== "@uiq/mcp-server") {
+    packageMetadataIssues.push("package.json name must stay @uiq/mcp-server");
+  }
+  if (binName !== "prooflane-mcp") {
+    packageMetadataIssues.push("package.json bin name must stay prooflane-mcp");
+  }
+  if (packageJson.publishConfig?.access !== "public") {
+    packageMetadataIssues.push("package.json publishConfig.access must stay public");
+  }
+  if (packageJson.engines?.node !== ">=20") {
+    packageMetadataIssues.push("package.json engines.node must stay >=20");
+  }
+  if (!Array.isArray(packageJson.files) || packageJson.files.join("|") !== "dist|README.md|.env.example") {
+    packageMetadataIssues.push("package.json files must stay [dist, README.md, .env.example]");
+  }
+  if (!packageJson.scripts?.prepack) {
+    packageMetadataIssues.push("package.json must define prepack");
+  }
+  if (!/npm pack --dry-run/.test(packageJson.scripts?.["package:smoke"] ?? "")) {
+    packageMetadataIssues.push("package:smoke must verify npm pack --dry-run");
+  }
+  if (packageMetadataIssues.length > 0) {
+    drifts.push({ docPath: packageJsonPath, issues: packageMetadataIssues });
   }
 
   for (const docPath of docPaths) {
@@ -289,6 +352,115 @@ function main(): void {
         );
       }
     }
+    if (result.issues.length > 0) {
+      drifts.push(result);
+    }
+  }
+
+  const publishTruthDocs: Array<{ path: string; patterns: Array<string | RegExp> }> = [
+    {
+      path: readmePath,
+      patterns: [packageName, binName, /ready in repo, not published yet/i, PRODUCT_VALUE_PROPOSITION_PATTERN],
+    },
+    {
+      path: distributionPath,
+      patterns: [
+        packageName,
+        binName,
+        /npx\s+-y\s+@uiq\/mcp-server/i,
+        /pnpm dlx @uiq\/mcp-server/i,
+        /Docker Truth Today/,
+      ],
+    },
+    {
+      path: integrationsPath,
+      patterns: [
+        packageName,
+        binName,
+        /stdio only/i,
+        /does \*\*not\*\* use OAuth|does not use OAuth/i,
+        "UIQ_MCP_API_BASE_URL",
+        "UIQ_MCP_TOOL_GROUPS",
+        CANONICAL_PACKAGE_TOOL_GROUPS,
+      ],
+    },
+    {
+      path: resolve(repoRoot, "docs/mcp.md"),
+      patterns: [
+        packageName,
+        binName,
+        /stdio only/i,
+        /does \*\*not\*\* use OAuth|does not use OAuth/i,
+        "UIQ_MCP_API_BASE_URL",
+        "UIQ_MCP_TOOL_GROUPS",
+        CANONICAL_PACKAGE_TOOL_GROUPS,
+      ],
+    },
+    {
+      path: resolve(repoRoot, "docs/how-to/mcp-clients-setup.md"),
+      patterns: [
+        packageName,
+        binName,
+        /does \*\*not\*\* use OAuth|does not use OAuth/i,
+        "UIQ_MCP_API_BASE_URL",
+        "UIQ_MCP_TOOL_GROUPS",
+        CANONICAL_PACKAGE_TOOL_GROUPS,
+        "\"cwd\": \"/ABSOLUTE/PATH/TO/REPO\"",
+      ],
+    },
+    {
+      path: resolve(repoRoot, "docs/how-to/mcp-quickstart-1pager.md"),
+      patterns: [
+        packageName,
+        binName,
+        /does \*\*not\*\* use OAuth|does not use OAuth/i,
+        "UIQ_MCP_API_BASE_URL",
+        "UIQ_MCP_TOOL_GROUPS",
+        CANONICAL_PACKAGE_TOOL_GROUPS,
+      ],
+    },
+    {
+      path: entrypointsPath,
+      patterns: [
+        packageName,
+        binName,
+        /Real MCP server with stdio transport/,
+        /does \*\*not\*\* use OAuth|does not use OAuth/i,
+      ],
+    },
+    {
+      path: skillPath,
+      patterns: [
+        packageName,
+        binName,
+        /generic in-repo scaffold/i,
+        /does \*\*not\*\* use OAuth|does not use OAuth/i,
+        "UIQ_MCP_API_BASE_URL",
+        "UIQ_MCP_TOOL_GROUPS",
+        CANONICAL_PACKAGE_TOOL_GROUPS,
+        /not published yet/i,
+      ],
+    },
+    {
+      path: manifestPath,
+      patterns: [
+        /^name:\s*prooflane-mcp$/m,
+        /^protocol:\s*stdio$/m,
+        packageName,
+        "UIQ_MCP_API_BASE_URL",
+        "UIQ_MCP_TOOL_GROUPS",
+        CANONICAL_PACKAGE_TOOL_GROUPS,
+      ],
+    },
+    {
+      path: indexHtmlPath,
+      patterns: [PRODUCT_VALUE_PROPOSITION, /<title>Prooflane \| AI-native WebUI stress lab<\/title>/],
+    },
+  ];
+
+  for (const doc of publishTruthDocs) {
+    const text = readFileSync(doc.path, "utf8");
+    const result = checkRequiredPatterns(doc.path, text, doc.patterns);
     if (result.issues.length > 0) {
       drifts.push(result);
     }

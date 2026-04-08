@@ -189,9 +189,20 @@ If you want the deeper contract, read
 Use this path when you want Prooflane to show up as a controlled tool surface
 inside an MCP-capable client such as Codex, Claude Code, or another MCP host.
 
+The truthful install path **today** is the repo-native command:
+
 ```bash
 pnpm mcp:start
 ```
+
+Package truth for this path:
+
+- publish-ready package target: `@uiq/mcp-server`
+- planned CLI name: `prooflane-mcp`
+- protocol today: **stdio only**
+- local stdio startup does **not** use OAuth
+- the truthful package-launch shape is `npx -y @uiq/mcp-server` /
+  `pnpm dlx @uiq/mcp-server`, and it is **not published yet**
 
 By default the MCP server targets its managed backend lane at
 `http://127.0.0.1:18080`. If you want MCP to attach to the local
@@ -199,6 +210,12 @@ By default the MCP server targets its managed backend lane at
 
 ```bash
 UIQ_MCP_API_BASE_URL=http://127.0.0.1:17380
+```
+
+If you want optional tool groups as well, add:
+
+```bash
+UIQ_MCP_TOOL_GROUPS=advanced,analysis,proof
 ```
 
 Then continue with:
