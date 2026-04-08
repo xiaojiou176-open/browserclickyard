@@ -76,6 +76,33 @@ assert all("/automation/tasks.json" not in path for path in selected_paths)
 assert all("/test-output/state.db" not in path for path in selected_paths)
 PY
 
+mkdir -p \
+  "$runtime_root/container-runs/lint-all/20200101-000000-11111/uiq-node-modules" \
+  "$runtime_root/container-runs/container-runs/exec/20200101-000000-22222/tmp"
+printf 'bridge\n' >"$runtime_root/container-runs/lint-all/20200101-000000-11111/uiq-node-modules/marker.txt"
+printf 'tmp\n' >"$runtime_root/container-runs/container-runs/exec/20200101-000000-22222/tmp/marker.txt"
+touch -t 202001010000 \
+  "$runtime_root/container-runs/lint-all/20200101-000000-11111" \
+  "$runtime_root/container-runs/container-runs/exec/20200101-000000-22222"
+
+container_dry_run_output="$(
+  bash scripts/cleanup-runtime.sh \
+    --dry-run \
+    --allow-outside-workspace \
+    --target "$runtime_root/container-runs" \
+    --ttl-hours 1 \
+    --max-size-gb 999 2>&1
+)"
+
+if ! grep -Fq "$runtime_root/container-runs/lint-all/20200101-000000-11111" <<<"$container_dry_run_output"; then
+  echo "expected cleanup-runtime dry-run to select stale container run directory" >&2
+  exit 1
+fi
+if ! grep -Fq "$runtime_root/container-runs/container-runs/exec/20200101-000000-22222" <<<"$container_dry_run_output"; then
+  echo "expected cleanup-runtime dry-run to select nested stale container run directory" >&2
+  exit 1
+fi
+
 for protected_dir in reports automation test-output; do
   set +e
   protected_output="$(

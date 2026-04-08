@@ -11,16 +11,28 @@
 
 ![Prooflane studio preview card](./docs/assets/prooflane-studio-preview.svg)
 
-## Product In Three Layers
+## What this repo is
 
-Use this shortcut if you want the product category, the first practical win,
-and the deeper layer in one glance.
-
-| Layer | Phrase | What it means |
+| Layer | Short answer | Why it matters |
 | --- | --- | --- |
 | Category | **AI-native WebUI stress lab** | Start from a target URL and run browser experiments without stitching together ad hoc scripts and CI fragments. |
-| First win | **Target-first experiment -> readable result** | Use the stress-lab shell to point at a local WebUI, choose a lab mode, and read one clear result path before you open deeper review. |
-| Deeper layer | **Governed proof + agent-ready workflows** | MCP, AI review, proof campaigns, and release briefs stay behind the first experiment result instead of replacing the front door story. |
+| First visible win | **Target-first experiment -> readable result** | A newcomer should get one clear result path before opening proof/governance depth. |
+| Deeper layer | **Governed proof + agent-ready workflows** | MCP, AI review, and release briefs stay behind the first experiment result instead of replacing the front door story. |
+
+## Start with one visible win
+
+Choose the shortest honest path before you read the heavier engineering stack:
+
+1. **No local setup yet?** Open the
+   [public-safe guided demo](./docs/examples/public-stress-lab-guided-demo.md).
+2. **Want the real shell locally?** Start with
+   [docs/get-started.md](./docs/get-started.md), then run `./scripts/dev-up.sh`.
+3. **Want MCP after the first result exists?** Read
+   [MCP quickstart](./docs/how-to/mcp-quickstart-1pager.md) and
+   [INTEGRATIONS.md](./INTEGRATIONS.md).
+
+![Prooflane Command Center running locally with Stress Lab, Runs and Blocks, Flow Studio, and Advanced Review available in the operator shell. This is a maintainer-local product view, not a hosted public demo or proof of live GitHub settings.](./docs/assets/prooflane-command-center-real.png)
+![Prooflane result path diagram showing the local first-look path, the governed run path, and the MCP connection route.](./docs/assets/prooflane-result-path.svg)
 
 ## Distribution Truth Today
 
@@ -41,34 +53,15 @@ registry or marketplace distribution that has not happened yet.
 
 ## New Here?
 
-Choose the path that matches how much effort you want to spend before you know
-whether Prooflane is for you.
-
-- **No local setup yet?** Open the
-  [public-safe guided demo](./docs/examples/public-stress-lab-guided-demo.md).
-- **Want to see the real shell locally?** Go to
-  [docs/get-started.md](./docs/get-started.md).
+- **Want the product story first?** Start with
+  [Start with results](./docs/get-started.md).
 - **Want the publish-ready MCP artifact truth?** Read
-  [INTEGRATIONS.md](./INTEGRATIONS.md) for `@uiq/mcp-server` and
-  `prooflane-mcp`.
-- **Want the deeper governed layer?** Use
+  [INTEGRATIONS.md](./INTEGRATIONS.md).
+- **Want the governed proof layer?** Use
   [docs/proof-center.md](./docs/proof-center.md) and
   [docs/mcp.md](./docs/mcp.md).
 - **Want the MCP-capable client path?** Start with
   [docs/how-to/mcp-agent-review-loop.md](./docs/how-to/mcp-agent-review-loop.md).
-
-## First Practical Win
-
-Choose the shortest path that matches the lab result you want first by jumping
-straight to **Start With Results**:
-
-- See the localhost-first stress-lab entry in one place
-- Copy-paste the exact commands without scanning the whole README
-- Confirm what you should expect when each path works before you open advanced review
-
-See: [Start with results](./docs/get-started.md).
-
-![Prooflane Command Center running locally with Stress Lab, Runs and Blocks, Flow Studio, and Advanced Review available in the operator shell. This is a maintainer-local product view, not a hosted public demo or proof of live GitHub settings.](./docs/assets/prooflane-command-center-real.png)
 
 ## 30-Second First Look
 
@@ -101,8 +94,6 @@ Current GitHub-side metadata and remote enforcement remain audit-backed states.
 Use [docs/reference/public-readiness.md](./docs/reference/public-readiness.md)
 and the latest audit artifacts for current remote truth instead of treating
 the historical closure snapshot as live GitHub proof.
-
-![Prooflane hero showing an AI-native WebUI stress lab with target-first entry, result reading, and optional governed review.](./docs/assets/prooflane-hero.svg)
 
 ## What Prooflane Gives You Right Now
 

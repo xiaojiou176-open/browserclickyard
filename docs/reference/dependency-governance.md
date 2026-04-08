@@ -11,6 +11,9 @@ repository and must move together with manifest and lockfile changes.
   `underscore`, `hono`, `esbuild`, and the currently-governed
   `path-to-regexp` vulnerable transitive lines (`0.1.12 -> 0.1.13`,
   `8.3.0 -> 8.4.0`).
+- The current npm security baseline also pins `basic-ftp` to `5.2.1` so the
+  root workspace no longer carries the command-injection advisory from the
+  previous `5.2.0` line.
 - The current security baseline pins `lodash` and `lodash-es` to `4.18.1`
   because GitHub advisories `GHSA-f23m-r3pf-42rh` and `GHSA-r5fr-rjxr-66jc`
   surfaced through Dependabot for the transitive runtime lines used by
@@ -32,6 +35,9 @@ repository and must move together with manifest and lockfile changes.
   transitive resolution, refresh the lock with `uv lock --upgrade-package <name>`
   and record the accepted residual advisories, if any, in `CHANGELOG.md` until
   the upstream package publishes a fixed release.
+- The current Python transitive security baseline advances `cryptography` to
+  `46.0.7` through `uv.lock`, which is the first patched release after the
+  buffer-overflow advisory that affected `46.0.6`.
 
 ## Active Closeout Baseline
 
@@ -40,6 +46,7 @@ repository and must move together with manifest and lockfile changes.
 | Package | Current locked version |
 | --- | --- |
 | `fastapi` | `0.135.3` |
+| `cryptography` | `46.0.7` |
 | `mypy` | `1.20.0` |
 | `requests` | `2.33.1` |
 | `ruff` | `0.15.9` |

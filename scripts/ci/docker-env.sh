@@ -15,6 +15,7 @@ fi
 UIQ_CI_GATE_IMAGE_REF="${UIQ_CI_GATE_IMAGE_REF:-uiq-ci-base:local}"
 UIQ_CI_BROWSER_IMAGE_REF="${UIQ_CI_BROWSER_IMAGE_REF:-uiq-ci-browser:local}"
 UIQ_CONTAINER_GATE_TTL_HOURS=72
+UIQ_CONTAINER_GATE_MAX_SIZE_BYTES=$((2 * 1024 * 1024 * 1024))
 UIQ_CONTAINER_CONTRACT_ENV_NAMES=(
   PRE_COMMIT_HOME
   TMPDIR
@@ -225,28 +226,90 @@ uiq_prune_expired_container_gate_history() {
   local gate_root="${UIQ_CONTAINER_GATE_HOST_ROOT:-$UIQ_RUNTIME_CACHE_HOST_ROOT/container-gates}"
   local runner_root="${UIQ_HOST_RUNNER_TEMP_ROOT}"
 
-  python3 - "$gate_root" "$runner_root" "$UIQ_CONTAINER_GATE_TTL_HOURS" <<'PY'
+  python3 - "$gate_root" "$runner_root" "$UIQ_CONTAINER_GATE_TTL_HOURS" "$UIQ_CONTAINER_GATE_MAX_SIZE_BYTES" <<'PY'
 from __future__ import annotations
 
+import os
 import shutil
 import sys
 import time
 from pathlib import Path
 
 
-def prune_two_level_dirs(root: Path, ttl_seconds: float) -> None:
+def looks_like_run_id(path: Path) -> bool:
+    name = path.name
+    parts = name.split("-")
+    return len(parts) == 3 and all(part.isdigit() for part in parts)
+
+
+def dir_size_bytes(path: Path) -> int:
+    try:
+        output = os.popen(f"du -sk '{path}'").read().strip().split()
+        if not output:
+            return 0
+        return int(output[0]) * 1024
+    except Exception:
+        return 0
+
+
+def collect_prunable_units(root: Path) -> list[Path]:
     if not root.exists():
+        return []
+    units: list[Path] = []
+    now = time.time()
+    for top_entry in root.iterdir():
+        if not top_entry.is_dir():
+            continue
+        children = [child for child in top_entry.iterdir() if child.is_dir()]
+        immediate_runs = [child for child in children if looks_like_run_id(child)]
+        if immediate_runs:
+            units.extend(immediate_runs)
+            continue
+        nested_runs: list[Path] = []
+        for child in children:
+            nested_runs.extend(
+                grandchild
+                for grandchild in child.iterdir()
+                if grandchild.is_dir() and looks_like_run_id(grandchild)
+            )
+        if nested_runs:
+            units.extend(nested_runs)
+            continue
+        units.append(top_entry)
+    return units
+
+
+def prune_units(root: Path, ttl_seconds: float, max_size_bytes: int) -> None:
+    units = collect_prunable_units(root)
+    if not units:
         return
     now = time.time()
+    kept: list[tuple[Path, float, int]] = []
+    for run_dir in units:
+        age_seconds = now - run_dir.stat().st_mtime
+        if age_seconds > ttl_seconds:
+            shutil.rmtree(run_dir, ignore_errors=True)
+            continue
+        kept.append((run_dir, run_dir.stat().st_mtime, dir_size_bytes(run_dir)))
+
+    total_size = sum(size for _, _, size in kept)
+    if total_size > max_size_bytes:
+        for run_dir, _, size in sorted(kept, key=lambda item: item[1]):
+            if total_size <= max_size_bytes:
+                break
+            shutil.rmtree(run_dir, ignore_errors=True)
+            total_size -= size
+
     for gate_dir in root.iterdir():
         if not gate_dir.is_dir():
             continue
-        for run_dir in gate_dir.iterdir():
-            if not run_dir.is_dir():
+        for candidate in gate_dir.iterdir():
+            if not candidate.is_dir():
                 continue
-            age_seconds = now - run_dir.stat().st_mtime
-            if age_seconds > ttl_seconds:
-                shutil.rmtree(run_dir, ignore_errors=True)
+            try:
+                candidate.rmdir()
+            except OSError:
+                pass
         try:
             gate_dir.rmdir()
         except OSError:
@@ -257,9 +320,10 @@ gate_root = Path(sys.argv[1])
 runner_root = Path(sys.argv[2])
 ttl_hours = int(sys.argv[3])
 ttl_seconds = ttl_hours * 3600
+max_size_bytes = int(sys.argv[4])
 
-prune_two_level_dirs(gate_root, ttl_seconds)
-prune_two_level_dirs(runner_root, ttl_seconds)
+prune_units(gate_root, ttl_seconds, max_size_bytes)
+prune_units(runner_root, ttl_seconds, max_size_bytes)
 PY
 }
 
