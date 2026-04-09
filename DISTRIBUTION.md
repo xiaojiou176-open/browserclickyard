@@ -55,12 +55,21 @@ restating those remote GitHub surfaces as freshly verified current state.
 - Generic in-repo skill packet at `docs/skills/prooflane-mcp/`
 - Release-ready docs, CI governance, and security gate surfaces
 
+## Companion Skill Host State
+
+- ClawHub listing for the companion skill packet is live at
+  `https://clawhub.ai/xiaojiou176/prooflane-mcp`
+- OpenHands/extensions remains `review-pending` via PR `#161`
+- Those receipts apply to `docs/skills/prooflane-mcp/` only; they do **not**
+  prove npm/PyPI publication, main-product marketplace listing, or hosted SaaS
+  availability
+
 ## Not Published Yet
 
 - npm package
 - PyPI package
 - Official plugin marketplace listing
-- Public Skills marketplace listing
+- Additional public Skills marketplace listings beyond the ClawHub companion packet
 - Separate starter bundle distribution
 - Public Docker image
 - Hosted multi-tenant SaaS claim

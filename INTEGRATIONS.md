@@ -11,7 +11,7 @@ This page keeps the integration story truthful and compact.
 | MCP server | Live, repo-native | `pnpm mcp:start` |
 | MCP package shape | Publish-ready, not published | `@uiq/mcp-server` -> `prooflane-mcp` |
 | Codex / Claude Code / other MCP hosts | Supported through MCP config, not a marketplace listing | `docs/how-to/mcp-clients-setup.md` |
-| Generic skill scaffold | Ready in repo, not marketplace-published | `docs/skills/prooflane-mcp/SKILL.md` |
+| Companion skill packet | ClawHub live; OpenHands review-pending | `docs/skills/prooflane-mcp/SKILL.md` |
 
 ## What Does Not Exist Yet
 
@@ -20,7 +20,7 @@ This page keeps the integration story truthful and compact.
 | npm package | Not published |
 | PyPI package | Not published |
 | Official plugin marketplace listing | Not published |
-| Public Skills marketplace listing | Not published |
+| Additional public Skills marketplace listings beyond the companion ClawHub packet | Not published |
 | Public Docker image | Not published |
 | Separate starter bundle distribution | Not published |
 

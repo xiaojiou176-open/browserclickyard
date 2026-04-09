@@ -22,8 +22,9 @@ package-registry or hosted distribution that does not exist yet.
 - Local stdio startup does **not** use OAuth; protected HTTP/API and
   automation surfaces keep the existing token/header contract.
 - Prooflane is **not** currently a hosted SaaS service.
-- This skill is a generic in-repo scaffold. It is **not** a published skill
-  marketplace artifact yet.
+- This skill remains a generic in-repo scaffold and is now published on
+  ClawHub as a companion packet, but that does **not** imply npm publication,
+  hosted Prooflane distribution, or main-product marketplace listing.
 
 ## Prerequisites
 
