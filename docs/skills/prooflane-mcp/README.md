@@ -50,14 +50,17 @@ Use it when you want one portable skill folder that teaches:
 ## Current packet-lane state
 
 - OpenHands/extensions is currently `review-pending` via PR `#161`
-- ClawHub is still `ready-but-not-listed` in the repo-owned packet ledger
+- ClawHub is now `listed-live` at
+  `https://clawhub.ai/xiaojiou176/prooflane-mcp` after fresh host-side
+  read-back on `2026-04-09`
 - those packet-lane states apply only to this skill folder, not to the main
   Prooflane product lane
 
 ## What this packet must not claim
 
 - no live OpenHands listing without fresh PR/read-back
-- no live ClawHub listing without fresh host-side read-back
+- no broader package, marketplace, or product claim beyond the fresh ClawHub
+  host-side read-back for this companion packet
 - no published npm package or public Docker image unless the repo has fresh
   proof
 - no hosted Prooflane SaaS claim

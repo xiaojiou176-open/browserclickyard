@@ -60,11 +60,13 @@ marketplace, and hosted lanes still stay in separate, claim-gated buckets.
   channel, Discussions, and issue templates are part of the current front-door
   route, but their current live state stays audit-backed.
 - **Ready but not live yet**: the publish-ready MCP package
-  `@uiq/mcp-server`, the planned `prooflane-mcp` CLI shape, and the companion
-  in-repo skill packet at `docs/skills/prooflane-mcp/`.
-- **Not published yet**: PyPI, npm registry distribution, plugin marketplaces,
-  public Skills registry listings, public Docker images, and hosted SaaS
-  distribution claims.
+  `@uiq/mcp-server` and the planned `prooflane-mcp` CLI shape.
+- **Companion skill host state**: the packet at `docs/skills/prooflane-mcp/`
+  is now listed live on ClawHub and still `review-pending` on
+  OpenHands/extensions; those receipts apply only to the companion skill lane.
+- **Not published yet**: PyPI, npm registry distribution, official plugin
+  marketplaces, additional public Skills registry listings beyond the ClawHub
+  companion packet, public Docker images, and hosted SaaS distribution claims.
 - **Audit rule**: use
   [docs/reference/public-readiness.md](./docs/reference/public-readiness.md)
   before restating live GitHub metadata, homepage, release presence, or branch

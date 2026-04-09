@@ -8,8 +8,9 @@ entrypoint: SKILL.md
 package_shape: skill-folder
 registry_targets:
   clawhub:
-    status: ready-but-not-listed
+    status: listed-live
     package_shape: skill-folder
+    listing_url: https://clawhub.ai/xiaojiou176/prooflane-mcp
     submit_via: clawhub publish . --slug prooflane-mcp --name "Prooflane MCP Skill" --version 0.1.0 --tags mcp,proof,automation,review,prooflane
   openhands-extensions:
     status: review-pending

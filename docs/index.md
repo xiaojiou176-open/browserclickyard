@@ -15,11 +15,14 @@ that has not happened yet.
 - **Remote GitHub routes exist**: repository, homepage, Discussions, and
   release surfaces remain audit-backed rather than static proof.
 - **Ready but not live yet**: the publish-ready MCP package
-  `@uiq/mcp-server`, the planned `prooflane-mcp` CLI shape, the companion
-  in-repo skill packet, and other external distribution listings that are
-  prepared but not published.
-- **Not published yet**: npm, PyPI, public Skills marketplace listings, public
-  Docker images, and hosted SaaS claims.
+  `@uiq/mcp-server`, the planned `prooflane-mcp` CLI shape, and other external
+  distribution listings that are prepared but not published.
+- **Companion skill host state**: `docs/skills/prooflane-mcp/` is listed live
+  on ClawHub and still review-pending on OpenHands/extensions; that host state
+  belongs to the companion skill lane only.
+- **Not published yet**: npm, PyPI, additional public Skills marketplace
+  listings beyond the ClawHub companion packet, public Docker images, and
+  hosted SaaS claims.
 - Distribution-ready summaries live in [DISTRIBUTION.md](../DISTRIBUTION.md)
   and [INTEGRATIONS.md](../INTEGRATIONS.md).
 
