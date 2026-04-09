@@ -48,7 +48,7 @@
     "prepack": "bash ../../scripts/lib/node-bin.sh tsc -p tsconfig.build.json",
     "check": "bash ../../scripts/lib/node-bin.sh tsc -p tsconfig.json --noEmit",
     "test": "bash ../../scripts/lib/node-bin.sh tsx --test tests/mcp-*.test.ts",
-    "package:smoke": "npm pack --dry-run >/dev/null && node scripts/smoke-built-bin.mjs"
+    "package:smoke": "bash ../../scripts/lib/pnpm-safe.sh pack --pack-destination .runtime-cache/package-smoke >/dev/null && node scripts/smoke-built-bin.mjs"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.26.0",

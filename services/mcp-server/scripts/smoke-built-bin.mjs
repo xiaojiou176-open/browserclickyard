@@ -77,5 +77,9 @@ try {
     child.kill("SIGTERM");
   }
   await waitForExit(child);
+  await rm(resolve(packageRoot, ".runtime-cache/package-smoke"), {
+    recursive: true,
+    force: true,
+  });
   await rm(resolve(packageRoot, "dist"), { recursive: true, force: true });
 }

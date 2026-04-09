@@ -32,6 +32,7 @@ import {
   analyzeSecurity,
   analyzeVisual,
   appendRunOverrides,
+  comparePerf,
   desktopInputWarnings,
   latestRunId,
   listRunIds,
@@ -882,10 +883,25 @@ export function registerRunTools(
             metrics_delta?: { values?: Record<string, unknown> };
             compare?: { metrics_delta?: { values?: Record<string, unknown> } };
           };
-          const deltas =
+          const rawDeltas =
             payload.metrics_delta?.values ??
             payload.compare?.metrics_delta?.values ??
             {};
+          const normalizedRemoteDeltas = Object.fromEntries(
+            Object.entries(rawDeltas).map(([key, value]) => {
+              if (typeof value === "number") {
+                return [key, { delta: value }];
+              }
+              return [key, value];
+            }),
+          );
+          const localComparison = comparePerf(runIdA, runIdB) as {
+            deltas?: Record<string, unknown>;
+          };
+          const deltas = {
+            ...normalizedRemoteDeltas,
+            ...(localComparison.deltas ?? {}),
+          };
           return {
             content: [
               {
