@@ -380,7 +380,7 @@ test("publish-ready package truth stays aligned across docs, skill scaffold, and
   assert.ok(packageJson.scripts?.prepack, "package.json must define a prepack build hook");
   assert.match(
     packageJson.scripts?.["package:smoke"] ?? "",
-    /npm pack --dry-run/,
+    /pnpm-safe\.sh pack --pack-destination \.runtime-cache\/package-smoke/,
     "package:smoke must verify the pack path",
   );
 

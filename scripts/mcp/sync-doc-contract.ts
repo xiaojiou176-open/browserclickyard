@@ -326,8 +326,14 @@ function main(): void {
   if (!packageJson.scripts?.prepack) {
     packageMetadataIssues.push("package.json must define prepack");
   }
-  if (!/npm pack --dry-run/.test(packageJson.scripts?.["package:smoke"] ?? "")) {
-    packageMetadataIssues.push("package:smoke must verify npm pack --dry-run");
+  if (
+    !/pnpm-safe\.sh pack --pack-destination \.runtime-cache\/package-smoke/.test(
+      packageJson.scripts?.["package:smoke"] ?? "",
+    )
+  ) {
+    packageMetadataIssues.push(
+      "package:smoke must verify the publish-ready pack path through scripts/lib/pnpm-safe.sh",
+    );
   }
   if (packageMetadataIssues.length > 0) {
     drifts.push({ docPath: packageJsonPath, issues: packageMetadataIssues });

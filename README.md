@@ -19,6 +19,21 @@
 | First visible win | **Target-first experiment -> readable result** | A newcomer should get one clear result path before opening proof/governance depth. |
 | Deeper layer | **Governed proof + agent-ready workflows** | MCP, AI review, and release briefs stay behind the first experiment result instead of replacing the front door story. |
 
+## Primary Product vs Companion Surfaces
+
+Use this like a museum map:
+
+| Surface | Role | What it proves | What it must not be mistaken for |
+| --- | --- | --- | --- |
+| `README.md` + `docs/get-started.md` + the local stress-lab shell | primary product lane | Prooflane is an AI-native WebUI stress lab | a package listing, a browser extension, or a hosted SaaS proof |
+| `docs/proof-center.md` + `Advanced Review` story | deeper governed layer | proof, review, and AI summaries still exist behind the first result | the first-use front door |
+| `services/mcp-server/` + `docs/skills/prooflane-mcp/` | companion integration lane | MCP-capable clients can attach to the same governed runtime | the main product identity or proof that a marketplace/package listing already happened |
+
+In plain language:
+
+> browser-adjacent does not mean browser-extension product.
+> MCP-ready does not mean package-listed.
+
 ## Start with one visible win
 
 Choose the shortest honest path before you read the heavier engineering stack:
@@ -36,18 +51,24 @@ Choose the shortest honest path before you read the heavier engineering stack:
 
 ## Distribution Truth Today
 
-Prooflane is **distribution-ready on GitHub today**, but it is not claiming
-registry or marketplace distribution that has not happened yet.
+Prooflane already has a **public GitHub front door today**, but its package,
+marketplace, and hosted lanes still stay in separate, claim-gated buckets.
 
-- **Live now**: GitHub repository, GitHub Pages, release notes, Discussions,
-  issue templates, the localhost-first stress-lab path, governed runs, the
+- **Repo-owned now**: the localhost-first stress-lab path, governed runs, the
   repo-native MCP command `pnpm mcp:start`, and public-safe proof/demo docs.
+- **Remote GitHub routes exist**: the public repository, homepage, release
+  channel, Discussions, and issue templates are part of the current front-door
+  route, but their current live state stays audit-backed.
 - **Ready but not live yet**: the publish-ready MCP package
-  `@uiq/mcp-server`, the planned `prooflane-mcp` CLI shape, and the generic
-  in-repo Skill scaffold at `docs/skills/prooflane-mcp/`.
+  `@uiq/mcp-server`, the planned `prooflane-mcp` CLI shape, and the companion
+  in-repo skill packet at `docs/skills/prooflane-mcp/`.
 - **Not published yet**: PyPI, npm registry distribution, plugin marketplaces,
   public Skills registry listings, public Docker images, and hosted SaaS
   distribution claims.
+- **Audit rule**: use
+  [docs/reference/public-readiness.md](./docs/reference/public-readiness.md)
+  before restating live GitHub metadata, homepage, release presence, or branch
+  enforcement as fresh fact.
 - **Manual later**: custom GitHub social preview upload still belongs to
   GitHub Settings rather than a tracked repo action.
 
