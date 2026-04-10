@@ -5,7 +5,7 @@ import { DEFAULT_UI_LOCALE, pickUiText, type UiLocale } from "../i18n/uiLocale";
 import type { ParamsState } from "../components/ParamsPanel";
 import ParamsPanel from "../components/ParamsPanel";
 import { Badge, Button, Card, CardContent, CardHeader, CardTitle } from "../components/ui";
-import type { FirstUseStage } from "../hooks/useAppStore";
+import { useAppStore, type FirstUseStage } from "../hooks/useAppStore";
 import { useProofApi } from "../hooks/useProofApi";
 import type {
   Command,
@@ -145,7 +145,6 @@ interface QuickLaunchViewProps {
   canCompleteFirstUse: boolean;
   onFirstUseStageChange: (stage: FirstUseStage) => void;
   onCompleteFirstUse: () => void;
-  onGoToTasks?: () => void;
 }
 
 function QuickLaunchView({
@@ -174,8 +173,8 @@ function QuickLaunchView({
   canCompleteFirstUse,
   onFirstUseStageChange,
   onCompleteFirstUse,
-  onGoToTasks = () => {},
 }: QuickLaunchViewProps) {
+  const store = useAppStore();
   const laneMapSummary = pickUiText(
     locale,
     LANE_MAP_SUMMARY,
@@ -505,7 +504,7 @@ function QuickLaunchView({
               <Button
                 size="sm"
                 variant={firstUseProgress.runTriggered ? "default" : "secondary"}
-                onClick={onGoToTasks}
+                onClick={() => store.setActiveView("tasks")}
                 disabled={!firstUseProgress.runTriggered}
               >
                 {pickUiText(locale, "Open Runs & Blocks", "\u6253\u5f00 Runs & Blocks")}

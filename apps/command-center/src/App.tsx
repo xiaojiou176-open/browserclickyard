@@ -310,7 +310,6 @@ export default function App() {
   }, [createRun, isFirstUseActive, markFirstUseRunTriggered, store]);
 
   const handleGoToLaunch = useCallback(() => store.setActiveView("launch"), [store]);
-  const handleGoToTasks = useCallback(() => store.setActiveView("tasks"), [store]);
   const handleRestartOnboarding = useCallback(() => {
     store.setActiveView("launch");
     store.restartOnboarding();
@@ -443,7 +442,6 @@ export default function App() {
               firstUseProgress={firstUseProgress}
               canCompleteFirstUse={canCompleteFirstUse}
               onCompleteFirstUse={completeFirstUse}
-              onGoToTasks={handleGoToTasks}
             />
           )}
 
