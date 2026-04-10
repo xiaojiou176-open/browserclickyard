@@ -16,6 +16,7 @@ env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
   UIQ_ALLOW_HOST_GATE_DIAGNOSTIC: "1"
   UIQ_ALLOW_HOST_GATE_DIAGNOSTIC_REASON: pr-quick-gate
+  UIQ_BOOTSTRAP_COREPACK_VERSION: "0.34.6"
 
 jobs:
   pr-quick-gate:
@@ -35,6 +36,10 @@ jobs:
       - name: Activate pnpm from root packageManager
         run: |
           set -euo pipefail
+          export npm_config_prefix="${RUNNER_TEMP}/uiq-corepack-bootstrap"
+          echo "${npm_config_prefix}/bin" >> "$GITHUB_PATH"
+          export PATH="${npm_config_prefix}/bin:$PATH"
+          npm install -g "corepack@${UIQ_BOOTSTRAP_COREPACK_VERSION}"
           corepack enable
           corepack prepare "$(node -p "require('./package.json').packageManager")" --activate
       - name: OpenAI residue hard gate
