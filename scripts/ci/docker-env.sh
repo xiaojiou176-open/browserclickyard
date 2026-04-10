@@ -364,7 +364,7 @@ uiq_collect_forward_env_args() {
     uiq_append_env_arg_if_set "$target_array_name" "$env_name"
   done < <(uiq_collect_contract_env_names)
 
-  for env_name in CI GITHUB_ACTIONS GITHUB_REF GITHUB_SHA GITHUB_RUN_ID GITHUB_RUN_ATTEMPT; do
+  for env_name in CI GITHUB_ACTIONS GITHUB_REF GITHUB_SHA GITHUB_RUN_ID GITHUB_RUN_ATTEMPT GH_TOKEN GITHUB_TOKEN; do
     uiq_append_env_arg_if_set "$target_array_name" "$env_name"
   done
 

@@ -149,6 +149,7 @@ RUN_BACKEND="$(read_bool "${UIQ_SUITE_BACKEND:-}" 1)"
 RUN_TEST_TRUTH_GATE="$(read_bool "${UIQ_SUITE_TEST_TRUTH_GATE:-}" 1)"
 RUN_AUTOMATION_CHECK="$(read_bool "${UIQ_SUITE_AUTOMATION_CHECK:-}" 1)"
 RUN_ORCHESTRATOR_MCP="$(read_bool "${UIQ_SUITE_ORCHESTRATOR_MCP:-}" 1)"
+RUN_ORCHESTRATOR_MCP_CONTRACT="$(read_bool "${UIQ_SUITE_ORCHESTRATOR_MCP_CONTRACT:-}" 1)"
 DEFAULT_COVERAGE_GATE="1"
 RUN_COVERAGE_GATE="$(read_bool "${UIQ_SUITE_COVERAGE_GATE:-${UIQ_VERIFY_ENABLE_COVERAGE_GATE:-$DEFAULT_COVERAGE_GATE}}" "$DEFAULT_COVERAGE_GATE")"
 CI_CONTEXT="$(read_bool "${CI:-}" 0)"
@@ -529,7 +530,9 @@ fi
 
 if [[ "$RUN_ORCHESTRATOR_MCP" == "1" ]]; then
   orchestrator_default_cmd="bash scripts/lib/node-bin.sh tsx --test packages/orchestrator/src/commands/run.test.ts packages/orchestrator/src/commands/run.runid.test.ts"
-  orchestrator_default_cmd="$(append_cmd_segment "$orchestrator_default_cmd" "${PNPM_SAFE} mcp:check")"
+  if [[ "$RUN_ORCHESTRATOR_MCP_CONTRACT" == "1" ]]; then
+    orchestrator_default_cmd="$(append_cmd_segment "$orchestrator_default_cmd" "${PNPM_SAFE} mcp:check")"
+  fi
   resolve_suite_cmd \
     "orchestrator-mcp-gate" \
     "$orchestrator_default_cmd" \
