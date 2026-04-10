@@ -22,8 +22,9 @@ package-registry or hosted distribution that does not exist yet.
 - Local stdio startup does **not** use OAuth; protected HTTP/API and
   automation surfaces keep the existing token/header contract.
 - Prooflane is **not** currently a hosted SaaS service.
-- This skill is a generic in-repo scaffold. It is **not** a published skill
-  marketplace artifact yet.
+- This skill remains a generic in-repo scaffold and is now published on
+  ClawHub as a companion packet, but that does **not** imply npm publication,
+  hosted Prooflane distribution, or main-product marketplace listing.
 
 ## Prerequisites
 
@@ -31,7 +32,7 @@ package-registry or hosted distribution that does not exist yet.
 - Node.js 20+
 - pnpm
 - Python 3.12+
-- A local shell session in the repository root
+- A local shell session inside the cloned `ui-automation-control-plane` checkout
 
 ## Canonical Repo
 
@@ -68,7 +69,7 @@ What success looks like:
 
 ## Repo-Native MCP Start (Today)
 
-Start the current MCP server from the repository:
+Start the current repo-native MCP server from your cloned checkout:
 
 ```bash
 pnpm mcp:start
@@ -102,7 +103,7 @@ Do **not** claim this package is published until registry publication really hap
     "uiq": {
       "command": "pnpm",
       "args": ["mcp:start"],
-      "cwd": "/ABSOLUTE/PATH/TO/REPO",
+      "cwd": "/absolute/path/to/ui-automation-control-plane",
       "env": {
         "UIQ_MCP_API_BASE_URL": "http://127.0.0.1:18080",
         "UIQ_MCP_TOOL_GROUPS": "advanced,analysis,proof"
@@ -142,7 +143,7 @@ Do **not** claim this package is published until registry publication really hap
 
 ## Minimal Verification
 
-Run these from the repo root:
+Run these from your cloned `ui-automation-control-plane` checkout:
 
 ```bash
 pnpm mcp:check
@@ -160,13 +161,13 @@ Expected result:
 - docs contract passes
 - MCP smoke passes
 
-## Troubleshooting
+## Start here
 
-- If MCP starts but cannot reach the local app stack:
-  set `UIQ_MCP_API_BASE_URL=http://127.0.0.1:17380`
-- If governed runs fail:
-  verify whether `AUTOMATION_API_TOKEN` or `GEMINI_API_KEY` is required for the path you chose
-- If you only need the UI first-look:
-  use `./scripts/dev-up.sh` first; do not start with deeper proof lanes
-- If a claim sounds like package registry, marketplace, or hosted SaaS distribution:
-  stop and verify it in `DISTRIBUTION.md` before repeating it
+1. Read [references/INSTALL.md](references/INSTALL.md)
+2. Load the right host config from:
+   - [references/OPENHANDS_MCP_CONFIG.json](references/OPENHANDS_MCP_CONFIG.json)
+   - [references/OPENCLAW_MCP_CONFIG.json](references/OPENCLAW_MCP_CONFIG.json)
+3. Skim the tool surface in [references/CAPABILITIES.md](references/CAPABILITIES.md)
+4. Run the first review loop from [references/DEMO.md](references/DEMO.md)
+5. If attach or proof fails, use
+   [references/TROUBLESHOOTING.md](references/TROUBLESHOOTING.md)

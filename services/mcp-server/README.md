@@ -4,6 +4,12 @@
 evidence through the MCP protocol. It is an adapter boundary, not the product
 frontend or the main backend business surface.
 
+In plain language:
+
+> this package is the companion translator booth for MCP-capable clients.
+> it is not the main Prooflane exhibit and it is not a browser-extension
+> product.
+
 This package is the **publish-ready MCP artifact target** for Prooflane.
 Today it still ships from the repository. It is **not** yet published to npm or
 another registry.

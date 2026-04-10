@@ -6,20 +6,34 @@ you need more detail.
 
 ## Distribution Truth Today
 
-Prooflane is already publishable through **GitHub + GitHub Pages + public-safe
+Prooflane is already public through **GitHub + GitHub Pages + public-safe
 docs**, but it is not claiming package-registry or marketplace distribution
 that has not happened yet.
 
-- **Live now**: GitHub repository, GitHub Pages, Discussions, release notes,
-  MCP docs, public-safe guided demo, and proof docs.
+- **Repo-owned now**: MCP docs, public-safe guided demo, public proof docs, and
+  the localhost-first stress-lab path.
+- **Remote GitHub routes exist**: repository, homepage, Discussions, and
+  release surfaces remain audit-backed rather than static proof.
 - **Ready but not live yet**: the publish-ready MCP package
-  `@uiq/mcp-server`, the planned `prooflane-mcp` CLI shape, the generic
-  in-repo skill scaffold, and other external distribution listings that are
-  prepared but not published.
-- **Not published yet**: npm, PyPI, public Skills marketplace listings, public
-  Docker images, and hosted SaaS claims.
+  `@uiq/mcp-server`, the planned `prooflane-mcp` CLI shape, and other external
+  distribution listings that are prepared but not published.
+- **Companion skill host state**: `docs/skills/prooflane-mcp/` is listed live
+  on ClawHub and still review-pending on OpenHands/extensions; that host state
+  belongs to the companion skill lane only.
+- **Not published yet**: npm, PyPI, additional public Skills marketplace
+  listings beyond the ClawHub companion packet, public Docker images, and
+  hosted SaaS claims.
 - Distribution-ready summaries live in [DISTRIBUTION.md](../DISTRIBUTION.md)
   and [INTEGRATIONS.md](../INTEGRATIONS.md).
+
+Quick map:
+
+- **front door first:** `README.md` + `docs/get-started.md`
+- **proof second:** `docs/proof-center.md`
+- **MCP / skill later:** `services/mcp-server/` docs + `docs/skills/prooflane-mcp/`
+- **remote GitHub truth:** re-check through
+  `docs/reference/public-readiness.md` before treating homepage/release/discussion
+  state as fresh fact
 
 Use these two short pages when you want the truth without reading the full
 architecture stack:
@@ -84,7 +98,7 @@ architecture stack:
 - [docs/reference/resolution-overrides.md](./reference/resolution-overrides.md):
   dependency override registry
 
-## Runtime And Extension
+## Runtime And Integration Surfaces
 
 - [docs/architecture.md](./architecture.md): canonical architecture contract
 - [docs/reference/integration-entrypoints.md](./reference/integration-entrypoints.md): builder map for HTTP, MCP, frontend hooks, and generated client surfaces
@@ -106,6 +120,10 @@ architecture stack:
 
 ## MCP
 
+These docs describe the **companion integration lane**.
+They are real and usable today, but they are not the primary Prooflane product
+story.
+
 - [docs/reference/integration-entrypoints.md](./reference/integration-entrypoints.md):
   builder entry map before you choose HTTP vs MCP vs repo-internal client code
 - [docs/how-to/mcp-agent-review-loop.md](./how-to/mcp-agent-review-loop.md):
@@ -117,7 +135,7 @@ architecture stack:
   client setup
 - [docs/mcp.md](./mcp.md): full MCP contract
 - [docs/skills/prooflane-mcp/SKILL.md](./skills/prooflane-mcp/SKILL.md):
-  generic in-repo skill scaffold for `@uiq/mcp-server` / `prooflane-mcp`
+  generic in-repo companion skill scaffold for `@uiq/mcp-server` / `prooflane-mcp`
 
 Suggested roles:
 

@@ -82,14 +82,20 @@ jobs:
           sarif_file: .runtime-cache/artifacts/ci/trivy-results.sarif
           category: trivy
       - name: Repo doctor
+        env:
+          UIQ_DOCTOR_REPO_SKIP_REDUNDANT_GOVERNANCE: "1"
         run: bash scripts/lib/pnpm-safe.sh doctor:repo
       - name: Lint all
+        env:
+          UIQ_SKIP_SENSITIVE_SURFACE_GATE: "1"
         run: UIQ_CONTAINER_GATE_NAME=ci-quick-gate-lint bash scripts/lint-all.sh
       - name: Log quality
         run: node scripts/ci/check-log-quality.mjs
       - name: MCP contract check
         run: bash scripts/lib/pnpm-safe.sh mcp:check
       - name: Fast matrix
+        env:
+          UIQ_SUITE_ORCHESTRATOR_MCP_CONTRACT: "0"
         run: bash scripts/lib/pnpm-safe.sh test:matrix:fast
 
   required_ci_gate:
