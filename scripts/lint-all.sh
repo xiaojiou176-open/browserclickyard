@@ -22,6 +22,17 @@ should_cleanup_node_artifacts_on_exit() {
   esac
 }
 
+read_bool() {
+  local raw="${1:-}"
+  local fallback="${2:-0}"
+  case "$raw" in
+    1|true|TRUE|yes|YES|on|ON) echo "1" ;;
+    0|false|FALSE|no|NO|off|OFF) echo "0" ;;
+    "") echo "$fallback" ;;
+    *) echo "$fallback" ;;
+  esac
+}
+
 shared_node_bin_ready() {
   local bin_name="$1"
   bash scripts/lib/node-bin.sh "$bin_name" --version >/dev/null 2>&1
@@ -185,7 +196,11 @@ add_check "root-typecheck" "bash scripts/lib/pnpm-safe.sh typecheck"
 add_check "command-center-eslint" "$COMMAND_CENTER_ESLINT_CMD"
 add_check "automation-eslint" "$AUTOMATION_ESLINT_CMD"
 add_check "service-api-ruff" "$SERVICE_API_RUFF_CMD"
-add_check "sensitive-surface-gate" "node scripts/ci/check-sensitive-surface-leaks.mjs"
+if [[ "$(read_bool "${UIQ_SKIP_SENSITIVE_SURFACE_GATE:-}" 0)" != "1" ]]; then
+  add_check "sensitive-surface-gate" "node scripts/ci/check-sensitive-surface-leaks.mjs"
+else
+  echo "[lint-all] skip sensitive-surface-gate (covered by upstream canonical gate)"
+fi
 add_check "host-safety-gate" "bash scripts/ci/host-safety-gate.sh"
 
 echo "[lint-all] running ${#CHECK_NAMES[@]} checks in parallel"

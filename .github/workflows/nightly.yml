@@ -37,6 +37,8 @@ jobs:
           corepack prepare "$(node -p "require('./package.json').packageManager")" --activate
       - name: Containerized nightly deterministic core
         env:
+          GH_TOKEN: ${{ github.token }}
+          GITHUB_TOKEN: ${{ github.token }}
           UIQ_CONTAINER_GATE_SERVICE_OVERRIDE: ci-browser
           UIQ_CONTAINER_GATE_BUILD_OVERRIDE: ci-browser
           UIQ_CONTAINER_GATE_COMMAND_OVERRIDE: |
