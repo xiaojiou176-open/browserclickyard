@@ -321,16 +321,38 @@ uiq_prepare_authoritative_workspace_node_root() {
   fi
 }
 
+uiq_workspace_node_module_link_specs() {
+  local root_dir="$1"
+  cat <<EOF
+${root_dir}/contracts/node_modules:../node_modules
+${root_dir}/apps/command-center/node_modules:../../node_modules
+${root_dir}/tooling/automation/node_modules:../../node_modules
+${root_dir}/tests/web-harness/node_modules:../../node_modules
+${root_dir}/services/mcp-server/node_modules:../../node_modules
+${root_dir}/tests/node_modules:../node_modules
+${root_dir}/tests/frontend-e2e/node_modules:../node_modules
+EOF
+}
+
 uiq_workspace_node_modules_topology_ready() {
   local root_dir="$1"
   local shared_dir="${2:-${UIQ_NODE_MODULES_DIR:-$(uiq_resolve_node_modules_dir "$root_dir")}}"
   local root_node_modules="${root_dir}/node_modules"
+  local link_spec=""
+  local workspace_path=""
   if [[ "$(uiq_normalize_contract_path "$shared_dir")" == "$(uiq_normalize_contract_path "$root_node_modules")" ]]; then
-    [[ -d "$root_node_modules" && ! -L "$root_node_modules" ]]
-    return $?
+    [[ -d "$root_node_modules" && ! -L "$root_node_modules" ]] || return 1
+  else
+    [[ -L "$root_node_modules" && -e "$root_node_modules" ]] || return 1
+    [[ "$(uiq_normalize_abs_path "$root_node_modules")" == "$(uiq_normalize_abs_path "$shared_dir")" ]] || return 1
   fi
-  [[ -L "$root_node_modules" && -e "$root_node_modules" ]] || return 1
-  [[ "$(uiq_normalize_abs_path "$root_node_modules")" == "$(uiq_normalize_abs_path "$shared_dir")" ]]
+  while IFS= read -r link_spec; do
+    [[ -n "$link_spec" ]] || continue
+    workspace_path="${link_spec%%:*}"
+    [[ -L "$workspace_path" && -e "$workspace_path" ]] || return 1
+    [[ "$(uiq_normalize_abs_path "$workspace_path")" == "$(uiq_normalize_abs_path "$shared_dir")" ]] || return 1
+  done < <(uiq_workspace_node_module_link_specs "$root_dir")
+  return 0
 }
 
 uiq_workspace_install_state_ready() {
@@ -608,9 +630,12 @@ uiq_cleanup_root_node_artifacts() {
   rm -rf \
     "${root_dir}/contracts/node_modules" \
     "${root_dir}/apps/command-center/node_modules" \
+    "${root_dir}/apps/command-center/workspace/node_modules" \
     "${root_dir}/tooling/automation/node_modules" \
+    "${root_dir}/tooling/automation/workspace/node_modules" \
     "${root_dir}/tests/web-harness/node_modules" \
     "${root_dir}/services/mcp-server/node_modules" \
+    "${root_dir}/services/mcp-server/workspace/node_modules" \
     "${root_dir}/tests/node_modules" \
     "${root_dir}/tests/frontend-e2e/node_modules" \
     "${root_dir}/apps/command-center/workspace/.runtime-cache" \
@@ -644,15 +669,7 @@ uiq_link_workspace_node_modules() {
   local preserve_root_node_modules=0
   local workspace_path=""
   local target_path=""
-  local -a workspace_links=(
-    "${root_dir}/contracts/node_modules:../node_modules"
-    "${root_dir}/apps/command-center/node_modules:../../node_modules"
-    "${root_dir}/tooling/automation/node_modules:../../node_modules"
-    "${root_dir}/tests/web-harness/node_modules:../../node_modules"
-    "${root_dir}/services/mcp-server/node_modules:../../node_modules"
-    "${root_dir}/tests/node_modules:../node_modules"
-    "${root_dir}/tests/frontend-e2e/node_modules:../node_modules"
-  )
+  local link_spec=""
 
   if [[ "$shared_dir" == "$root_node_modules" ]]; then
     preserve_root_node_modules=1
@@ -698,11 +715,12 @@ PY
     uiq_atomic_symlink "$shared_dir" "$root_node_modules"
   fi
 
-  for link_spec in "${workspace_links[@]}"; do
+  while IFS= read -r link_spec; do
+    [[ -n "$link_spec" ]] || continue
     workspace_path="${link_spec%%:*}"
     target_path="${link_spec#*:}"
     uiq_atomic_symlink "$target_path" "$workspace_path"
-  done
+  done < <(uiq_workspace_node_module_link_specs "$root_dir")
 }
 
 uiq_shared_link_repair_fingerprint() {

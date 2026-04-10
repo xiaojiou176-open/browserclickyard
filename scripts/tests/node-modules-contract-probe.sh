@@ -102,4 +102,19 @@ if ! uiq_assert_no_parent_workspace_node_modules "$workspace_root"; then
   exit 1
 fi
 
+if ! uiq_workspace_node_modules_topology_ready "$workspace_root" "$authoritative_root"; then
+  echo "expected canonical workspace node_modules topology to be ready" >&2
+  exit 1
+fi
+
+rm -f "$workspace_root/apps/command-center/node_modules"
+mkdir -p "$workspace_root/apps/command-center/home/runner/work/ui-automation-control-plane/ui-automation-control-plane"
+ln -s ../../../../../../node_modules \
+  "$workspace_root/apps/command-center/home/runner/work/ui-automation-control-plane/ui-automation-control-plane/node_modules"
+
+if uiq_workspace_node_modules_topology_ready "$workspace_root" "$authoritative_root"; then
+  echo "expected corrupted workspace bridge topology to be rejected" >&2
+  exit 1
+fi
+
 echo "node-modules contract probe checks passed"
