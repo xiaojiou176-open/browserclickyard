@@ -14,6 +14,7 @@ import {
 } from "../constants/testIds";
 import type { AppView } from "../hooks/useAppStore";
 import { DEFAULT_UI_LOCALE, pickUiText, type UiLocale } from "../i18n/uiLocale";
+import { Badge, Button } from "./ui";
 
 interface ConsoleHeaderProps {
   runningCount: number;
@@ -40,6 +41,12 @@ const LANE_MAP_SUMMARY =
 
 const RECOMMENDED_FIRST_PATH =
   "Recommended first path: enter a URL, choose a lab mode, run the experiment, then inspect the latest result before opening Advanced Review.";
+
+const FIRST_USE_ROUTE_TITLE =
+  "New here? Use the shell like a runway: launch in Stress Lab first, then read Runs & Blocks before you branch into Flow Studio or Advanced Review.";
+
+const FIRST_USE_ROUTE_LATER_HINT =
+  "Flow Studio and Advanced Review still stay available, but they are later lanes after the first result exists.";
 
 const laneViews: LaneView[] = [
   {
@@ -173,6 +180,16 @@ function ConsoleHeader({
     locale,
     RECOMMENDED_FIRST_PATH,
     "\u63a8\u8350\u8def\u5f84\uff1a\u5148\u586b URL\uff0c\u9009\u5b9e\u9a8c\u6a21\u5f0f\uff0c\u542f\u52a8\u5b9e\u9a8c\uff0c\u518d\u8bfb\u7ed3\u679c\uff1b\u6700\u540e\u624d\u8fdb\u5165 Advanced Review\u3002",
+  );
+  const firstUseRouteTitle = pickUiText(
+    locale,
+    FIRST_USE_ROUTE_TITLE,
+    "\u7b2c\u4e00\u6b21\u6765\u8fd9\u91cc\uff0c\u5c31\u628a\u8fd9\u4e2a shell \u5f53\u6210\u4e00\u6761\u8dd1\u9053\uff1a\u5148\u5728 Stress Lab \u53d1\u8d77\u5b9e\u9a8c\uff0c\u518d\u53bb Runs & Blocks \u8bfb\u7ed3\u679c\uff0c\u4e4b\u540e\u624d\u5206\u53c9\u5230 Flow Studio \u6216 Advanced Review\u3002",
+  );
+  const firstUseRouteLaterHint = pickUiText(
+    locale,
+    FIRST_USE_ROUTE_LATER_HINT,
+    "Flow Studio \u548c Advanced Review \u8fd8\u5728\uff0c\u53ea\u662f\u5b83\u4eec\u5e94\u8be5\u51fa\u73b0\u5728\u4f60\u770b\u5230\u7b2c\u4e00\u4e2a\u7ed3\u679c\u4e4b\u540e\u3002",
   );
   const localizedLaneViews: LaneView[] = useMemo(
     () => [
@@ -340,6 +357,43 @@ function ConsoleHeader({
             <h1>Prooflane</h1>
             <p>{laneMapSummary}</p>
             <p>{recommendedFirstPath}</p>
+            <div className="card-raised mt-3" data-tour="launch-priority">
+              <p className="field-label">
+                {pickUiText(locale, "Start here", "\u4ece\u8fd9\u91cc\u5f00\u59cb")}
+              </p>
+              <p className="hint-text">{firstUseRouteTitle}</p>
+              <div className="form-actions">
+                <Button size="sm" onClick={() => onViewChange("launch")}>
+                  {pickUiText(locale, "1. Open Stress Lab", "1. \u6253\u5f00 Stress Lab")}
+                </Button>
+                <Button variant="secondary" size="sm" onClick={() => onViewChange("tasks")}>
+                  {pickUiText(locale, "2. Read Runs & Blocks", "2. \u67e5\u770b Runs & Blocks")}
+                </Button>
+              </div>
+              <div className="form-actions">
+                <Badge variant={activeView === "launch" ? "default" : "secondary"}>
+                  {pickUiText(locale, "First lane: Stress Lab", "\u7b2c\u4e00\u7ad9\uff1aStress Lab")}
+                </Badge>
+                <Badge variant={activeView === "tasks" ? "default" : "secondary"}>
+                  {pickUiText(
+                    locale,
+                    "Next lane: Runs & Blocks",
+                    "\u4e0b\u4e00\u7ad9\uff1aRuns & Blocks",
+                  )}
+                </Badge>
+                <Badge variant="secondary">
+                  {pickUiText(locale, "Later: Flow Studio", "\u7a0d\u540e\uff1aFlow Studio")}
+                </Badge>
+                <Badge variant="secondary">
+                  {pickUiText(
+                    locale,
+                    "Later: Advanced Review",
+                    "\u7a0d\u540e\uff1aAdvanced Review",
+                  )}
+                </Badge>
+              </div>
+              <p className="hint-text">{firstUseRouteLaterHint}</p>
+            </div>
           </div>
         </div>
         <div className="header-right">
