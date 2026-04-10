@@ -29,6 +29,27 @@ type ReviewBoardViewProps = {
 const REVIEW_BOARD_GUIDE =
   "Advanced Review is the optional governed compare layer. Start in Stress Lab, inspect the latest result in Runs & Blocks, and come here only when you need deeper comparison, proof bundles, or AI-assisted analysis.";
 
+const REVIEW_TRUST_LADDER = [
+  {
+    key: "real-run",
+    title: "Real run first",
+    detail:
+      "Do not start here from theory. Open Advanced Review only after Stress Lab and Runs & Blocks already surfaced a real result.",
+  },
+  {
+    key: "governed-readback",
+    title: "Read the gate before the story",
+    detail:
+      "Check gate status, compare deltas, and AI findings together so the operator reads one governed picture instead of scattered clues.",
+  },
+  {
+    key: "handoff-ready",
+    title: "Leave with a trusted next move",
+    detail:
+      "When the evidence is legible, end with a release brief or handoff prompt so the next operator inherits context instead of guesswork.",
+  },
+] as const;
+
 function readNumber(value: unknown): number | null {
   return typeof value === "number" && Number.isFinite(value) ? value : null;
 }
@@ -509,6 +530,65 @@ export default function ReviewBoardView({
                 {error}
               </p>
             )}
+          </CardContent>
+        </Card>
+
+        <Card className="mt-3">
+          <CardHeader>
+            <CardTitle>{pickUiText(locale, "Review trust ladder", "审查信任阶梯")}</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="hint-text">
+              {pickUiText(
+                locale,
+                "Think of this page as the trust layer for operators: first prove the run is real, then read governed signals together, then leave with a clear next move.",
+                "把这个页面理解成给操作员看的“信任层”：先确认 run 真实存在，再把治理信号放在一起读，最后带着明确的下一步离开。",
+              )}
+            </p>
+            <div
+              className="command-tags mt-2"
+              aria-label={pickUiText(locale, "Review trust ladder", "审查信任阶梯")}
+            >
+              {REVIEW_TRUST_LADDER.map((step, index) => (
+                <Badge key={step.key} variant="secondary">
+                  {pickUiText(locale, `${index + 1}. ${step.title}`, `${index + 1}. ${
+                    [
+                      "先有真实 run",
+                      "先读门禁再讲故事",
+                      "离开时带着可信下一步",
+                    ][index]
+                  }`)}
+                </Badge>
+              ))}
+            </div>
+            <ul className="task-list mt-3">
+              {REVIEW_TRUST_LADDER.map((step, index) => (
+                <li key={step.key} className="task-item">
+                  <div className="task-item-info text-left">
+                    <strong>
+                      {pickUiText(locale, `${index + 1}. ${step.title}`, `${index + 1}. ${
+                        [
+                          "先有真实 run",
+                          "先读门禁再讲故事",
+                          "离开时带着可信下一步",
+                        ][index]
+                      }`)}
+                    </strong>
+                    <p>
+                      {pickUiText(
+                        locale,
+                        step.detail,
+                        [
+                          "不要从想象开始。只有当 Stress Lab 和 Runs & Blocks 已经给出真实结果后，才来这里做更深审查。",
+                          "先把 gate、compare delta 和 AI 发现放在一起读，别让操作员在分散线索里拼图。",
+                          "当证据已经看得懂时，用 release brief 或 handoff prompt 收尾，让下一位操作员接手时不用猜。",
+                        ][index],
+                      )}
+                    </p>
+                  </div>
+                </li>
+              ))}
+            </ul>
           </CardContent>
         </Card>
 
