@@ -76,7 +76,11 @@ repair_workspace_after_install() {
   local had_skip_shared_repair=0
   local previous_skip_shared_repair=""
   if should_repair_node_links; then
-    uiq_cleanup_root_node_artifacts "$ROOT_DIR"
+    local preserve_root_node_modules=0
+    if uiq_should_preserve_root_node_modules "$ROOT_DIR"; then
+      preserve_root_node_modules=1
+    fi
+    uiq_cleanup_root_node_artifacts "$ROOT_DIR" "$preserve_root_node_modules"
     echo "[pnpm-install-safe] repairing shared module links" >&2
     uiq_link_workspace_node_modules "$ROOT_DIR"
     if [[ -n "${RUNNER_TEMP:-}" && "$UIQ_NODE_MODULES_DIR" == "${RUNNER_TEMP}"/* ]]; then

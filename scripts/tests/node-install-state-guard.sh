@@ -16,6 +16,24 @@ trap cleanup EXIT
 
 mkdir -p "$node_root/.pnpm/node_modules"
 
+set +e
+missing_marker_output="$(
+  UIQ_NODE_MODULES_DIR="$node_root" uiq_workspace_install_state_ready "$workspace_root" 2>&1
+)"
+missing_marker_status=$?
+set -e
+
+if [[ "$missing_marker_status" -eq 0 ]]; then
+  echo "expected empty node_modules store to fail install-state guard" >&2
+  exit 1
+fi
+
+if ! grep -Eq "missing-workspace-state|empty-pnpm-store" <<<"$missing_marker_output"; then
+  echo "expected missing install marker reason in guard output" >&2
+  echo "$missing_marker_output" >&2
+  exit 1
+fi
+
 cat >"$node_root/.pnpm-workspace-state-v1.json" <<'JSON'
 {
   "projects": {

@@ -355,6 +355,26 @@ def append_issue(message: str) -> None:
         issues.append(message)
 
 
+def check_required_install_markers() -> None:
+    pnpm_dir = shared / ".pnpm"
+    if not pnpm_dir.exists():
+        append_issue(f"missing-pnpm-store path={pnpm_dir}")
+        return
+
+    try:
+        has_store_entries = any(pnpm_dir.iterdir())
+    except OSError as exc:
+        append_issue(f"pnpm-store-unreadable path={pnpm_dir} error={exc}")
+        return
+
+    if not has_store_entries:
+        append_issue(f"empty-pnpm-store path={pnpm_dir}")
+
+    state_file = shared / ".pnpm-workspace-state-v1.json"
+    if not state_file.exists():
+        append_issue(f"missing-workspace-state path={state_file}")
+
+
 def check_workspace_state() -> None:
     state_file = shared / ".pnpm-workspace-state-v1.json"
     if not state_file.exists():
@@ -433,6 +453,7 @@ def detect_rollup_native_package() -> tuple[str, str] | None:
     return package_base, version
 
 
+check_required_install_markers()
 check_workspace_state()
 
 if str(root) != "/workspace":
