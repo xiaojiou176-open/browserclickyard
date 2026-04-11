@@ -27,6 +27,58 @@ resolve_corepack_js() {
   return 1
 }
 
+resolve_bootstrap_corepack_prefix() {
+  if [[ -n "${UIQ_BOOTSTRAP_COREPACK_PREFIX:-}" ]]; then
+    printf '%s\n' "$UIQ_BOOTSTRAP_COREPACK_PREFIX"
+    return 0
+  fi
+  if [[ -n "${RUNNER_TEMP:-}" && "${RUNNER_TEMP}" == /* ]]; then
+    printf '%s\n' "${RUNNER_TEMP}/uiq-corepack-bootstrap"
+    return 0
+  fi
+  printf '%s\n' "${XDG_CACHE_HOME:-$HOME/.cache}/uiq/corepack-bootstrap"
+}
+
+bootstrap_corepack_binary() {
+  local prefix="${1:-$(resolve_bootstrap_corepack_prefix)}"
+  local version="${UIQ_BOOTSTRAP_COREPACK_VERSION:-0.34.6}"
+  mkdir -p "$prefix"
+  echo "[pnpm-install-safe] installing corepack@${version} into ${prefix}" >&2
+  run_node_cli_env env npm_config_prefix="$prefix" npm install -g "corepack@${version}" >/dev/null
+  export PATH="${prefix}/bin:${PATH}"
+}
+
+prepare_package_manager_with_corepack() {
+  local package_manager="$1"
+  local log_file=""
+  local status=0
+  log_file="$(mktemp)"
+
+  if ! command -v corepack >/dev/null 2>&1; then
+    bootstrap_corepack_binary
+  fi
+
+  if run_node_cli_env corepack prepare "$package_manager" --activate >"$log_file" 2>&1; then
+    rm -f "$log_file"
+    return 0
+  fi
+  status=$?
+
+  if grep -Fq "Cannot find matching keyid" "$log_file"; then
+    echo "[pnpm-install-safe] detected corepack keyid mismatch; bootstrapping a newer corepack release" >&2
+    bootstrap_corepack_binary
+    if run_node_cli_env corepack prepare "$package_manager" --activate >"$log_file" 2>&1; then
+      rm -f "$log_file"
+      return 0
+    fi
+    status=$?
+  fi
+
+  cat "$log_file" >&2 || true
+  rm -f "$log_file"
+  return "$status"
+}
+
 pnpm_runtime_defaults() {
   if [[ -n "${UIQ_CONTAINER_GATE_NAME:-}" ]] || [[ -n "${CI:-}" ]] || [[ -n "${GITHUB_ACTIONS:-}" ]]; then
     printf '%s %s\n' "${UIQ_PNPM_CHILD_CONCURRENCY:-1}" "${UIQ_PNPM_NETWORK_CONCURRENCY:-2}"
@@ -138,23 +190,24 @@ ensure_pnpm_entrypoint() {
     run_node_cli_env node "$pnpm_cjs" --version >/dev/null
     return 0
   fi
+  local package_manager=""
+  package_manager="$(package_manager_spec)"
   if command -v pnpm >/dev/null 2>&1 && run_node_cli_env pnpm --version >/dev/null 2>&1; then
+    if [[ -n "$package_manager" ]] && command -v corepack >/dev/null 2>&1; then
+      prepare_package_manager_with_corepack "$package_manager"
+      if pnpm_cjs="$(resolve_pnpm_cjs)"; then
+        run_node_cli_env node "$pnpm_cjs" --version >/dev/null
+      fi
+    fi
     return 0
   fi
   if ! command -v corepack >/dev/null 2>&1; then
     return 1
   fi
-  local package_manager=""
-  package_manager="$(package_manager_spec)"
   if [[ -z "$package_manager" ]]; then
     return 1
   fi
-  local corepack_js=""
-  if corepack_js="$(resolve_corepack_js)"; then
-    run_node_cli_env node "$corepack_js" prepare "$package_manager" --activate >/dev/null
-  else
-    run_node_cli_env corepack prepare "$package_manager" --activate >/dev/null
-  fi
+  prepare_package_manager_with_corepack "$package_manager"
   if pnpm_cjs="$(resolve_pnpm_cjs)"; then
     run_node_cli_env node "$pnpm_cjs" --version >/dev/null
     return 0
@@ -212,22 +265,13 @@ resolve_pnpm_cjs() {
   local version="${package_manager#pnpm@}"
   version="${version%%+*}"
   local corepack_root="${COREPACK_HOME:-$HOME/.cache/node/corepack}"
-  local candidates=()
   if [[ -n "$version" && "$version" != "$package_manager" ]]; then
-    candidates+=("$corepack_root/v1/pnpm/$version/dist/pnpm.cjs")
-  fi
-  candidates+=(
-    "/usr/local/lib/node_modules/corepack/dist/pnpm.js"
-    "/usr/lib/node_modules/corepack/dist/pnpm.js"
-    "/opt/homebrew/lib/node_modules/corepack/dist/pnpm.js"
-  )
-  local candidate=""
-  for candidate in "${candidates[@]}"; do
+    local candidate="$corepack_root/v1/pnpm/$version/dist/pnpm.cjs"
     if [[ -f "$candidate" ]]; then
       printf '%s\n' "$candidate"
       return 0
     fi
-  done
+  fi
   return 1
 }
 
