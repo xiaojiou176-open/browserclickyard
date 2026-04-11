@@ -16,6 +16,21 @@ trap cleanup EXIT
 
 mkdir -p "$node_root/.pnpm/node_modules"
 
+export UIQ_NODE_MODULES_DIR="$node_root"
+uiq_export_node_env "$workspace_root"
+
+if [[ "$npm_config_modules_dir" != "node_modules" ]]; then
+  echo "expected authoritative workspace node root to export canonical npm_config_modules_dir" >&2
+  printf 'actual=%s\n' "$npm_config_modules_dir" >&2
+  exit 1
+fi
+
+if [[ "$npm_config_virtual_store_dir" != "node_modules/.pnpm" ]]; then
+  echo "expected authoritative workspace node root to export canonical npm_config_virtual_store_dir" >&2
+  printf 'actual=%s\n' "$npm_config_virtual_store_dir" >&2
+  exit 1
+fi
+
 set +e
 missing_marker_output="$(
   UIQ_NODE_MODULES_DIR="$node_root" uiq_workspace_install_state_ready "$workspace_root" 2>&1

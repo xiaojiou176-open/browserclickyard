@@ -270,19 +270,30 @@ uiq_export_node_env() {
   resolved_node_modules_dir="$(uiq_resolve_node_modules_dir "$root_dir")"
   local resolved_pnpm_store_dir="${UIQ_PNPM_STORE_DIR:-$(uiq_resolve_pnpm_store_dir)}"
   local resolved_corepack_home="${COREPACK_HOME:-$(uiq_resolve_corepack_home)}"
+  local authoritative_contract_root
+  local npm_modules_dir
+  local npm_virtual_store_dir
   resolved_node_modules_dir="$(uiq_normalize_runner_temp_child_path "$resolved_node_modules_dir" "uiq-node-modules")"
   resolved_pnpm_store_dir="$(uiq_normalize_runner_temp_child_path "$resolved_pnpm_store_dir" "uiq-pnpm-store")"
   resolved_corepack_home="$(uiq_normalize_runner_temp_child_path "$resolved_corepack_home" "uiq-corepack")"
-  if [[ "$(uiq_normalize_contract_path "$resolved_node_modules_dir")" == "$(uiq_normalize_contract_path "$(uiq_resolve_authoritative_workspace_node_root "$root_dir")")" ]]; then
+  authoritative_contract_root="$(uiq_normalize_contract_path "$(uiq_resolve_authoritative_workspace_node_root "$root_dir")")"
+  npm_modules_dir="$resolved_node_modules_dir"
+  npm_virtual_store_dir="${resolved_node_modules_dir}/.pnpm"
+  if [[ "$(uiq_normalize_contract_path "$resolved_node_modules_dir")" == "$authoritative_contract_root" ]]; then
     uiq_prepare_authoritative_workspace_node_root "$root_dir"
+    # Keep authoritative workspace installs expressed canonically so pnpm
+    # does not materialize "<workspace>/<absolute-path-without-leading-slash>"
+    # inside child workspace directories.
+    npm_modules_dir="node_modules"
+    npm_virtual_store_dir="node_modules/.pnpm"
   fi
   export UIQ_NODE_MODULES_DIR="$resolved_node_modules_dir"
   export UIQ_PNPM_STORE_DIR="$resolved_pnpm_store_dir"
   export COREPACK_HOME="$resolved_corepack_home"
   export PNPM_STORE_PATH="$UIQ_PNPM_STORE_DIR"
   export npm_config_store_dir="$UIQ_PNPM_STORE_DIR"
-  export npm_config_modules_dir="$UIQ_NODE_MODULES_DIR"
-  export npm_config_virtual_store_dir="${UIQ_NODE_MODULES_DIR}/.pnpm"
+  export npm_config_modules_dir="$npm_modules_dir"
+  export npm_config_virtual_store_dir="$npm_virtual_store_dir"
   export NODE_PATH="${UIQ_NODE_MODULES_DIR}${NODE_PATH:+:${NODE_PATH}}"
   export PATH="${UIQ_NODE_MODULES_DIR}/.bin:${PATH}"
   case " ${NODE_OPTIONS:-} " in
