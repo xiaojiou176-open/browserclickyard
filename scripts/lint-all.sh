@@ -38,9 +38,14 @@ required_shared_bin_path() {
   printf '%s\n' "${UIQ_NODE_MODULES_DIR}/.bin/${bin_name}"
 }
 
+shared_node_bin_resolves() {
+  local bin_name="$1"
+  bash "$ROOT_DIR/scripts/lib/node-bin.sh" "$bin_name" --version >/dev/null 2>&1
+}
+
 shared_node_bin_ready() {
   local bin_name="$1"
-  [[ -x "$(required_shared_bin_path "$bin_name")" ]]
+  [[ -x "$(required_shared_bin_path "$bin_name")" ]] || shared_node_bin_resolves "$bin_name"
 }
 
 shared_node_runtime_ready() {
