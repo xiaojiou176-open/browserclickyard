@@ -125,6 +125,7 @@ reset_node_modules_root() {
 }
 
 repair_workspace_after_install() {
+  sync_workspace_state_marker
   local had_skip_shared_repair=0
   local previous_skip_shared_repair=""
   if should_repair_node_links; then
@@ -182,6 +183,108 @@ repair_workspace_after_install() {
     echo "[pnpm-install-safe] container gate shared module links ready" >&2
     return 0
   fi
+}
+
+workspace_state_marker_matches_root() {
+  local candidate_path="$1"
+  python3 - "$candidate_path" "$ROOT_DIR" <<'PY'
+from __future__ import annotations
+
+import json
+import os
+import sys
+from pathlib import Path
+
+candidate = Path(sys.argv[1])
+root = Path(sys.argv[2]).resolve()
+
+try:
+    payload = json.loads(candidate.read_text(encoding="utf-8"))
+except Exception:
+    raise SystemExit(1)
+
+projects = payload.get("projects") or {}
+if not isinstance(projects, dict) or not projects:
+    raise SystemExit(1)
+
+project_roots = {os.path.realpath(os.path.abspath(str(path))) for path in projects.keys()}
+if str(root) in project_roots or "/workspace" in project_roots:
+    raise SystemExit(0)
+
+raise SystemExit(1)
+PY
+}
+
+write_workspace_state_marker() {
+  local target_path="$1"
+  local seed_path="${2:-}"
+  python3 - "$target_path" "$ROOT_DIR" "$seed_path" <<'PY'
+from __future__ import annotations
+
+import json
+import time
+import sys
+from pathlib import Path
+
+target = Path(sys.argv[1])
+root = Path(sys.argv[2]).resolve()
+seed_path = Path(sys.argv[3]) if sys.argv[3] else None
+
+payload: dict[str, object] = {}
+if seed_path is not None and seed_path.exists():
+    try:
+        raw_payload = json.loads(seed_path.read_text(encoding="utf-8"))
+        if isinstance(raw_payload, dict):
+            payload = raw_payload
+    except Exception:
+        payload = {}
+
+projects = payload.get("projects")
+if not isinstance(projects, dict):
+    projects = {}
+payload["projects"] = projects
+
+package_payload = json.loads((root / "package.json").read_text(encoding="utf-8"))
+projects[str(root)] = {
+    "name": str(package_payload.get("name") or root.name),
+    "version": str(package_payload.get("version") or "0.0.0"),
+}
+payload.setdefault("lastValidatedTimestamp", int(time.time() * 1000))
+
+target.parent.mkdir(parents=True, exist_ok=True)
+target.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+PY
+}
+
+sync_workspace_state_marker() {
+  local shared_state_file="${UIQ_NODE_MODULES_DIR}/.pnpm-workspace-state-v1.json"
+  if [[ -f "$shared_state_file" ]] && workspace_state_marker_matches_root "$shared_state_file"; then
+    return 0
+  fi
+
+  local candidate=""
+  local pnpm_cjs=""
+  pnpm_cjs="$(resolve_pnpm_cjs || true)"
+  if [[ -n "$pnpm_cjs" ]]; then
+    candidate="$(cd "$(dirname "$pnpm_cjs")/node_modules" && pwd)/.pnpm-workspace-state-v1.json"
+    if [[ -f "$candidate" ]]; then
+      write_workspace_state_marker "$shared_state_file" "$candidate"
+      echo "[pnpm-install-safe] synced workspace-state marker into shared node root" >&2
+      return 0
+    fi
+  fi
+
+  while IFS= read -r candidate; do
+    [[ -n "$candidate" ]] || continue
+    if [[ -f "$candidate" ]]; then
+      write_workspace_state_marker "$shared_state_file" "$candidate"
+      echo "[pnpm-install-safe] synced workspace-state marker into shared node root" >&2
+      return 0
+    fi
+  done < <(find "${COREPACK_HOME:-$(uiq_resolve_corepack_home)}" -path '*/.pnpm-workspace-state-v1.json' -type f 2>/dev/null)
+
+  write_workspace_state_marker "$shared_state_file"
+  echo "[pnpm-install-safe] synthesized workspace-state marker into shared node root" >&2
 }
 
 container_gate_shared_runtime_ready() {
