@@ -17,15 +17,17 @@ const LANE_MAP_SUMMARY =
 const RECOMMENDED_FIRST_PATH =
   "Recommended first path: enter a URL, choose a lab mode, run the experiment, then inspect the latest result before opening Advanced Review.";
 
-const TOUR_VIEW_GUIDES = {
-  launch:
-    "Stress Lab is where you begin. Confirm the target, choose a lab mode, and launch the first browser experiment.",
+const TOUR_PAGE_GUIDES = {
+  plan:
+    "This page is not a whole-product map. It exists to get one first result on screen: configure the target, choose a mode, run it, then read Runs & Blocks.",
+  parameters:
+    "Use the parameter panel to set the base URL, optional start URL, and success checkpoint before you try to launch anything.",
+  modes:
+    "Choose one lab mode that matches the first question you want answered. You do not need every lane on the first pass.",
+  actions:
+    "Launch from the command grid or a saved template only after the target is configured. Reusable shortcuts stay secondary to the first run.",
   tasks:
-    "Runs & Blocks is where you read the latest result, inspect failures, and clear manual blockers before running again.",
-  workshop:
-    "Flow Studio is where you deepen the experiment by editing journeys, replaying steps, and tightening what the run just taught you.",
-  review:
-    "Advanced Review is the optional governed layer for comparing proof bundles, AI summaries, and historical matches after the result already exists.",
+    "After launch, move to Runs & Blocks to read the verdict or clear a waiting gate such as OTP or manual input.",
 } as const;
 
 interface OnboardingTourProps {
@@ -53,65 +55,82 @@ function OnboardingTour({
     RECOMMENDED_FIRST_PATH,
     "\u63a8\u8350\u8def\u5f84\uff1a\u5148\u586b URL\uff0c\u9009\u5b9e\u9a8c\u6a21\u5f0f\uff0c\u542f\u52a8\u5b9e\u9a8c\uff0c\u518d\u8bfb\u7ed3\u679c\uff1b\u6700\u540e\u624d\u8fdb\u5165 Advanced Review\u3002",
   );
-  const localizedTourViewGuides = {
-    launch: pickUiText(
+  const localizedTourPageGuides = {
+    plan: pickUiText(
       locale,
-      TOUR_VIEW_GUIDES.launch,
-      "Stress Lab \u662f\u7b2c\u4e00\u7ad9\u3002\u5148\u786e\u8ba4\u76ee\u6807\uff0c\u518d\u9009\u62e9\u5b9e\u9a8c\u6a21\u5f0f\uff0c\u7136\u540e\u542f\u52a8\u7b2c\u4e00\u6b21\u6d4f\u89c8\u5668\u5b9e\u9a8c\u3002",
+      TOUR_PAGE_GUIDES.plan,
+      "这个页面不是整张产品地图，而是为了把第一个结果先跑出来：先配目标、再选模式、再运行，最后去 Runs & Blocks 读结论。",
+    ),
+    parameters: pickUiText(
+      locale,
+      TOUR_PAGE_GUIDES.parameters,
+      "先在参数面板里设置 base URL、可选 start URL 和 success checkpoint，然后再尝试发起实验。",
+    ),
+    modes: pickUiText(
+      locale,
+      TOUR_PAGE_GUIDES.modes,
+      "先选一个最符合当前问题的实验模式就够了，第一次不需要把所有 lane 都走一遍。",
+    ),
+    actions: pickUiText(
+      locale,
+      TOUR_PAGE_GUIDES.actions,
+      "只有在目标配置好之后，才从 command grid 或已保存模板发起运行。可复用快捷方式仍然应该排在首跑之后。",
     ),
     tasks: pickUiText(
       locale,
-      TOUR_VIEW_GUIDES.tasks,
-      "Runs & Blocks \u7528\u6765\u5148\u8bfb\u6700\u65b0\u7ed3\u679c\u3001\u770b\u5931\u8d25\u4e0e\u6682\u505c\u539f\u56e0\uff0c\u518d\u51b3\u5b9a\u662f\u5426\u7ee7\u7eed\u3002",
-    ),
-    workshop: pickUiText(
-      locale,
-      TOUR_VIEW_GUIDES.workshop,
-      "Flow Studio \u8d1f\u8d23\u66f4\u6df1\u4e00\u5c42\u7684\u6d41\u7a0b\u7f16\u8f91\u3001\u6b65\u9aa4\u91cd\u653e\u548c\u5b9e\u9a8c\u4f18\u5316\u3002",
-    ),
-    review: pickUiText(
-      locale,
-      TOUR_VIEW_GUIDES.review,
-      "Advanced Review \u662f\u53ef\u9009\u6cbb\u7406\u5c42\uff0c\u53ea\u6709\u5728\u7ed3\u679c\u5df2\u7ecf\u5b58\u5728\u4e14\u9700\u8981 proof\u3001AI \u6458\u8981\u6216\u5386\u53f2\u5bf9\u6bd4\u65f6\u624d\u6253\u5f00\u3002",
+      TOUR_PAGE_GUIDES.tasks,
+      "发起运行后，下一站就是 Runs & Blocks。在那里读结论，或者清掉 OTP / 手工输入这样的等待闸门。",
     ),
   } as const;
   const localizedSteps: TourStep[] = [
     {
-      selector: '[data-tour="welcome"]',
+      selector: '[data-tour="launch-plan"]',
       title: pickUiText(
         locale,
         "Step 1: Start from the target, not from the room list",
         "\u6b65\u9aa4 1\uff1a\u5148\u4ece\u76ee\u6807\u5f00\u59cb\uff0c\u800c\u4e0d\u662f\u5148\u770b\u623f\u95f4\u5217\u8868",
       ),
-      body: `${laneMapSummary} ${recommendedFirstPath}`,
+      body: `${localizedTourPageGuides.plan} ${laneMapSummary} ${recommendedFirstPath}`,
       position: "bottom",
     },
     {
-      selector: '[data-tour="tab-launch"]',
-      title: pickUiText(locale, "Step 2: Launch from Stress Lab", "\u6b65\u9aa4 2\uff1a\u4ece Stress Lab \u53d1\u8d77\u5b9e\u9a8c"),
-      body: localizedTourViewGuides.launch,
+      selector: '[data-tour="launch-parameters"]',
+      title: pickUiText(
+        locale,
+        "Step 2: Configure the target first",
+        "\u6b65\u9aa4 2\uff1a\u5148\u914d\u7f6e\u76ee\u6807",
+      ),
+      body: localizedTourPageGuides.parameters,
+      position: "bottom",
+    },
+    {
+      selector: '[data-tour="launch-modes"]',
+      title: pickUiText(
+        locale,
+        "Step 3: Choose one lab mode",
+        "\u6b65\u9aa4 3\uff1a\u9009\u4e00\u4e2a\u5b9e\u9a8c\u6a21\u5f0f",
+      ),
+      body: localizedTourPageGuides.modes,
+      position: "bottom",
+    },
+    {
+      selector: '[data-tour="launch-actions"]',
+      title: pickUiText(
+        locale,
+        "Step 4: Start the run from this page",
+        "\u6b65\u9aa4 4\uff1a\u5728\u8fd9\u4e2a\u9875\u9762\u53d1\u8d77\u8fd0\u884c",
+      ),
+      body: localizedTourPageGuides.actions,
       position: "bottom",
     },
     {
       selector: '[data-tour="tab-tasks"]',
-      title: pickUiText(locale, "Step 3: Read the result in Runs & Blocks", "\u6b65\u9aa4 3\uff1a\u5728 Runs & Blocks \u8bfb\u7ed3\u679c"),
-      body: localizedTourViewGuides.tasks,
-      position: "bottom",
-    },
-    {
-      selector: '[data-tour="tab-workshop"]',
-      title: pickUiText(locale, "Step 4: Deepen the journey in Flow Studio", "\u6b65\u9aa4 4\uff1a\u5728 Flow Studio \u6df1\u5316\u6d41\u7a0b"),
-      body: localizedTourViewGuides.workshop,
-      position: "bottom",
-    },
-    {
-      selector: '[data-tour="tab-review"]',
       title: pickUiText(
         locale,
-        "Step 5: Open Advanced Review only when needed",
-        "\u6b65\u9aa4 5\uff1a\u53ea\u6709\u9700\u8981\u65f6\u624d\u6253\u5f00 Advanced Review",
+        "Step 5: Move to Runs & Blocks next",
+        "\u6b65\u9aa4 5\uff1a\u4e0b\u4e00\u7ad9\u8f6c\u5230 Runs & Blocks",
       ),
-      body: localizedTourViewGuides.review,
+      body: localizedTourPageGuides.tasks,
       position: "bottom",
     },
   ];

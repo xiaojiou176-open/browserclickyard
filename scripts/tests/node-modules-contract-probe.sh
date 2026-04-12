@@ -92,6 +92,60 @@ fi
 UIQ_NODE_MODULES_DIR="$authoritative_root"
 uiq_link_workspace_node_modules "$workspace_root"
 
+authoritative_export_probe="$(
+  (
+    export RUNNER_TEMP="$runner_temp_root"
+    unset npm_config_modules_dir
+    unset npm_config_virtual_store_dir
+    UIQ_NODE_MODULES_DIR="$authoritative_root"
+    uiq_export_node_env "$workspace_root"
+    printf '%s\n%s\n' "$npm_config_modules_dir" "$npm_config_virtual_store_dir"
+  )
+)"
+
+authoritative_modules_dir="$(printf '%s\n' "$authoritative_export_probe" | sed -n '1p')"
+authoritative_virtual_store_dir="$(printf '%s\n' "$authoritative_export_probe" | sed -n '2p')"
+
+if [[ "$authoritative_modules_dir" != "node_modules" ]]; then
+  echo "expected repo-local authoritative export to keep npm_config_modules_dir project-relative" >&2
+  printf 'actual=%s\n' "$authoritative_modules_dir" >&2
+  exit 1
+fi
+
+if [[ "$authoritative_virtual_store_dir" != "node_modules/.pnpm" ]]; then
+  echo "expected repo-local authoritative export to keep npm_config_virtual_store_dir project-relative" >&2
+  printf 'actual=%s\n' "$authoritative_virtual_store_dir" >&2
+  exit 1
+fi
+
+override_export_probe="$(
+  (
+    export RUNNER_TEMP="$runner_temp_root"
+    unset npm_config_modules_dir
+    unset npm_config_virtual_store_dir
+    UIQ_NODE_MODULES_DIR="$override_root"
+    uiq_export_node_env "$workspace_root"
+    printf '%s\n%s\n' "$npm_config_modules_dir" "$npm_config_virtual_store_dir"
+  )
+)"
+
+override_modules_dir="$(printf '%s\n' "$override_export_probe" | sed -n '1p')"
+override_virtual_store_dir="$(printf '%s\n' "$override_export_probe" | sed -n '2p')"
+normalized_override_root="$(uiq_normalize_abs_path "$override_root")"
+normalized_override_virtual_store_dir="$(uiq_normalize_abs_path "$override_root/.pnpm")"
+
+if [[ "$override_modules_dir" != "$normalized_override_root" ]]; then
+  echo "expected explicit runner-temp bridge export to preserve absolute npm_config_modules_dir" >&2
+  printf 'actual=%s\n' "$override_modules_dir" >&2
+  exit 1
+fi
+
+if [[ "$override_virtual_store_dir" != "$normalized_override_virtual_store_dir" ]]; then
+  echo "expected explicit runner-temp bridge export to preserve absolute npm_config_virtual_store_dir" >&2
+  printf 'actual=%s\n' "$override_virtual_store_dir" >&2
+  exit 1
+fi
+
 if [[ -e "$disallowed_parent_root" || -L "$disallowed_parent_root" ]]; then
   echo "expected repo-local bridge creation to keep parent workspace node_modules absent" >&2
   exit 1
@@ -99,6 +153,21 @@ fi
 
 if ! uiq_assert_no_parent_workspace_node_modules "$workspace_root"; then
   echo "expected parent workspace guard to accept clean repo-local topology" >&2
+  exit 1
+fi
+
+if ! uiq_workspace_node_modules_topology_ready "$workspace_root" "$authoritative_root"; then
+  echo "expected canonical workspace node_modules topology to be ready" >&2
+  exit 1
+fi
+
+rm -f "$workspace_root/apps/command-center/node_modules"
+mkdir -p "$workspace_root/apps/command-center/home/runner/work/ui-automation-control-plane/ui-automation-control-plane"
+ln -s ../../../../../../node_modules \
+  "$workspace_root/apps/command-center/home/runner/work/ui-automation-control-plane/ui-automation-control-plane/node_modules"
+
+if uiq_workspace_node_modules_topology_ready "$workspace_root" "$authoritative_root"; then
+  echo "expected corrupted workspace bridge topology to be rejected" >&2
   exit 1
 fi
 

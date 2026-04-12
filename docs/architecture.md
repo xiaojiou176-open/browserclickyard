@@ -33,6 +33,15 @@ behavior.
   the repository root must still resolve Vite `root` to
   `apps/command-center/` so `/` serves the product frontend instead of the repo
   root directory.
+- Command-center first-use shell contract: the above-the-fold onboarding path is
+  intentionally launch-first. Operators should configure the target in
+  `Stress Lab`, choose one lab mode, launch the run, then move into
+  `Runs & Blocks` to read the result before branching into `Flow Studio` or
+  `Advanced Review`.
+- Restart-onboarding contract: global restart actions must switch the active
+  command-center view back to `launch` before replaying the first-use tour, so
+  launch-only tour steps keep real anchors instead of falling back to a centered
+  dialog on `tasks`, `workshop`, or `review`.
 - `tests/web-harness` positioning: UIQ web harness for orchestrator-driven unit/ct/e2e
   and CI shared runtime, not the primary product frontend.
 - Component-test runtime contract: `tests/web-harness/tests/ct` uses

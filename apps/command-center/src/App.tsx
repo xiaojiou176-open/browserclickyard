@@ -310,6 +310,10 @@ export default function App() {
   }, [createRun, isFirstUseActive, markFirstUseRunTriggered, store]);
 
   const handleGoToLaunch = useCallback(() => store.setActiveView("launch"), [store]);
+  const handleRestartOnboarding = useCallback(() => {
+    store.setActiveView("launch");
+    store.restartOnboarding();
+  }, [store]);
 
   useEffect(() => {
     if (!isFirstUseActive) {
@@ -378,7 +382,7 @@ export default function App() {
         onLocaleChange={store.setUiLocale as (locale: UiLocale) => void}
         onViewChange={store.setActiveView}
         onOpenHelp={() => store.setShowHelp(true)}
-        onRestartTour={store.restartOnboarding}
+        onRestartTour={handleRestartOnboarding}
       />
 
       {isRegisterRoute && (
@@ -528,7 +532,7 @@ export default function App() {
           activeView={store.activeView}
           locale={store.uiLocale}
           onClose={() => store.setShowHelp(false)}
-          onRestartTour={store.restartOnboarding}
+          onRestartTour={handleRestartOnboarding}
         />
       )}
 

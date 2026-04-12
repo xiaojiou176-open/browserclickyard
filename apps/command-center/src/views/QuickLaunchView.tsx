@@ -5,7 +5,7 @@ import { DEFAULT_UI_LOCALE, pickUiText, type UiLocale } from "../i18n/uiLocale";
 import type { ParamsState } from "../components/ParamsPanel";
 import ParamsPanel from "../components/ParamsPanel";
 import { Badge, Button, Card, CardContent, CardHeader, CardTitle } from "../components/ui";
-import type { FirstUseStage } from "../hooks/useAppStore";
+import { useAppStore, type FirstUseStage } from "../hooks/useAppStore";
 import { useProofApi } from "../hooks/useProofApi";
 import type {
   Command,
@@ -21,7 +21,14 @@ const LANE_MAP_SUMMARY =
 const RECOMMENDED_FIRST_PATH =
   "Recommended first path: enter a URL, choose a lab mode, run the experiment, then inspect the latest result before opening Advanced Review.";
 
-const LAB_MODES = [
+type LabMode = {
+  title: string;
+  description: string;
+  bestWhen: string;
+  badge: string;
+};
+
+const LAB_MODES: readonly LabMode[] = [
   {
     title: "Explore",
     description: "Crawl states, discover paths, and surface fragile interactions before you script or reuse them.",
@@ -60,15 +67,12 @@ const LAB_MODES = [
   },
 ] as const;
 
-function localizeLabMode(
-  locale: UiLocale,
-  mode: (typeof LAB_MODES)[number],
-): (typeof LAB_MODES)[number] {
+function localizeLabMode(locale: UiLocale, mode: LabMode): LabMode {
   if (locale === "en") {
     return mode;
   }
 
-  const translations: Record<(typeof LAB_MODES)[number]["title"], (typeof LAB_MODES)[number]> = {
+  const translations: Record<string, LabMode> = {
     Explore: {
       title: "探索",
       description: "遍历状态、发现路径，并在真正编写或复用流程之前先暴露脆弱交互。",
@@ -170,6 +174,7 @@ function QuickLaunchView({
   onFirstUseStageChange,
   onCompleteFirstUse,
 }: QuickLaunchViewProps) {
+  const store = useAppStore();
   const laneMapSummary = pickUiText(
     locale,
     LANE_MAP_SUMMARY,
@@ -221,6 +226,89 @@ function QuickLaunchView({
   const canGoRun =
     (isCurrentStage("configure") || isCurrentStage("run")) && firstUseProgress.configValid;
   const canShowComplete = firstUseStage === "verify";
+  const firstUseStateTitle = !firstUseProgress.configValid
+    ? pickUiText(locale, "State: no config yet", "\u72b6\u6001\uff1a\u8fd8\u6ca1\u6709\u914d\u7f6e")
+    : !firstUseProgress.runTriggered
+      ? pickUiText(
+          locale,
+          "State: config ready, run not started",
+          "\u72b6\u6001\uff1a\u914d\u7f6e\u5df2\u5c31\u7eea\uff0c\u8fd8\u672a\u542f\u52a8",
+        )
+      : firstUseProgress.resultSeen
+        ? pickUiText(
+            locale,
+            "State: result is ready to read",
+            "\u72b6\u6001\uff1a\u7ed3\u679c\u5df2\u51c6\u5907\u597d",
+          )
+        : pickUiText(
+            locale,
+            "State: run is queued or still landing",
+            "\u72b6\u6001\uff1a\u8fd0\u884c\u5df2\u542f\u52a8\uff0c\u6b63\u5728\u843d\u5730",
+          );
+  const firstUseStateHint = !firstUseProgress.configValid
+    ? pickUiText(
+        locale,
+        "Fill in the target first. The parameter panel is the real step one for a first run.",
+        "\u5148\u628a\u76ee\u6807\u586b\u597d\u3002\u53c2\u6570\u9762\u677f\u624d\u662f\u7b2c\u4e00\u6b65\u7684\u771f\u6b63\u8d77\u70b9\u3002",
+      )
+    : !firstUseProgress.runTriggered
+      ? pickUiText(
+          locale,
+          "You are ready to choose one lab mode and launch a single experiment.",
+          "\u4f60\u73b0\u5728\u53ef\u4ee5\u9009\u4e00\u4e2a\u5b9e\u9a8c\u6a21\u5f0f\uff0c\u7136\u540e\u542f\u52a8\u7b2c\u4e00\u6b21\u5b9e\u9a8c\u3002",
+        )
+      : firstUseProgress.resultSeen
+        ? pickUiText(
+            locale,
+            "Move to Runs & Blocks now. That is where this first slice wants the user to read the verdict before going deeper.",
+            "\u73b0\u5728\u8bf7\u8f6c\u5230 Runs & Blocks\u3002\u8fd9\u4e2a\u9996\u5200\u7684\u76ee\u6807\uff0c\u5c31\u662f\u5148\u8ba9\u4eba\u5728\u90a3\u91cc\u8bfb\u7ed3\u8bba\uff0c\u518d\u5f80\u66f4\u6df1\u7684\u5c42\u8d70\u3002",
+          )
+        : pickUiText(
+            locale,
+            "Stay on the launch path until the run settles. If it pauses for OTP or manual input, continue in Runs & Blocks instead of jumping to deeper lanes.",
+            "\u8bf7\u7ee7\u7eed\u5f85\u5728\u542f\u52a8\u4e3b\u7ebf\u4e0a\uff0c\u76f4\u5230\u8fd0\u884c\u843d\u7a33\u3002\u5982\u679c\u5b83\u5361\u5728 OTP \u6216\u4eba\u5de5\u8f93\u5165\uff0c\u5c31\u53bb Runs & Blocks \u7ee7\u7eed\uff0c\u4e0d\u8981\u5148\u8df3\u8fdb\u66f4\u6df1\u7684 lane\u3002",
+          );
+  const launchChecklist = [
+    {
+      title: pickUiText(locale, "1. Configure the target", "1. \u914d\u7f6e\u76ee\u6807"),
+      body: pickUiText(
+        locale,
+        "Use the parameter panel to set the base URL, optional start URL, and success checkpoint.",
+        "\u5728\u53c2\u6570\u9762\u677f\u91cc\u8bbe\u7f6e base URL\u3001\u53ef\u9009 start URL \u548c success checkpoint\u3002",
+      ),
+      status: firstUseProgress.configValid
+        ? pickUiText(locale, "Ready", "\u5df2\u5c31\u7eea")
+        : pickUiText(locale, "Required", "\u5fc5\u586b"),
+      badgeVariant: firstUseProgress.configValid ? "default" : "secondary",
+    },
+    {
+      title: pickUiText(locale, "2. Choose one lab mode", "2. \u9009\u4e00\u4e2a\u5b9e\u9a8c\u6a21\u5f0f"),
+      body: pickUiText(
+        locale,
+        "Pick the single question you want answered first: explore, load, perf, chaos, visual, or accessibility.",
+        "\u5148\u9009\u8fd9\u4e00\u8f6e\u6700\u60f3\u56de\u7b54\u7684\u95ee\u9898\uff1a\u63a2\u7d22\u3001\u8d1f\u8f7d\u3001\u6027\u80fd\u3001\u6df7\u6c8c\u3001\u89c6\u89c9\u6216\u65e0\u969c\u788d\u3002",
+      ),
+      status: firstUseProgress.configValid
+        ? pickUiText(locale, "Choose now", "\u73b0\u5728\u9009")
+        : pickUiText(locale, "After config", "\u914d\u7f6e\u540e"),
+      badgeVariant: firstUseProgress.configValid ? "default" : "secondary",
+    },
+    {
+      title: pickUiText(locale, "3. Run, then read Runs & Blocks", "3. \u542f\u52a8\uff0c\u7136\u540e\u8bfb Runs & Blocks"),
+      body: pickUiText(
+        locale,
+        "Launch from the command grid or a reusable template, then move to Runs & Blocks to read the verdict or clear manual gates.",
+        "\u4ece command grid \u6216\u53ef\u590d\u7528\u6a21\u677f\u53d1\u8d77\u8fd0\u884c\uff0c\u7136\u540e\u53bb Runs & Blocks \u8bfb\u7ed3\u8bba\u6216\u6e05\u6389\u4eba\u5de5\u95f8\u95e8\u3002",
+      ),
+      status: firstUseProgress.resultSeen
+        ? pickUiText(locale, "Result ready", "\u7ed3\u679c\u5df2\u5c31\u7eea")
+        : firstUseProgress.runTriggered
+          ? pickUiText(locale, "In progress", "\u8fdb\u884c\u4e2d")
+          : pickUiText(locale, "Next", "\u4e0b\u4e00\u6b65"),
+      badgeVariant:
+        firstUseProgress.runTriggered || firstUseProgress.resultSeen ? "default" : "secondary",
+    },
+  ] as const;
   const selectedTemplate = templates.find((tpl) => tpl.template_id === selectedTemplateId) ?? null;
   const missingRequiredTemplateParams = selectedTemplate
     ? selectedTemplate.params_schema
@@ -376,9 +464,71 @@ function QuickLaunchView({
           </Card>
         )}
 
-        <Card className="mb-4">
+        <Card className="mb-4" data-tour="launch-plan">
           <CardHeader>
-            <CardTitle>{pickUiText(locale, "Start with a URL", "\u4ece URL \u5f00\u59cb")}</CardTitle>
+            <CardTitle>
+              {pickUiText(
+                locale,
+                "Launch-first path for the first result",
+                "\u7b2c\u4e00\u4e2a\u7ed3\u679c\u7684 launch-first \u8def\u5f84",
+              )}
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="hint-text">{laneMapSummary}</p>
+            <p className="text-muted">
+              {pickUiText(
+                locale,
+                "This page only needs to do one job above the fold: configure the target, pick the lab mode, run it, then read Runs & Blocks.",
+                "\u8fd9\u4e2a\u9875\u9762\u5728\u9996\u5c4f\u53ea\u9700\u8981\u505a\u4e00\u4ef6\u4e8b\uff1a\u5148\u914d\u7f6e\u76ee\u6807\uff0c\u518d\u9009\u5b9e\u9a8c\u6a21\u5f0f\uff0c\u542f\u52a8\u8fd0\u884c\uff0c\u7136\u540e\u53bb Runs & Blocks \u8bfb\u7ed3\u679c\u3002",
+              )}
+            </p>
+            <p className="text-muted">
+              <strong>{firstUseStateTitle}</strong>
+            </p>
+            <p className="text-muted">{firstUseStateHint}</p>
+            <div className="templates-grid mt-3">
+              {launchChecklist.map((item) => (
+                <Card key={item.title} className="template-card">
+                  <CardHeader className="template-card-header">
+                    <CardTitle>{item.title}</CardTitle>
+                    <Badge variant={item.badgeVariant}>{item.status}</Badge>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="hint-text">{item.body}</p>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+            <div className="form-actions mt-3">
+              <Button
+                size="sm"
+                variant={firstUseProgress.runTriggered ? "default" : "secondary"}
+                onClick={() => store.setActiveView("tasks")}
+                disabled={!firstUseProgress.runTriggered}
+              >
+                {pickUiText(locale, "Open Runs & Blocks", "\u6253\u5f00 Runs & Blocks")}
+              </Button>
+              <Button
+                size="sm"
+                variant="secondary"
+                onClick={() => onFirstUseStageChange("configure")}
+              >
+                {pickUiText(locale, "Back to target setup", "\u56de\u5230\u76ee\u6807\u914d\u7f6e")}
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="mb-4" data-tour="launch-modes">
+          <CardHeader>
+            <CardTitle>
+              {pickUiText(
+                locale,
+                "Choose the lab mode for this target",
+                "\u4e3a\u8fd9\u4e2a\u76ee\u6807\u9009\u62e9\u5b9e\u9a8c\u6a21\u5f0f",
+              )}
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <p className="hint-text">
@@ -407,17 +557,32 @@ function QuickLaunchView({
           </CardContent>
         </Card>
 
-        {/* Commands section */}
-        <CommandGrid
-          commands={commands}
-          locale={locale}
-          commandState={commandState}
-          activeTab={activeTab}
-          submittingId={submittingId}
-          feedbackText={feedbackText}
-          onActiveTabChange={onActiveTabChange}
-          onRunCommand={onRunCommand}
-        />
+        <div className="templates-section" data-tour="launch-actions">
+          <div className="section-divider">
+            <span className="section-divider-line" />
+            <span className="section-divider-label">
+              {pickUiText(locale, "Run from Stress Lab", "\u4ece Stress Lab \u542f\u52a8")}
+            </span>
+            <span className="section-divider-line" />
+          </div>
+          <p className="hint-text mb-4">
+            {pickUiText(
+              locale,
+              "Keep this slice focused: launch one experiment first. Reusable journeys, fit checks, and version history stay below as later shortcuts.",
+              "\u8fd9\u4e00\u5200\u5148\u4fdd\u6301\u805a\u7126\uff1a\u5148\u542f\u52a8\u4e00\u6b21\u5b9e\u9a8c\u3002\u53ef\u590d\u7528\u6d41\u7a0b\u3001\u76ee\u6807\u9002\u914d\u68c0\u67e5\u548c\u7248\u672c\u5386\u53f2\u90fd\u653e\u5728\u4e0b\u9762\u5f53 later shortcut\u3002",
+            )}
+          </p>
+          <CommandGrid
+            commands={commands}
+            locale={locale}
+            commandState={commandState}
+            activeTab={activeTab}
+            submittingId={submittingId}
+            feedbackText={feedbackText}
+            onActiveTabChange={onActiveTabChange}
+            onRunCommand={onRunCommand}
+          />
+        </div>
 
         {/* Templates section */}
         {templates.length > 0 && (
@@ -425,10 +590,21 @@ function QuickLaunchView({
             <div className="section-divider">
               <span className="section-divider-line" />
               <span className="section-divider-label">
-                {pickUiText(locale, "Reusable journeys", "\u53ef\u590d\u7528\u6d41\u7a0b")}
+                {pickUiText(
+                  locale,
+                  "Later: reusable journeys",
+                  "\u7a0d\u540e\uff1a\u53ef\u590d\u7528\u6d41\u7a0b",
+                )}
               </span>
               <span className="section-divider-line" />
             </div>
+            <p className="hint-text mb-4">
+              {pickUiText(
+                locale,
+                "Use these after the first result exists. They help you rerun, compare target fit, and manage saved versions without taking over the first-use path.",
+                "\u8fd9\u4e9b\u66f4\u9002\u5408\u653e\u5728\u7b2c\u4e00\u4e2a\u7ed3\u679c\u51fa\u6765\u4e4b\u540e\u518d\u7528\u3002\u5b83\u4eec\u53ef\u4ee5\u5e2e\u4f60\u91cd\u8dd1\u3001\u68c0\u67e5\u76ee\u6807\u9002\u914d\uff0c\u6216\u7ba1\u7406\u4fdd\u5b58\u7684\u7248\u672c\uff0c\u4f46\u4e0d\u5e94\u8be5\u53d6\u4ee3\u9996\u6b21\u4f7f\u7528\u4e3b\u7ebf\u3002",
+              )}
+            </p>
             <div className="templates-grid">
               {templates.map((tpl) => {
                 const isSelected = selectedTemplateId === tpl.template_id;
@@ -663,7 +839,7 @@ function QuickLaunchView({
             <div className="section-divider">
               <span className="section-divider-line" />
               <span className="section-divider-label">
-                {pickUiText(locale, "Template quick start", "模板快速开始")}
+                {pickUiText(locale, "Later: template quick start", "稍后：模板快速开始")}
               </span>
               <span className="section-divider-line" />
             </div>
@@ -693,6 +869,7 @@ function QuickLaunchView({
       </div>
       <aside
         className={`quick-launch-sidebar ${canToggleSidebar && sidebarCollapsed ? "collapsed" : ""}`}
+        data-tour="launch-parameters"
       >
         {canToggleSidebar && (
           <button
@@ -708,7 +885,25 @@ function QuickLaunchView({
             {sidebarCollapsed ? "\u276F" : "\u276E"}
           </button>
         )}
-        {showSidebarPanel && <ParamsPanel params={params} locale={locale} onChange={onParamsChange} />}
+        {showSidebarPanel && (
+          <>
+            <div className="section-divider">
+              <span className="section-divider-line" />
+              <span className="section-divider-label">
+                {pickUiText(locale, "1. Configure target", "1. 配置目标")}
+              </span>
+              <span className="section-divider-line" />
+            </div>
+            <p className="hint-text mb-4">
+              {pickUiText(
+                locale,
+                "This panel is the true first step. Set the target URL, optional start page, and success checkpoint before you choose the experiment mode.",
+                "这个面板才是真正的第一步。先把目标 URL、可选起始页和 success checkpoint 设好，再去选择实验模式。",
+              )}
+            </p>
+            <ParamsPanel params={params} locale={locale} onChange={onParamsChange} />
+          </>
+        )}
       </aside>
     </div>
   );

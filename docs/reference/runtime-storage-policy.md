@@ -47,6 +47,11 @@ behind the current space-governance contract.
 - Explicit `UIQ_NODE_MODULES_DIR` overrides must still resolve to one of those
   governed roots. Parent-workspace spill paths such as `../node_modules` are
   invalid current truth and must be rejected instead of silently reused.
+- When `UIQ_NODE_MODULES_DIR` resolves back to the repo-local authoritative
+  root, pnpm-facing `modules-dir` and `virtual-store-dir` exports must stay
+  project-relative (`node_modules`, `node_modules/.pnpm`) so install flows do
+  not materialize `<workspace>/<absolute-path-without-leading-slash>/...`
+  residue under governed subtrees.
 - `bash scripts/tests/no-parent-workspace-node-modules.sh` is the explicit
   local guard that fails closed when a legacy parent-workspace root reappears.
 - Runtime bridges must not remain as dangling symlinks after execution.
