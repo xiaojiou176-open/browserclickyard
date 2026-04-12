@@ -154,23 +154,23 @@ repair_workspace_after_install() {
       had_skip_shared_repair=1
       previous_skip_shared_repair="${UIQ_SKIP_SHARED_MODULE_LINK_REPAIR}"
     fi
-    if uiq_container_gate_root_resolution_targets_ready "$UIQ_NODE_MODULES_DIR"; then
+    if container_gate_shared_runtime_ready; then
       if [[ "$had_skip_shared_repair" -eq 1 ]]; then
         export UIQ_SKIP_SHARED_MODULE_LINK_REPAIR="$previous_skip_shared_repair"
       fi
-      echo "[pnpm-install-safe] container gate shortcut: root-resolution targets already ready" >&2
+      echo "[pnpm-install-safe] container gate shortcut: shared runtime already ready" >&2
       return 0
     fi
     if uiq_refresh_direct_shared_links "$ROOT_DIR" "$UIQ_NODE_MODULES_DIR"; then
       echo "[pnpm-install-safe] container gate shortcut: refreshed direct dependency links" >&2
-      if uiq_container_gate_root_resolution_targets_ready "$UIQ_NODE_MODULES_DIR"; then
+      if container_gate_shared_runtime_ready; then
         if [[ "$had_skip_shared_repair" -eq 1 ]]; then
           export UIQ_SKIP_SHARED_MODULE_LINK_REPAIR="$previous_skip_shared_repair"
         fi
-        echo "[pnpm-install-safe] container gate shortcut: root-resolution targets ready" >&2
+        echo "[pnpm-install-safe] container gate shortcut: shared runtime ready" >&2
         return 0
       fi
-      echo "[pnpm-install-safe] container gate shortcut: critical root-resolution targets still missing; continuing into full topology repair" >&2
+      echo "[pnpm-install-safe] container gate shortcut: direct dependency refresh incomplete for full shared runtime; continuing into full topology repair" >&2
     else
       echo "[pnpm-install-safe] container gate direct dependency refresh incomplete; continuing into full topology repair" >&2
     fi
@@ -182,6 +182,12 @@ repair_workspace_after_install() {
     echo "[pnpm-install-safe] container gate shared module links ready" >&2
     return 0
   fi
+}
+
+container_gate_shared_runtime_ready() {
+  uiq_container_gate_root_resolution_targets_ready "$UIQ_NODE_MODULES_DIR" \
+    && uiq_workspace_node_modules_topology_ready "$ROOT_DIR" "$UIQ_NODE_MODULES_DIR" \
+    && uiq_workspace_install_state_ready "$ROOT_DIR" "$UIQ_NODE_MODULES_DIR"
 }
 
 ensure_pnpm_entrypoint() {
