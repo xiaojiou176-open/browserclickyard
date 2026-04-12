@@ -281,9 +281,9 @@ uiq_export_node_env() {
   npm_virtual_store_dir="${resolved_node_modules_dir}/.pnpm"
   if [[ "$(uiq_normalize_contract_path "$resolved_node_modules_dir")" == "$authoritative_contract_root" ]]; then
     uiq_prepare_authoritative_workspace_node_root "$root_dir"
-    # Keep authoritative workspace installs expressed canonically so pnpm
-    # does not materialize "<workspace>/<absolute-path-without-leading-slash>"
-    # inside child workspace directories.
+    # pnpm treats path-like config values as project-relative in some install flows.
+    # Keep the repo-local authoritative root expressed canonically to avoid materializing
+    # "<workspace>/<absolute-path-without-leading-slash>/node_modules" inside subtrees.
     npm_modules_dir="node_modules"
     npm_virtual_store_dir="node_modules/.pnpm"
   fi
@@ -332,16 +332,38 @@ uiq_prepare_authoritative_workspace_node_root() {
   fi
 }
 
+uiq_workspace_node_module_link_specs() {
+  local root_dir="$1"
+  cat <<EOF
+${root_dir}/contracts/node_modules:../node_modules
+${root_dir}/apps/command-center/node_modules:../../node_modules
+${root_dir}/tooling/automation/node_modules:../../node_modules
+${root_dir}/tests/web-harness/node_modules:../../node_modules
+${root_dir}/services/mcp-server/node_modules:../../node_modules
+${root_dir}/tests/node_modules:../node_modules
+${root_dir}/tests/frontend-e2e/node_modules:../node_modules
+EOF
+}
+
 uiq_workspace_node_modules_topology_ready() {
   local root_dir="$1"
   local shared_dir="${2:-${UIQ_NODE_MODULES_DIR:-$(uiq_resolve_node_modules_dir "$root_dir")}}"
   local root_node_modules="${root_dir}/node_modules"
+  local link_spec=""
+  local workspace_path=""
   if [[ "$(uiq_normalize_contract_path "$shared_dir")" == "$(uiq_normalize_contract_path "$root_node_modules")" ]]; then
-    [[ -d "$root_node_modules" && ! -L "$root_node_modules" ]]
-    return $?
+    [[ -d "$root_node_modules" && ! -L "$root_node_modules" ]] || return 1
+  else
+    [[ -L "$root_node_modules" && -e "$root_node_modules" ]] || return 1
+    [[ "$(uiq_normalize_abs_path "$root_node_modules")" == "$(uiq_normalize_abs_path "$shared_dir")" ]] || return 1
   fi
-  [[ -L "$root_node_modules" && -e "$root_node_modules" ]] || return 1
-  [[ "$(uiq_normalize_abs_path "$root_node_modules")" == "$(uiq_normalize_abs_path "$shared_dir")" ]]
+  while IFS= read -r link_spec; do
+    [[ -n "$link_spec" ]] || continue
+    workspace_path="${link_spec%%:*}"
+    [[ -L "$workspace_path" && -e "$workspace_path" ]] || return 1
+    [[ "$(uiq_normalize_abs_path "$workspace_path")" == "$(uiq_normalize_abs_path "$shared_dir")" ]] || return 1
+  done < <(uiq_workspace_node_module_link_specs "$root_dir")
+  return 0
 }
 
 uiq_workspace_install_state_ready() {
@@ -437,6 +459,96 @@ def check_container_absolute_links(base_dir: Path) -> None:
             return
 
 
+def parse_version(raw: str) -> tuple[int, ...]:
+    parts = []
+    for token in raw.split("."):
+        digits = []
+        for ch in token:
+            if ch.isdigit():
+                digits.append(ch)
+            else:
+                break
+        if not digits:
+            break
+        parts.append(int("".join(digits)))
+    return tuple(parts)
+
+
+def compare_version(left: tuple[int, ...], right: tuple[int, ...]) -> int:
+    max_len = max(len(left), len(right))
+    padded_left = left + (0,) * (max_len - len(left))
+    padded_right = right + (0,) * (max_len - len(right))
+    if padded_left < padded_right:
+        return -1
+    if padded_left > padded_right:
+        return 1
+    return 0
+
+
+def version_satisfies(version: str, spec: str) -> bool:
+    spec = spec.strip()
+    if not spec:
+        return True
+    version_tuple = parse_version(version)
+    expected_tuple = parse_version(spec.lstrip("^~>=< "))
+    if not version_tuple or not expected_tuple:
+        return True
+    if spec.startswith("^"):
+        return version_tuple[0] == expected_tuple[0] and compare_version(version_tuple, expected_tuple) >= 0
+    if spec.startswith("~"):
+        return version_tuple[:2] == expected_tuple[:2] and compare_version(version_tuple, expected_tuple) >= 0
+    if spec.startswith(">="):
+        return compare_version(version_tuple, expected_tuple) >= 0
+    if spec.startswith(">"):
+        return compare_version(version_tuple, expected_tuple) > 0
+    if spec.startswith("<="):
+        return compare_version(version_tuple, expected_tuple) <= 0
+    if spec.startswith("<"):
+        return compare_version(version_tuple, expected_tuple) < 0
+    return version_tuple[: len(expected_tuple)] == expected_tuple
+
+
+def check_direct_dependency_links() -> None:
+    package_json = root / "package.json"
+    if not package_json.exists():
+        return
+
+    try:
+        payload = json.loads(package_json.read_text(encoding="utf-8"))
+    except Exception as exc:  # pragma: no cover - defensive parse guard
+        append_issue(f"package-json-unreadable path={package_json} error={exc}")
+        return
+
+    dependencies: dict[str, str] = {}
+    for section in ("dependencies", "devDependencies"):
+        dependency_map = payload.get(section) or {}
+        if not isinstance(dependency_map, dict):
+            continue
+        for name, spec in dependency_map.items():
+            if isinstance(name, str) and name.strip():
+                dependencies[name] = str(spec or "").strip()
+
+    for name, spec in sorted(dependencies.items()):
+        package_path = shared / name
+        try:
+            present = package_path.exists() or package_path.is_symlink()
+        except OSError:
+            present = False
+        if not present:
+            append_issue(f"missing-direct-dependency-links package={name}")
+            return
+        package_json_path = package_path / "package.json"
+        try:
+            package_payload = json.loads(package_json_path.read_text(encoding="utf-8"))
+        except Exception:
+            append_issue(f"missing-direct-dependency-links package={name}")
+            return
+        version = str(package_payload.get("version") or "").strip()
+        if not version or not version_satisfies(version, spec):
+            append_issue(f"missing-direct-dependency-links package={name}")
+            return
+
+
 def detect_rollup_native_package() -> tuple[str, str] | None:
     if sys.platform != "darwin":
         return None
@@ -470,6 +582,8 @@ check_workspace_state()
 if str(root) != "/workspace":
     check_container_absolute_links(shared)
     check_container_absolute_links(shared / ".pnpm" / "node_modules")
+
+check_direct_dependency_links()
 
 rollup_native = detect_rollup_native_package()
 if rollup_native is not None:
@@ -548,9 +662,12 @@ uiq_cleanup_root_node_artifacts() {
   rm -rf \
     "${root_dir}/contracts/node_modules" \
     "${root_dir}/apps/command-center/node_modules" \
+    "${root_dir}/apps/command-center/workspace/node_modules" \
     "${root_dir}/tooling/automation/node_modules" \
+    "${root_dir}/tooling/automation/workspace/node_modules" \
     "${root_dir}/tests/web-harness/node_modules" \
     "${root_dir}/services/mcp-server/node_modules" \
+    "${root_dir}/services/mcp-server/workspace/node_modules" \
     "${root_dir}/tests/node_modules" \
     "${root_dir}/tests/frontend-e2e/node_modules" \
     "${root_dir}/apps/command-center/workspace/.runtime-cache" \
@@ -584,15 +701,7 @@ uiq_link_workspace_node_modules() {
   local preserve_root_node_modules=0
   local workspace_path=""
   local target_path=""
-  local -a workspace_links=(
-    "${root_dir}/contracts/node_modules:../node_modules"
-    "${root_dir}/apps/command-center/node_modules:../../node_modules"
-    "${root_dir}/tooling/automation/node_modules:../../node_modules"
-    "${root_dir}/tests/web-harness/node_modules:../../node_modules"
-    "${root_dir}/services/mcp-server/node_modules:../../node_modules"
-    "${root_dir}/tests/node_modules:../node_modules"
-    "${root_dir}/tests/frontend-e2e/node_modules:../node_modules"
-  )
+  local link_spec=""
 
   if [[ "$shared_dir" == "$root_node_modules" ]]; then
     preserve_root_node_modules=1
@@ -638,11 +747,12 @@ PY
     uiq_atomic_symlink "$shared_dir" "$root_node_modules"
   fi
 
-  for link_spec in "${workspace_links[@]}"; do
+  while IFS= read -r link_spec; do
+    [[ -n "$link_spec" ]] || continue
     workspace_path="${link_spec%%:*}"
     target_path="${link_spec#*:}"
     uiq_atomic_symlink "$target_path" "$workspace_path"
-  done
+  done < <(uiq_workspace_node_module_link_specs "$root_dir")
 }
 
 uiq_shared_link_repair_fingerprint() {

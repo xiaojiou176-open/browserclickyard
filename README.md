@@ -46,7 +46,7 @@ Choose the shortest honest path before you read the heavier engineering stack:
    [MCP quickstart](./docs/how-to/mcp-quickstart-1pager.md) and
    [INTEGRATIONS.md](./INTEGRATIONS.md).
 
-![Prooflane Command Center running locally with Stress Lab, Runs and Blocks, Flow Studio, and Advanced Review available in the operator shell. This is a maintainer-local product view, not a hosted public demo or proof of live GitHub settings.](./docs/assets/prooflane-command-center-real.png)
+![Prooflane studio preview showing the launch-first operator path: Stress Lab first, then Runs and Blocks, then Flow Studio, with Advanced Review as the deeper governed layer behind the first visible result.](./docs/assets/prooflane-studio-preview.svg)
 ![Prooflane result path diagram showing the local first-look path, the governed run path, and the MCP connection route.](./docs/assets/prooflane-result-path.svg)
 
 ## Distribution Truth Today
@@ -109,14 +109,18 @@ What you should see:
 - API health on `http://127.0.0.1:17380/health/`
 - A live Stress Lab surface with URL-first parameters, lab-mode guidance, Runs & Blocks, and Advanced Review instead of a static docs-only experience
 
-The screenshot above is a real local run of the current English product
-surface. It is a maintainer-local product view, not a hosted public demo or a
-claim about live GitHub settings. A governed run is a separate step and
-requires a valid `GEMINI_API_KEY`.
-Current GitHub-side metadata and remote enforcement remain audit-backed states.
-Use [docs/reference/public-readiness.md](./docs/reference/public-readiness.md)
-and the latest audit artifacts for current remote truth instead of treating
-the historical closure snapshot as live GitHub proof.
+The preview card above is the current **public-facing shell map** for the
+launch-first IA. It is intentionally a semantic front-door visual, not a
+literal runtime screenshot, so README does not freeze an outdated local shell
+capture as if it were current product truth.
+
+If you want the live maintainer-local shell, run `./scripts/dev-up.sh` and use
+the app itself as the source of truth. A governed run is a separate step and
+requires a valid `GEMINI_API_KEY`. Current GitHub-side metadata and remote
+enforcement remain audit-backed states. Use
+[docs/reference/public-readiness.md](./docs/reference/public-readiness.md) and
+the latest audit artifacts for current remote truth instead of treating a
+historical closure snapshot as live GitHub proof.
 
 ## What Prooflane Gives You Right Now
 

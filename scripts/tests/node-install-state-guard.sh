@@ -49,6 +49,15 @@ if ! grep -Eq "missing-workspace-state|empty-pnpm-store" <<<"$missing_marker_out
   exit 1
 fi
 
+cat >"$workspace_root/package.json" <<'JSON'
+{
+  "name": "uiq-install-state-guard-fixture",
+  "private": true,
+  "dependencies": {},
+  "devDependencies": {}
+}
+JSON
+
 cat >"$node_root/.pnpm-workspace-state-v1.json" <<'JSON'
 {
   "projects": {
@@ -86,6 +95,45 @@ cat >"$node_root/.pnpm-workspace-state-v1.json" <<JSON
       "version": "0.1.0"
     }
   }
+}
+JSON
+
+UIQ_NODE_MODULES_DIR="$node_root" uiq_workspace_install_state_ready "$workspace_root"
+
+cat >"$workspace_root/package.json" <<'JSON'
+{
+  "name": "uiq-install-state-guard-fixture",
+  "private": true,
+  "dependencies": {
+    "vitest": "^3.2.4"
+  },
+  "devDependencies": {}
+}
+JSON
+
+set +e
+missing_dep_output="$(
+  UIQ_NODE_MODULES_DIR="$node_root" uiq_workspace_install_state_ready "$workspace_root" 2>&1
+)"
+missing_dep_status=$?
+set -e
+
+if [[ "$missing_dep_status" -eq 0 ]]; then
+  echo "expected missing direct dependency links to fail install-state guard" >&2
+  exit 1
+fi
+
+if ! grep -Fq "missing-direct-dependency-links" <<<"$missing_dep_output"; then
+  echo "expected missing direct dependency reason in guard output" >&2
+  echo "$missing_dep_output" >&2
+  exit 1
+fi
+
+mkdir -p "$node_root/vitest"
+cat >"$node_root/vitest/package.json" <<'JSON'
+{
+  "name": "vitest",
+  "version": "3.2.4"
 }
 JSON
 

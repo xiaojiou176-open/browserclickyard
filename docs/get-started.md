@@ -38,12 +38,12 @@ What success looks like:
 - The header locale toggle can switch the highest-traffic shell guidance between **English** and **简体中文** without changing command ids or API routes
 - The shell can now keep navigation, onboarding, help, Flow Studio guidance, parameter panels, dialogs, and operator feedback chrome aligned in English or Simplified Chinese
 
-![Prooflane Command Center running locally with Stress Lab, Runs and Blocks, Flow Studio, and Advanced Review available in the operator shell. This is a maintainer-local product view, not a hosted public demo or proof of live GitHub settings.](./assets/prooflane-command-center-real.png)
+![Prooflane studio preview showing the launch-first operator path: Stress Lab first, then Runs and Blocks, then Flow Studio, with Advanced Review as the deeper governed layer behind the first visible result.](./assets/prooflane-studio-preview.svg)
 
-This screenshot is a current local first-look capture of the English product
-surface. It is useful for orientation, but the running app and the latest
-audit artifacts still remain the source of truth for current behavior and live
-GitHub state.
+This preview card is the current **front-door orientation visual** for the
+launch-first IA. It is useful for understanding the product map before you boot
+the stack, but the running app and the latest audit artifacts still remain the
+source of truth for current behavior and live GitHub state.
 
 If this is your first run in a fresh checkout, bootstrap once first:
 

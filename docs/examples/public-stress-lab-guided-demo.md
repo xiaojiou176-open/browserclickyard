@@ -37,9 +37,13 @@ That sentence is doing three jobs:
 
 ## Step 2. See The Main Product Surface
 
-The current operator shell is shown here:
+The current launch-first shell map is shown here:
 
-![Prooflane Command Center running locally with Stress Lab, Runs and Blocks, Flow Studio, and Advanced Review available in the operator shell. This is a maintainer-local product view, not a hosted public demo or proof of live GitHub settings.](../assets/prooflane-command-center-real.png)
+![Prooflane studio preview showing the launch-first operator path: Stress Lab first, then Runs and Blocks, then Flow Studio, with Advanced Review as the deeper governed layer behind the first visible result.](../assets/prooflane-studio-preview.svg)
+
+This is a semantic front-door preview, not a literal runtime screenshot. That
+keeps the public demo aligned with the current IA without treating an older
+maintainer-local capture as current shell proof.
 
 Read it in this order:
 

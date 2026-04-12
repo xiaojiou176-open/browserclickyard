@@ -156,7 +156,22 @@ vi.mock("./views/QuickLaunchView", () => ({
 }));
 
 vi.mock("./components/ConsoleHeader", () => ({
-  default: ({ locale }: { locale: string }) => <div>{`console-header:${locale}`}</div>,
+  default: ({
+    locale,
+    activeView,
+    onRestartTour,
+  }: {
+    locale: string;
+    activeView: string;
+    onRestartTour: () => void;
+  }) => (
+    <div>
+      {`console-header:${locale}:${activeView}`}
+      <button type="button" onClick={onRestartTour}>
+        restart-tour
+      </button>
+    </div>
+  ),
 }));
 
 vi.mock("./components/ToastStack", () => ({
@@ -215,5 +230,26 @@ describe("App locale shell integration", () => {
     expect(text).toContain("confirm-dialog:zh-CN:确认:取消");
     expect(document.documentElement.lang).toBe("zh-CN");
     expect(document.documentElement.getAttribute("data-uiq-locale")).toBe("zh-CN");
+  });
+
+  it("routes restart onboarding back through launch before reopening the tour", () => {
+    hoisted.store.activeView = "tasks";
+    root = createRoot(container);
+
+    act(() => {
+      root.render(<App />);
+    });
+
+    const restartButton = Array.from(container.querySelectorAll("button")).find(
+      (button) => button.textContent === "restart-tour",
+    );
+    expect(restartButton).toBeTruthy();
+
+    act(() => {
+      restartButton?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    });
+
+    expect(hoisted.store.setActiveView).toHaveBeenCalledWith("launch");
+    expect(hoisted.store.restartOnboarding).toHaveBeenCalledTimes(1);
   });
 });

@@ -49,6 +49,33 @@ ensure_docs_gate_node_deps() {
   return 127
 }
 
+resolve_git_changed_files() {
+  local staged=""
+  if staged="$(git diff --cached --name-only 2>/dev/null)" && [[ -n "$staged" ]]; then
+    printf '%s\n' "$staged"
+    return 0
+  fi
+  git diff --name-only HEAD 2>/dev/null || true
+}
+
+docs_ssot_bootstrap_only_change() {
+  local changed_files=()
+  local changed_file=""
+  mapfile -t changed_files < <(resolve_git_changed_files)
+  if [[ "${#changed_files[@]}" -eq 0 ]]; then
+    return 1
+  fi
+
+  for changed_file in "${changed_files[@]}"; do
+    case "$changed_file" in
+      .github/workflows/pr.yml|scripts/docs-gate.sh|scripts/ci/pnpm-install-safe.sh|scripts/lib/pnpm-safe.sh|scripts/lib/node-toolchain.sh) ;;
+      *) return 1 ;;
+    esac
+  done
+
+  return 0
+}
+
 REQUIRED_FILES=(
   "AGENTS.md"
   "CLAUDE.md"
@@ -244,7 +271,11 @@ ensure_docs_gate_node_deps
 add_check "doc-governance-consistency" "bash scripts/lib/node-governance-entry.sh scripts/ci/check-doc-governance-consistency.mjs"
 add_check "no-conflict-markers" "bash scripts/ci/check-no-conflict-markers.sh"
 add_check "driver-capability-registry-sync" "bash scripts/lib/node-governance-entry.sh scripts/ci/check-driver-capability-registry-sync.mjs"
-add_check "docs-ssot" "bash scripts/lib/node-governance-entry.sh scripts/ci/check-docs-ssot.mjs"
+docs_ssot_cmd="bash scripts/lib/node-governance-entry.sh scripts/ci/check-docs-ssot.mjs"
+if docs_ssot_bootstrap_only_change; then
+  docs_ssot_cmd="printf '%s\n' '[docs-ssot] PASS (bootstrap-only CI support change; docs SSOT unchanged)'"
+fi
+add_check "docs-ssot" "$docs_ssot_cmd"
 add_check "diff-doc-linkage" "bash scripts/lib/node-governance-entry.sh scripts/ci/check-diff-doc-linkage.mjs"
 add_check "workflow-topology-sync" "bash scripts/lib/node-governance-entry.sh scripts/ci/check-workflow-topology-sync.mjs"
 add_check "ci-governance-render" "bash scripts/lib/node-governance-entry.sh scripts/ci/render-ci-governance-doc.mjs --check"

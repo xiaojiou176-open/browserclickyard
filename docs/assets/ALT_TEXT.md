@@ -6,6 +6,7 @@ docs pages, release notes, or GitHub discussions.
 | Asset | Recommended alt text |
 | --- | --- |
 | `prooflane-hero.svg` | `Prooflane hero showing an AI-native WebUI stress lab with target-first entry, result reading, and optional governed review.` |
+| `prooflane-studio-preview.svg` | `Prooflane studio preview showing the launch-first operator path: Stress Lab first, then Runs and Blocks, then Flow Studio, with Advanced Review as the deeper governed layer behind the first visible result.` |
 | `prooflane-command-center-real.png` | `Prooflane Command Center running locally with Stress Lab, Runs and Blocks, Flow Studio, and Advanced Review available in the operator shell. This is a maintainer-local product view, not a hosted public demo or proof of live GitHub settings.` |
 | `prooflane-result-path.svg` | `Prooflane result path diagram showing the local first-look path, the governed run path, and the MCP connection route.` |
 | `prooflane-architecture.svg` | `Prooflane architecture map showing the stress-lab shell, FastAPI control plane, orchestrator path, MCP boundary, and governed run evidence.` |

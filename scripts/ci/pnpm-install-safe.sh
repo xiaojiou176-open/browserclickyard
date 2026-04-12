@@ -323,6 +323,7 @@ trap cleanup_install_attempt EXIT
 
 echo "[pnpm-install-safe] first attempt: pnpm install $*" >&2
 prepare_workspace_node_links
+ensure_pnpm_entrypoint
 if run_pnpm install "$@" 2>&1 | tee "$log_file"; then
   repair_workspace_after_install
   install_succeeded=1
