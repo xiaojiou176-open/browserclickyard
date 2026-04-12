@@ -33,9 +33,23 @@ read_bool() {
   esac
 }
 
+required_shared_bin_path() {
+  local bin_name="$1"
+  printf '%s\n' "${UIQ_NODE_MODULES_DIR}/.bin/${bin_name}"
+}
+
 shared_node_bin_ready() {
   local bin_name="$1"
-  bash scripts/lib/node-bin.sh "$bin_name" --version >/dev/null 2>&1
+  [[ -x "$(required_shared_bin_path "$bin_name")" ]]
+}
+
+shared_node_runtime_ready() {
+  uiq_workspace_node_modules_topology_ready "$ROOT_DIR" "$UIQ_NODE_MODULES_DIR" \
+    && uiq_workspace_install_state_ready "$ROOT_DIR" "$UIQ_NODE_MODULES_DIR"
+}
+
+readonly_node_leaf_prefix() {
+  printf '%s' "UIQ_SKIP_NODE_LINK_REPAIR=1 UIQ_SKIP_SHARED_MODULE_LINK_REPAIR=1 UIQ_SKIP_WORKSPACE_NODE_LINKS=1"
 }
 
 collect_missing_shared_bins() {
@@ -57,6 +71,8 @@ ensure_shared_node_bins() {
   local repair_rc=0
   local repair_output=""
   local repair_verdict="ok"
+  local needs_bootstrap=0
+  local bootstrap_reason="shared runtime topology not ready"
   if uiq_capture_shared_link_repair "$ROOT_DIR" repair_output repair_verdict; then
     repair_rc=0
   else
@@ -69,14 +85,20 @@ ensure_shared_node_bins() {
     return "$repair_rc"
   fi
   mapfile -t missing_bins < <(collect_missing_shared_bins)
-  if [[ "${#missing_bins[@]}" -eq 0 ]]; then
+  if ! shared_node_runtime_ready; then
+    needs_bootstrap=1
+  elif [[ "${#missing_bins[@]}" -gt 0 ]]; then
+    needs_bootstrap=1
+    bootstrap_reason="missing: ${missing_bins[*]}"
+  fi
+  if [[ "$needs_bootstrap" -eq 0 ]]; then
     if [[ "$repair_rc" -ne 0 ]]; then
       echo "[lint-all] shared-link repair reported non-essential dependency gaps; required bins are present, continuing"
     fi
     return 0
   fi
 
-  echo "[lint-all] bootstrapping shared node deps (missing: ${missing_bins[*]})"
+  echo "[lint-all] bootstrapping shared node deps (${bootstrap_reason})"
   bash scripts/ci/pnpm-install-safe.sh --frozen-lockfile
   repair_rc=0
   repair_output=""
@@ -93,6 +115,10 @@ ensure_shared_node_bins() {
     return "$repair_rc"
   fi
   mapfile -t missing_bins < <(collect_missing_shared_bins)
+  if ! shared_node_runtime_ready; then
+    echo "error: shared Node runtime topology is still not ready after bootstrap" >&2
+    return 127
+  fi
   if [[ "${#missing_bins[@]}" -eq 0 ]]; then
     if [[ "$repair_rc" -ne 0 ]]; then
       echo "[lint-all] shared-link repair still reports non-essential dependency gaps after bootstrap; required bins are present, continuing"
@@ -108,6 +134,8 @@ if should_cleanup_node_artifacts_on_exit; then
   trap cleanup_node_artifacts EXIT
 fi
 ensure_shared_node_bins
+
+READONLY_NODE_LEAF_PREFIX="$(readonly_node_leaf_prefix)"
 
 RUN_ID="$(date +%Y%m%d-%H%M%S)-$$"
 LOG_DIR="$ROOT_DIR/.runtime-cache/lint-all/$RUN_ID"
@@ -188,11 +216,11 @@ print_failure_summary() {
   done
 }
 
-COMMAND_CENTER_ESLINT_CMD="cd apps/command-center && bash ../../scripts/lib/node-bin.sh eslint . -f json"
-AUTOMATION_ESLINT_CMD="cd tooling/automation && bash ../../scripts/lib/node-bin.sh eslint . -f json"
+COMMAND_CENTER_ESLINT_CMD="cd apps/command-center && ${READONLY_NODE_LEAF_PREFIX} bash ../../scripts/lib/node-bin.sh eslint . -f json"
+AUTOMATION_ESLINT_CMD="cd tooling/automation && ${READONLY_NODE_LEAF_PREFIX} bash ../../scripts/lib/node-bin.sh eslint . -f json"
 SERVICE_API_RUFF_CMD="cd services/api && RUFF_CACHE_DIR=../../.runtime-cache/cache/ruff ../../scripts/lib/python-exec.sh ruff check ."
 
-add_check "root-typecheck" "bash scripts/lib/pnpm-safe.sh typecheck"
+add_check "root-typecheck" "${READONLY_NODE_LEAF_PREFIX} bash scripts/lib/pnpm-safe.sh typecheck"
 add_check "command-center-eslint" "$COMMAND_CENTER_ESLINT_CMD"
 add_check "automation-eslint" "$AUTOMATION_ESLINT_CMD"
 add_check "service-api-ruff" "$SERVICE_API_RUFF_CMD"
