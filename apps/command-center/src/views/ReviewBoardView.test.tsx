@@ -37,6 +37,7 @@ describe("ReviewBoardView", () => {
     );
 
     await screen.findByText("Advanced Review");
+    await screen.findByText("Review trust ladder");
     await screen.findByText("When to open this page");
     await screen.findByText("AI release brief");
     await screen.findByText("Agent handoff prompt");
@@ -200,6 +201,7 @@ describe("ReviewBoardView", () => {
     );
 
     await screen.findByText("高级审查");
+    await screen.findByText("审查信任阶梯");
     await screen.findByText("Agent 交接提示");
     expect(
       (screen.getByLabelText("Agent 交接提示") as HTMLTextAreaElement).value,
