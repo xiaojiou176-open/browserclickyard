@@ -5,11 +5,25 @@
 > deeper review.
 
 [Start with results](./docs/get-started.md) ·
-[MCP quickstart](./docs/how-to/mcp-quickstart-1pager.md) ·
-[Distribution truth](./DISTRIBUTION.md) ·
-[Docs map](./docs/index.md)
+[Proof center](./docs/proof-center.md) ·
+[Docs map](./docs/index.md) ·
+[MCP after first result](./docs/how-to/mcp-quickstart-1pager.md)
 
 ![Prooflane studio preview card](./docs/assets/prooflane-studio-preview.svg)
+
+## At A Glance
+
+If you only want the shortest truthful filter before reading deeper, use this
+table first:
+
+| What you need to know | Current answer |
+| --- | --- |
+| Product thesis | an AI-native WebUI stress lab for localhost-first browser experiments |
+| Canonical front door | start in Stress Lab, read the result in Runs & Blocks, go deeper only if needed |
+| First visible win | target-first experiment -> readable result |
+| Deeper layer | proof, advanced review, and MCP only after a result exists |
+| Second ring only | MCP quickstart, distribution truth, skill packet, and package lanes |
+| What it must never be reduced to | a browser extension, package-listed MCP marketplace artifact, or hosted SaaS |
 
 ## What this repo is
 
@@ -33,6 +47,9 @@ In plain language:
 
 > browser-adjacent does not mean browser-extension product.
 > MCP-ready does not mean package-listed.
+>
+> Start in Stress Lab, read the result in Runs & Blocks, go deeper only if
+> needed.
 
 ## Start with one visible win
 

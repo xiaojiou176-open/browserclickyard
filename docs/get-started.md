@@ -10,6 +10,22 @@ This page separates three different wins:
 - A localhost-first governed experiment that writes reusable evidence
 - An MCP connection path for Codex, Claude Code, or another MCP-capable client
 
+## Canonical Order
+
+Treat those wins as one ordered path, not four co-equal front doors:
+
+1. read the public-safe guided demo if you need zero setup
+2. boot the local shell and confirm the Stress Lab surface exists
+3. run one governed localhost-first experiment when you need reusable proof
+4. attach through MCP only after the result path already makes sense
+
+In plain language:
+
+> open the lab
+> run one experiment
+> read one result
+> only then attach deeper tooling
+
 ## No Local Setup Yet?
 
 If you want to understand the product before you install anything, start with
