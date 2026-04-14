@@ -33,7 +33,7 @@
     "lighthouse": "^12.8.2",
     "playwright": "^1.59.1",
     "typescript": "^5.9.2",
-    "typescript-eslint": "^8.27.0",
+    "typescript-eslint": "^8.58.0",
     "vite": "^6.0.3",
     "vitest": "^3.2.4"
   },
