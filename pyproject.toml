@@ -21,7 +21,7 @@ dependencies = [
 dev = [
   "alembic>=1.16.0",
   "bandit>=1.7.10",
-  "google-genai==1.42.0",
+  "google-genai==1.70.0",
   "httpx>=0.28.0",
   "mutmut>=3.3.0",
   "pip-audit>=2.7.3",
