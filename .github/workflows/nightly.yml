@@ -46,7 +46,7 @@ jobs:
         run: bash scripts/ci/run-gate-in-container.sh exec
       - name: Upload test truthiness gate artifacts (always)
         if: ${{ always() }}
-        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: uiq-nightly-test-truth-gate
           path: |
@@ -59,7 +59,7 @@ jobs:
         run: bash scripts/ci/make-failure-bundle.sh || true
       - name: Upload failure bundle artifact
         if: ${{ failure() || cancelled() }}
-        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: uiq-nightly-failure-bundles
           path: |
@@ -67,7 +67,7 @@ jobs:
           retention-days: 14
           if-no-files-found: warn
       - name: Upload Artifacts
-        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: uiq-nightly-run
           path: |
@@ -118,7 +118,7 @@ jobs:
           node scripts/ci/uiq-mcp-stress-gate.mjs --profile nightly --iterations 100 --parallel "$PARALLEL" --strict true
       - name: Upload MCP stress gate artifacts (always)
         if: ${{ always() }}
-        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: uiq-nightly-mcp-stress-gate
           path: |
@@ -283,7 +283,7 @@ jobs:
         run: bash scripts/lib/node-bin.sh tsx scripts/ci/uiq-ai-review.mjs --profile nightly --strict true --severity-threshold high --max-artifacts 40 --emit-issue false --emit-pr-comment false
       - name: Upload AI review artifacts (always)
         if: ${{ always() }}
-        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: uiq-nightly-ai-review
           path: |
@@ -294,7 +294,7 @@ jobs:
       - name: Cross-target benchmark report (nightly)
         run: node scripts/ci/uiq-cross-target-benchmark.mjs --runs-dir .runtime-cache/artifacts/runs --out-dir .runtime-cache/artifacts/ci --profile nightly --lookback-days 14 --limit 120 --targets web,tauri,swift
       - name: Upload Artifacts
-        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: uiq-nightly-manual-observability
           path: |
