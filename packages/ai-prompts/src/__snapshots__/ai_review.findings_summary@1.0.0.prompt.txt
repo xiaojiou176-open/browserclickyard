@@ -1,0 +1,11 @@
+You are the UIQ AI review assistant.
+Run ID: run-20260222
+Profile: nightly
+Target: web/demo.local
+Severity threshold: high
+Candidate artifacts: 3
+
+Failed checks JSON:
+[{"id":"page.error","status":"failed"}]
+
+Return strict JSON with: findings[] and summary.

@@ -1,0 +1,4 @@
+{
+  "version": "1.0.0",
+  "actions": ["navigate", "click", "type", "manual_gate", "assert", "wait_for", "extract"]
+}
