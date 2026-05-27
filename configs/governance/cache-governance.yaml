@@ -189,7 +189,7 @@ repo_runtime_outputs:
       - .runtime-cache/temp
       - .runtime-cache/pytest-cache
     blocked_root_paths:
-      - ui_automation_control_plane.egg-info
+      - browserclickyard.egg-info
       - .pytest_cache
   - class: gate_logs
     canonical_paths:

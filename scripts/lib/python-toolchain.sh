@@ -35,7 +35,7 @@ uiq_export_python_env() {
 
 uiq_cleanup_python_root_noise() {
   local root_dir="${1:-$PWD}"
-  rm -rf "${root_dir}/ui_automation_control_plane.egg-info"
+  rm -rf "${root_dir}/browserclickyard.egg-info"
 }
 
 uiq_python_env_healthy() {

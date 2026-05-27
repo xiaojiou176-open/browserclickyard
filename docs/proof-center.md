@@ -24,7 +24,7 @@ governs itself.
 | Shipping history | What has changed recently | [CHANGELOG.md](../CHANGELOG.md) |
 | First public release notes | How the repo now presents its first public launch surface | [docs/releases/v0.1.0-public-launch.md](./releases/v0.1.0-public-launch.md) |
 | Historical closure snapshot | What was closed out to make the repository publicly maintainable at the time of the first public release | [docs/releases/v0.1.0-public-closure.md](./releases/v0.1.0-public-closure.md) |
-| Discussions and releases | How the public conversation and shipping rhythm evolve | [GitHub Discussions](https://github.com/xiaojiou176-open/ui-automation-control-plane/discussions), [GitHub Releases](https://github.com/xiaojiou176-open/ui-automation-control-plane/releases) |
+| Discussions and releases | How the public conversation and shipping rhythm evolve | [GitHub Discussions](https://github.com/xiaojiou176-open/browserclickyard/discussions), [GitHub Releases](https://github.com/xiaojiou176-open/browserclickyard/releases) |
 
 Current GitHub-side metadata and enforcement remain audit-backed states. This
 page should point you at the proof path, not quietly replace the latest

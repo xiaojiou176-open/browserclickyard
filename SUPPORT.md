@@ -8,12 +8,12 @@ discussion, and product feedback.
 - Check `README.md` first.
 - Check `docs/index.md` for the current documentation router.
 - Use GitHub Discussions for questions, ideas, and show-and-tell posts:
-  `https://github.com/xiaojiou176-open/ui-automation-control-plane/discussions`
+  `https://github.com/xiaojiou176-open/browserclickyard/discussions`
 
 ## Bug reports
 
 - Open a GitHub issue with repro steps, expected behavior, and actual behavior.
-- Use `https://github.com/xiaojiou176-open/ui-automation-control-plane/issues`
+- Use `https://github.com/xiaojiou176-open/browserclickyard/issues`
   for reproducible bugs and concrete work items.
 
 ## Security-sensitive topics

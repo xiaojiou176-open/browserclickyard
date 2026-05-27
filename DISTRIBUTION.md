@@ -6,11 +6,11 @@ reuse.
 ## Canonical Repo
 
 - Canonical repo URL:
-  `https://github.com/xiaojiou176-open/ui-automation-control-plane`
+  `https://github.com/xiaojiou176-open/browserclickyard`
 - Public homepage:
-  `https://xiaojiou176-open.github.io/ui-automation-control-plane/`
+  `https://xiaojiou176-open.github.io/browserclickyard/`
 - Public release channel:
-  `https://github.com/xiaojiou176-open/ui-automation-control-plane/releases`
+  `https://github.com/xiaojiou176-open/browserclickyard/releases`
 
 ## Primary lane vs companion lanes
 

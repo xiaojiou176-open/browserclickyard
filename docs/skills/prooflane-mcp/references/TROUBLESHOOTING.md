@@ -2,7 +2,7 @@
 
 ## The host cannot attach the MCP server
 
-- confirm the `cwd` points at the real cloned `ui-automation-control-plane`
+- confirm the `cwd` points at the real cloned `browserclickyard`
   checkout
 - rerun `pnpm install`
 - rerun `pnpm mcp:check` and `pnpm mcp:build`

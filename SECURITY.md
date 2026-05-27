@@ -6,7 +6,7 @@ flow.
 
 ## Reporting
 
-- Open a private security advisory at `https://github.com/xiaojiou176-open/ui-automation-control-plane/security/advisories/new`
+- Open a private security advisory at `https://github.com/xiaojiou176-open/browserclickyard/security/advisories/new`
 - If advisories are unavailable in your environment, contact repository maintainers directly instead of posting details in public issues.
 
 ## Sensitive data handling

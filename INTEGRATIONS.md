@@ -6,7 +6,7 @@ This page keeps the integration story truthful and compact.
 
 | Surface | Truthful status | Entry point |
 | --- | --- | --- |
-| GitHub Pages | Live | `https://xiaojiou176-open.github.io/ui-automation-control-plane/` |
+| GitHub Pages | Live | `https://xiaojiou176-open.github.io/browserclickyard/` |
 | HTTP / OpenAPI | Live, repo-native | `docs/reference/integration-entrypoints.md`, `docs/reference/universal-api.md` |
 | MCP server | Live, repo-native | `pnpm mcp:start` |
 | MCP package shape | Publish-ready, not published | `@uiq/mcp-server` -> `prooflane-mcp` |

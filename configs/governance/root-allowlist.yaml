@@ -72,7 +72,7 @@ tracked_root:
     - .coverage.*
     - .pytest_cache
     - .ruff_cache
-    - ui_automation_control_plane.egg-info
+    - browserclickyard.egg-info
     - coverage
     - coverage.xml
     - htmlcov

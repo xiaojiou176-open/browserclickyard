@@ -3,10 +3,10 @@
   "version": "0.1.0",
   "description": "Prooflane MCP server for read-mostly governed run, artifact, and review workflows.",
   "license": "MIT",
-  "homepage": "https://xiaojiou176-open.github.io/ui-automation-control-plane/",
+  "homepage": "https://xiaojiou176-open.github.io/browserclickyard/",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/xiaojiou176-open/ui-automation-control-plane.git",
+    "url": "git+https://github.com/xiaojiou176-open/browserclickyard.git",
     "directory": "services/mcp-server"
   },
   "keywords": [
