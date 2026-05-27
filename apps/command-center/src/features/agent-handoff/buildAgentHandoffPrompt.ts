@@ -110,8 +110,8 @@ export function buildAgentHandoffPrompt(args: {
   const lines = [
     pickUiText(
       locale,
-      "You are helping with a governed Prooflane follow-up. Keep Stress Lab as the front door, treat AI/MCP/proof as deeper layers, and avoid inventing a second truth system.",
-      "\u4f60\u6b63\u5728\u534f\u52a9\u4e00\u4e2a\u53d7\u6cbb\u7406\u7684 Prooflane \u8ddf\u8fdb\u4efb\u52a1\u3002\u8bf7\u4fdd\u6301 Stress Lab \u662f front door\uff0c\u628a AI/MCP/proof \u89c6\u4e3a deeper layer\uff0c\u4e0d\u8981\u53d1\u660e\u7b2c\u4e8c\u5957\u771f\u76f8\u7cfb\u7edf\u3002",
+      "You are helping with a governed Browserclickyard follow-up. Keep Stress Lab as the front door, treat AI/MCP/proof as deeper layers, and avoid inventing a second truth system.",
+      "\u4f60\u6b63\u5728\u534f\u52a9\u4e00\u4e2a\u53d7\u6cbb\u7406\u7684 Browserclickyard \u8ddf\u8fdb\u4efb\u52a1\u3002\u8bf7\u4fdd\u6301 Stress Lab \u662f front door\uff0c\u628a AI/MCP/proof \u89c6\u4e3a deeper layer\uff0c\u4e0d\u8981\u53d1\u660e\u7b2c\u4e8c\u5957\u771f\u76f8\u7cfb\u7edf\u3002",
     ),
     "",
     pickUiText(locale, "Run context", "\u8fd0\u884c\u4e0a\u4e0b\u6587"),

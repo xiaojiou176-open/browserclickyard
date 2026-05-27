@@ -1,6 +1,6 @@
-# Prooflane MCP Public Skill
+# Browserclickyard MCP Public Skill
 
-This folder is the public, self-contained skill packet for Prooflane's
+This folder is the public, self-contained skill packet for Browserclickyard's
 repo-native MCP surface.
 
 In plain language:
@@ -12,7 +12,7 @@ In plain language:
 
 Use it when you want one portable skill folder that teaches:
 
-- what Prooflane helps an agent do today
+- what Browserclickyard helps an agent do today
 - how to attach the repo-native stdio MCP server
 - which tool families are safe first
 - what a concrete first-success path looks like
@@ -40,21 +40,21 @@ Use it when you want one portable skill folder that teaches:
 ## Packet role
 
 - **Primary product stays elsewhere:** `README.md` and `docs/get-started.md`
-  remain the main Prooflane front door.
+  remain the main Browserclickyard front door.
 - **This folder is a companion packet:** it teaches repo-native MCP attach and
   proof-safe first steps for host-native skill flows.
 - **This folder is not the storefront:** any packet-lane review or listing
   state here does not prove package publication, browser-extension listing, or
-  hosted Prooflane availability.
+  hosted Browserclickyard availability.
 
 ## Current packet-lane state
 
 - OpenHands/extensions is currently `review-pending` via PR `#161`
 - ClawHub is now `listed-live` at
-  `https://clawhub.ai/xiaojiou176/prooflane-mcp` after fresh host-side
+  `https://clawhub.ai/xiaojiou176/browserclickyard-mcp` after fresh host-side
   read-back on `2026-04-09`
 - those packet-lane states apply only to this skill folder, not to the main
-  Prooflane product lane
+  Browserclickyard product lane
 
 ## What this packet must not claim
 
@@ -63,4 +63,4 @@ Use it when you want one portable skill folder that teaches:
   host-side read-back for this companion packet
 - no published npm package or public Docker image unless the repo has fresh
   proof
-- no hosted Prooflane SaaS claim
+- no hosted Browserclickyard SaaS claim

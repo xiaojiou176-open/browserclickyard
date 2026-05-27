@@ -1,7 +1,7 @@
 <svg width="1440" height="840" viewBox="0 0 1440 840" fill="none" xmlns="http://www.w3.org/2000/svg">
   <rect width="1440" height="840" rx="28" fill="#081723"/>
   <text x="96" y="98" fill="#F7FBFF" font-family="Helvetica, Arial, sans-serif" font-size="46" font-weight="700">Public proof stack</text>
-  <text x="96" y="136" fill="#95B9CE" font-family="Helvetica, Arial, sans-serif" font-size="20">Prooflane separates public evidence from</text>
+  <text x="96" y="136" fill="#95B9CE" font-family="Helvetica, Arial, sans-serif" font-size="20">Browserclickyard separates public evidence from</text>
   <text x="96" y="164" fill="#95B9CE" font-family="Helvetica, Arial, sans-serif" font-size="20">private runtime artifacts on purpose.</text>
   <rect x="120" y="210" width="1200" height="530" rx="34" fill="#0E2435" stroke="#254C64"/>
 

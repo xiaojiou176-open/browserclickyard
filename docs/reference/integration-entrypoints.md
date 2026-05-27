@@ -1,6 +1,6 @@
 # Integration Entry Points
 
-This page is the public builder map for Prooflane.
+This page is the public builder map for Browserclickyard.
 
 Use it when you need a direct answer to three practical questions:
 
@@ -20,7 +20,7 @@ Think of it like an airport signboard:
 | Entry path | What it is for today | Current truth | Good fit |
 | --- | --- | --- | --- |
 | `contracts/openapi/api.yaml` + HTTP | Direct service, CLI, or builder integration | Canonical API contract | Builders who want the most portable and explicit path |
-| `pnpm mcp:start` | Agent-facing adapter over existing ledgers and governed artifacts | Real MCP server with stdio transport and read-mostly review/runtime tools; publish-ready package target is `@uiq/mcp-server` with planned `prooflane-mcp` CLI shape | MCP-capable agents and operator copilots |
+| `pnpm mcp:start` | Agent-facing adapter over existing ledgers and governed artifacts | Real MCP server with stdio transport and read-mostly review/runtime tools; publish-ready package target is `@uiq/mcp-server` with planned `browserclickyard-mcp` CLI shape | MCP-capable agents and operator copilots |
 | `apps/command-center/src/hooks/useApiClient.ts` + `useProofApi.ts` | First-party frontend wiring | Real internal client layer used by the product UI | Repo contributors who want examples of current fetch/header patterns |
 | `tests/web-harness/src/api-gen/**` | Generated fetch wrappers for shared harness/test surfaces | Real generated code, but scoped to the web harness and selected API families | Contributors extending tests, mocks, or contract checks inside this repo |
 
@@ -56,14 +56,14 @@ Packaging truth:
 
 - repo-native entry today: `pnpm mcp:start`
 - publish-ready artifact target: `@uiq/mcp-server`
-- planned CLI / bin name: `prooflane-mcp`
+- planned CLI / bin name: `browserclickyard-mcp`
 - protocol today: **stdio only**
 - local stdio startup does **not** use OAuth
 - the package command shape is documented, but **not published yet**
 
 Search-friendly but still truthful phrasing:
 
-- Prooflane can act as an **MCP server for coding agents** such as Codex,
+- Browserclickyard can act as an **MCP server for coding agents** such as Codex,
   Claude Code, or any other MCP-capable client.
 - That is a protocol-compatibility statement about the adapter surface, not an
   official partnership claim.
@@ -90,7 +90,7 @@ Use:
 But use them with the right expectation:
 
 - this is a **generated harness client**
-- not a **versioned Prooflane SDK**
+- not a **versioned Browserclickyard SDK**
 
 ## Current Generated Client Reality
 
@@ -113,7 +113,7 @@ That means:
 
 So the honest sentence is:
 
-> Prooflane has a real OpenAPI contract and a real generated harness client, but it does **not** yet ship a full public SDK package.
+> Browserclickyard has a real OpenAPI contract and a real generated harness client, but it does **not** yet ship a full public SDK package.
 
 ## Shared Types: What Exists And What Does Not
 
@@ -127,7 +127,7 @@ Current type layers are real, but they are not one public SDK package yet.
 
 What does **not** exist yet:
 
-- no published `@prooflane/sdk`
+- no published `@browserclickyard/sdk`
 - no stable cross-package public TypeScript types module for builders
 - no semver-backed promise that frontend hooks or harness generators are the long-term external API
 
@@ -161,7 +161,7 @@ These are the repo-owned commands that define or verify the integration surface:
 
 ## Future SDK Path
 
-If Prooflane grows a real builder SDK later, the least-surprising path is:
+If Browserclickyard grows a real builder SDK later, the least-surprising path is:
 
 1. keep `contracts/openapi/api.yaml` as the source of truth
 2. widen generation beyond the current harness-only modules

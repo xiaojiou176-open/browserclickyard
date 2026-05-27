@@ -234,7 +234,7 @@ Review Board 不删，但它的职责要后撤。
 
 - `README.md`
 - `docs/get-started.md`
-- `docs/why-prooflane.md`
+- `docs/why-browserclickyard.md`
 - `docs/proof-center.md`
 
 #### Doc rule

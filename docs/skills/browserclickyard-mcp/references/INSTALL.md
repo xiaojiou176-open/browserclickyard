@@ -1,4 +1,4 @@
-# Install And Attach Prooflane MCP
+# Install And Attach Browserclickyard MCP
 
 ## Local repo setup
 
@@ -34,5 +34,5 @@ pnpm mcp:smoke
 ## Truth boundary
 
 This packet teaches the repo-native stdio MCP surface that works today.
-The package shape `@uiq/mcp-server` / `prooflane-mcp` is publish-ready but not
+The package shape `@uiq/mcp-server` / `browserclickyard-mcp` is publish-ready but not
 yet published.

@@ -1,5 +1,5 @@
 {
-  "app_name": "Prooflane",
+  "app_name": "Browserclickyard",
   "environment": "production",
   "backend": {
     "host": "0.0.0.0",

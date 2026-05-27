@@ -849,7 +849,7 @@ test.describe("@frontend-critical-buttons", () => {
     await installBackendStubs(page, state);
     await gotoRootWithFrontendRetry(page);
 
-    await expect(page.getByRole("heading", { level: 1, name: "Prooflane" })).toBeVisible();
+    await expect(page.getByRole("heading", { level: 1, name: "Browserclickyard" })).toBeVisible();
     const fetchTasksBeforeAuth = state.calls.fetchTasks;
     await page.locator("#automation-token").fill("token-demo-123");
     await page.locator("#automation-client-id").fill("client-e2e-001");

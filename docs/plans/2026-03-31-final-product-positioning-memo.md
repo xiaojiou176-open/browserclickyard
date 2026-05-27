@@ -2,7 +2,7 @@
 
 ## One-line positioning
 
-**Prooflane is an AI-native WebUI stress lab for localhost-first browser experiments, with governed proof and agent-ready workflows when results need deeper review.**
+**Browserclickyard is an AI-native WebUI stress lab for localhost-first browser experiments, with governed proof and agent-ready workflows when results need deeper review.**
 
 ## Subheadline
 

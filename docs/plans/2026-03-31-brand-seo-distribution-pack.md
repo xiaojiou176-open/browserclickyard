@@ -2,15 +2,15 @@
 
 ## Brand rule
 
-Keep **Prooflane** as the product brand.
+Keep **Browserclickyard** as the product brand.
 
 Do **not** rename the product into a generic `.ai` identity.
 
-If `prooflane.ai` or a similar domain is used later, it should act as a campaign or landing-page entrypoint, not as a replacement brand name.
+If `browserclickyard.ai` or a similar domain is used later, it should act as a campaign or landing-page entrypoint, not as a replacement brand name.
 
 ## Recommended one-liner
 
-Prooflane is an AI-native WebUI stress lab for localhost-first browser experiments, with governed proof and agent-ready workflows when results need deeper review.
+Browserclickyard is an AI-native WebUI stress lab for localhost-first browser experiments, with governed proof and agent-ready workflows when results need deeper review.
 
 ## Recommended GitHub description
 
@@ -29,11 +29,11 @@ AI-native WebUI stress lab for localhost-first browser experiments, governed pro
 
 ## SEO title
 
-Prooflane: AI-native WebUI Stress Lab for Browser Experiments
+Browserclickyard: AI-native WebUI Stress Lab for Browser Experiments
 
 ## SEO meta description
 
-Prooflane is an AI-native WebUI stress lab for localhost-first browser experiments, with readable results, governed proof, AI summaries, and MCP-ready workflows.
+Browserclickyard is an AI-native WebUI stress lab for localhost-first browser experiments, with readable results, governed proof, AI summaries, and MCP-ready workflows.
 
 ## Keyword clusters
 

@@ -1,6 +1,6 @@
 # Public Stress Lab Guided Demo
 
-This is the fastest **public-safe, no-setup** way to understand what Prooflane
+This is the fastest **public-safe, no-setup** way to understand what Browserclickyard
 is today.
 
 Think of it like a guided museum route:
@@ -25,7 +25,7 @@ Think of it like a guided museum route:
 
 ## Step 1. Understand The Product In One Sentence
 
-> **Prooflane is an AI-native WebUI stress lab for localhost-first browser
+> **Browserclickyard is an AI-native WebUI stress lab for localhost-first browser
 > experiments, with governed proof and agent-ready workflows when results need
 > deeper review.**
 
@@ -39,7 +39,7 @@ That sentence is doing three jobs:
 
 The current launch-first shell map is shown here:
 
-![Prooflane studio preview showing the launch-first operator path: Stress Lab first, then Runs and Blocks, then Flow Studio, with Advanced Review as the deeper governed layer behind the first visible result.](../assets/prooflane-studio-preview.svg)
+![Browserclickyard studio preview showing the launch-first operator path: Stress Lab first, then Runs and Blocks, then Flow Studio, with Advanced Review as the deeper governed layer behind the first visible result.](../assets/browserclickyard-studio-preview.svg)
 
 This is a semantic front-door preview, not a literal runtime screenshot. That
 keeps the public demo aligned with the current IA without treating an older
@@ -57,7 +57,7 @@ Read it in this order:
 This diagram shows how the public front door and the governed deeper lane fit
 together:
 
-![Prooflane result path diagram showing the local first-look path, the governed run path, and the MCP connection route.](../assets/prooflane-result-path.svg)
+![Browserclickyard result path diagram showing the local first-look path, the governed run path, and the MCP connection route.](../assets/browserclickyard-result-path.svg)
 
 Plain-language rule:
 
@@ -67,7 +67,7 @@ Plain-language rule:
 
 ## Step 4. Inspect One Public-Safe Proof Object
 
-Prooflane keeps exactly one public-safe proof sample in the repo:
+Browserclickyard keeps exactly one public-safe proof sample in the repo:
 
 - [Public Proof Sample](./public-proof-sample/README.md)
 
@@ -108,5 +108,5 @@ That is a product boundary, not just a marketing disclaimer.
 
 - See the front door: [README.md](../../README.md)
 - Follow the quickstart: [docs/get-started.md](../get-started.md)
-- Read the positioning: [docs/why-prooflane.md](../why-prooflane.md)
+- Read the positioning: [docs/why-browserclickyard.md](../why-browserclickyard.md)
 - Inspect the public proof lane: [docs/proof-center.md](../proof-center.md)

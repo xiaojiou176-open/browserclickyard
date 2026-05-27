@@ -1,7 +1,7 @@
 {
   "name": "@uiq/mcp-server",
   "version": "0.1.0",
-  "description": "Prooflane MCP server for read-mostly governed run, artifact, and review workflows.",
+  "description": "Browserclickyard MCP server for read-mostly governed run, artifact, and review workflows.",
   "license": "MIT",
   "homepage": "https://xiaojiou176-open.github.io/browserclickyard/",
   "repository": {
@@ -12,7 +12,7 @@
   "keywords": [
     "mcp",
     "model-context-protocol",
-    "prooflane",
+    "browserclickyard",
     "ai-agents",
     "webui-testing",
     "stdio"
@@ -33,7 +33,7 @@
     "./package.json": "./package.json"
   },
   "bin": {
-    "prooflane-mcp": "./dist/server.js"
+    "browserclickyard-mcp": "./dist/server.js"
   },
   "files": [
     "dist",

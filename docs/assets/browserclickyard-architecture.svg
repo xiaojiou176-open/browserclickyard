@@ -1,6 +1,6 @@
 <svg width="1440" height="860" viewBox="0 0 1440 860" fill="none" xmlns="http://www.w3.org/2000/svg">
   <rect width="1440" height="860" rx="28" fill="#081723"/>
-  <text x="88" y="92" fill="#F8FBFF" font-family="Helvetica, Arial, sans-serif" font-size="48" font-weight="700">Prooflane architecture at a glance</text>
+  <text x="88" y="92" fill="#F8FBFF" font-family="Helvetica, Arial, sans-serif" font-size="48" font-weight="700">Browserclickyard architecture at a glance</text>
   <text x="88" y="134" fill="#94B9CE" font-family="Helvetica, Arial, sans-serif" font-size="24">One product surface, one control plane, one orchestrator path, one proof lane.</text>
   <rect x="92" y="214" width="1256" height="566" rx="32" fill="#0E2334" stroke="#244B63"/>
   <rect x="132" y="272" width="300" height="176" rx="26" fill="#102A40"/>

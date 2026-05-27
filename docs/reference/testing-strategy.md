@@ -1,6 +1,6 @@
 # Testing Strategy
 
-Prooflane uses a **testing pyramid with governed release gates**, not one giant
+Browserclickyard uses a **testing pyramid with governed release gates**, not one giant
 bucket of tests.
 
 Think of it like building trust in layers:
@@ -49,4 +49,4 @@ Use this order when you want the fastest trustworthy signal:
 Do not collapse these into one generic word like “tests passed”.
 
 That would be like saying “the building is safe” after checking only the light
-switches. Prooflane wants you to say which layer passed.
+switches. Browserclickyard wants you to say which layer passed.

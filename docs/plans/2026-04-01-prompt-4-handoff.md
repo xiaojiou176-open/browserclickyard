@@ -90,7 +90,7 @@
 ### If Starting Route B Realignment
 
 - `README.md`
-- `docs/why-prooflane.md`
+- `docs/why-browserclickyard.md`
 - `apps/command-center/src/views/QuickLaunchView.tsx`
 - `packages/orchestrator/src/commands/load.ts`
 - `packages/orchestrator/src/commands/perf.ts`

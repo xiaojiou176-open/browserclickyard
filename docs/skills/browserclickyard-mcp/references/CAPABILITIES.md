@@ -1,6 +1,6 @@
-# Prooflane MCP Capabilities
+# Browserclickyard MCP Capabilities
 
-These are the current Prooflane tool families surfaced by the repo-native MCP
+These are the current Browserclickyard tool families surfaced by the repo-native MCP
 server.
 
 ## Best first tools

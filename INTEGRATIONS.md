@@ -9,9 +9,9 @@ This page keeps the integration story truthful and compact.
 | GitHub Pages | Live | `https://xiaojiou176-open.github.io/browserclickyard/` |
 | HTTP / OpenAPI | Live, repo-native | `docs/reference/integration-entrypoints.md`, `docs/reference/universal-api.md` |
 | MCP server | Live, repo-native | `pnpm mcp:start` |
-| MCP package shape | Publish-ready, not published | `@uiq/mcp-server` -> `prooflane-mcp` |
+| MCP package shape | Publish-ready, not published | `@uiq/mcp-server` -> `browserclickyard-mcp` |
 | Codex / Claude Code / other MCP hosts | Supported through MCP config, not a marketplace listing | `docs/how-to/mcp-clients-setup.md` |
-| Companion skill packet | ClawHub live; OpenHands review-pending | `docs/skills/prooflane-mcp/SKILL.md` |
+| Companion skill packet | ClawHub live; OpenHands review-pending | `docs/skills/browserclickyard-mcp/SKILL.md` |
 
 ## What Does Not Exist Yet
 
@@ -27,7 +27,7 @@ This page keeps the integration story truthful and compact.
 ## MCP Transport And Auth Truth
 
 - Publish-ready MCP package target: `@uiq/mcp-server`
-- Planned CLI / bin name: `prooflane-mcp`
+- Planned CLI / bin name: `browserclickyard-mcp`
 - MCP transport today: **stdio only**
 - Auth boundary today: local stdio startup does **not** use OAuth; protected
   HTTP/API and automation surfaces keep the existing token/header contract
@@ -73,22 +73,22 @@ Use the local repo as the MCP server source of truth.
 
 That package command shape is **ready**, but it is **not published yet**. The
 package keeps the scoped name `@uiq/mcp-server` in this pass, while the bin
-inside it remains `prooflane-mcp`.
+inside it remains `browserclickyard-mcp`.
 
 ## Truthful Wording
 
 It is truthful to say:
 
-- Prooflane works with Codex, Claude Code, OpenClaw, and other MCP-capable
+- Browserclickyard works with Codex, Claude Code, OpenClaw, and other MCP-capable
   clients through a repo-owned MCP server.
 - The publish-ready MCP artifact target is `@uiq/mcp-server`.
-- The planned CLI name is `prooflane-mcp`.
+- The planned CLI name is `browserclickyard-mcp`.
 - MCP today means **stdio**, not SSE or Streamable HTTP.
 
 It is **not** truthful to say:
 
 - there is already an official marketplace plugin
-- there is already a published `prooflane-mcp` package
+- there is already a published `browserclickyard-mcp` package
 - there is already a separately distributed starter bundle
 - there is already a public Docker image
 - MCP is the only supported integration path

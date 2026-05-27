@@ -2,13 +2,13 @@
 
 ## Final product sentence
 
-Prooflane is an AI-native WebUI stress lab for localhost-first browser
+Browserclickyard is an AI-native WebUI stress lab for localhost-first browser
 experiments, with governed proof and agent-ready workflows when results need
 deeper review.
 
 ## Final product in three sentences
 
-Prooflane now tells one clear outside story:
+Browserclickyard now tells one clear outside story:
 
 1. start from a target URL and browser experiment
 2. read the latest result before you escalate

@@ -1,6 +1,6 @@
 # Public Proof Sample
 
-This is Prooflane's single public-safe proof sample.
+This is Browserclickyard's single public-safe proof sample.
 
 It is intentionally small, sanitized, and schema-faithful. Think of it like a
 museum display model: it shows the shape of a governed run bundle without
@@ -8,7 +8,7 @@ opening the private runtime storeroom.
 
 ## What This Sample Proves
 
-- Prooflane writes a governed run bundle with a `manifest.json` contract and a
+- Browserclickyard writes a governed run bundle with a `manifest.json` contract and a
   `reports/summary.json` report
 - Public inspection can focus on safe structural fields without exposing broad
   runtime evidence

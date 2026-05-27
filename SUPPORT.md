@@ -1,6 +1,6 @@
 # Support
 
-Prooflane is public and now uses GitHub-native routing for support,
+Browserclickyard is public and now uses GitHub-native routing for support,
 discussion, and product feedback.
 
 ## Usage help

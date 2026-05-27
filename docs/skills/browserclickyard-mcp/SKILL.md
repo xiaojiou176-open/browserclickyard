@@ -1,30 +1,30 @@
-# Prooflane MCP Skill
+# Browserclickyard MCP Skill
 
 Use this skill when an agent needs to **clone, install, configure, verify, and
-use Prooflane's current MCP and local product surfaces** without overclaiming
+use Browserclickyard's current MCP and local product surfaces** without overclaiming
 package-registry or hosted distribution that does not exist yet.
 
 ## Use When
 
-- You want to evaluate Prooflane from the canonical public repository.
+- You want to evaluate Browserclickyard from the canonical public repository.
 - You want to connect Codex, Claude Code, OpenClaw, or another MCP-capable
-  client to Prooflane's repo-native MCP server.
+  client to Browserclickyard's repo-native MCP server.
 - You need a truthful walkthrough for local UI first-look, MCP setup, and
   governed run verification.
 
 ## Truthful Boundaries
 
-- Prooflane is public and distribution-ready on GitHub today.
+- Browserclickyard is public and distribution-ready on GitHub today.
 - The MCP server is real and repo-native today.
-- The package shape `@uiq/mcp-server` / `prooflane-mcp` is publish-ready, but
+- The package shape `@uiq/mcp-server` / `browserclickyard-mcp` is publish-ready, but
   it is **not published to npm yet**.
 - MCP today means **stdio only**.
 - Local stdio startup does **not** use OAuth; protected HTTP/API and
   automation surfaces keep the existing token/header contract.
-- Prooflane is **not** currently a hosted SaaS service.
+- Browserclickyard is **not** currently a hosted SaaS service.
 - This skill remains a generic in-repo scaffold and is now published on
   ClawHub as a companion packet, but that does **not** imply npm publication,
-  hosted Prooflane distribution, or main-product marketplace listing.
+  hosted Browserclickyard distribution, or main-product marketplace listing.
 
 ## Prerequisites
 

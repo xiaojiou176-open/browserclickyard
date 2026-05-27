@@ -1,6 +1,6 @@
 # Proof Center
 
-This page is the public map for what Prooflane is willing to prove in the open,
+This page is the public map for what Browserclickyard is willing to prove in the open,
 what remains private by default, and where to inspect the deeper governed
 evidence **after** a stress-lab result becomes worth preserving.
 
@@ -32,7 +32,7 @@ public-surface or branch-protection audit artifact.
 
 ## Single Public-Safe Proof Sample
 
-Prooflane keeps exactly one public-safe sample surface in this repo:
+Browserclickyard keeps exactly one public-safe sample surface in this repo:
 [docs/examples/public-proof-sample/README.md](./examples/public-proof-sample/README.md).
 
 What it is:
@@ -50,7 +50,7 @@ What it is not:
 
 ## Public-Safe Vs Private-Only
 
-Prooflane is public, but not every runtime artifact is public-safe.
+Browserclickyard is public, but not every runtime artifact is public-safe.
 
 ### Public-safe by policy
 
@@ -93,7 +93,7 @@ this repo today:
 If these surfaces become publicly queryable later, they should be promoted into
 this page only after the proof path is machine-verifiable and documented.
 
-## What "Proof" Means In Prooflane
+## What "Proof" Means In Browserclickyard
 
 Proof is not a marketing word here. In this repo, it means at least one of the
 following:
@@ -126,11 +126,11 @@ surfaces:
 - Release notes and changelog history
 - Discussions as a durable public context layer
 
-![Prooflane proof stack showing product story, contract truth, public-safe artifacts, and private-only runtime evidence boundaries.](./assets/prooflane-proof-stack.svg)
+![Browserclickyard proof stack showing product story, contract truth, public-safe artifacts, and private-only runtime evidence boundaries.](./assets/browserclickyard-proof-stack.svg)
 
 ## If You Want To Go Deeper
 
-- Product story: [docs/why-prooflane.md](./why-prooflane.md)
+- Product story: [docs/why-browserclickyard.md](./why-browserclickyard.md)
 - Guided walkthrough: [docs/examples/public-stress-lab-guided-demo.md](./examples/public-stress-lab-guided-demo.md)
 - Result-first quickstart: [docs/get-started.md](./get-started.md)
 - First release notes: [docs/releases/v0.1.0-public-launch.md](./releases/v0.1.0-public-launch.md)

@@ -58,7 +58,7 @@
 
 - `README.md`
 - `docs/index.md`
-- `docs/why-prooflane.md`
+- `docs/why-browserclickyard.md`
 - `docs/releases/*` if public-story packaging needs refresh
 - public-safe visuals under `docs/assets/`
 - any landing-page or metadata surface chosen for branding/SEO work

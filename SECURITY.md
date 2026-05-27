@@ -1,6 +1,6 @@
 # Security Policy
 
-Prooflane is public, but security handling remains private by default.
+Browserclickyard is public, but security handling remains private by default.
 Security reports must avoid public issue threads and use the private advisory
 flow.
 

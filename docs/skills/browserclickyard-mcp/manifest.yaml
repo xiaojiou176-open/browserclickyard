@@ -1,8 +1,8 @@
-name: prooflane-mcp
+name: browserclickyard-mcp
 version: 0.1.0
 summary: >
   Generic skill scaffold for teaching an agent to clone, install, configure,
-  verify, and use the Prooflane repo-native MCP server and local product paths.
+  verify, and use the Browserclickyard repo-native MCP server and local product paths.
 protocol: stdio
 entrypoint: SKILL.md
 package_shape: skill-folder
@@ -10,21 +10,21 @@ registry_targets:
   clawhub:
     status: listed-live
     package_shape: skill-folder
-    listing_url: https://clawhub.ai/xiaojiou176/prooflane-mcp
-    submit_via: clawhub publish . --slug prooflane-mcp --name "Prooflane MCP Skill" --version 0.1.0 --tags mcp,proof,automation,review,prooflane
+    listing_url: https://clawhub.ai/xiaojiou176/browserclickyard-mcp
+    submit_via: clawhub publish . --slug browserclickyard-mcp --name "Browserclickyard MCP Skill" --version 0.1.0 --tags mcp,proof,automation,review,browserclickyard
   openhands-extensions:
     status: review-pending
     package_shape: skill-folder
     submission_url: https://github.com/OpenHands/extensions/pull/161
-    submit_via: submit this folder as skills/prooflane-mcp/ in OpenHands/extensions
+    submit_via: submit this folder as skills/browserclickyard-mcp/ in OpenHands/extensions
 boundaries:
   packet_role: companion-skill-packet
   primary_product_lane: ai-native WebUI stress lab front door
-  listing_scope_note: OpenHands or ClawHub status applies to this skill packet only and does not prove Prooflane browser/store publication, package publication, or hosted SaaS distribution.
+  listing_scope_note: OpenHands or ClawHub status applies to this skill packet only and does not prove Browserclickyard browser/store publication, package publication, or hosted SaaS distribution.
   not_claimed:
     - No browser-extension product or browser-store listing is claimed here
     - No published npm or PyPI package is claimed here
-    - No hosted Prooflane SaaS state is claimed here
+    - No hosted Browserclickyard SaaS state is claimed here
 installation:
   repo: https://github.com/xiaojiou176-open/browserclickyard
   steps:
@@ -48,7 +48,7 @@ configuration:
     env:
       UIQ_MCP_API_BASE_URL: http://127.0.0.1:18080
       UIQ_MCP_TOOL_GROUPS: advanced,analysis,proof
-    note: publish-ready scoped package shape only; not published yet; bin inside remains prooflane-mcp
+    note: publish-ready scoped package shape only; not published yet; bin inside remains browserclickyard-mcp
 verification:
   steps:
     - pnpm mcp:check

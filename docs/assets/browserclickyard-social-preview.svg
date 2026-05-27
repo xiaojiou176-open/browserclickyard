@@ -13,7 +13,7 @@
   <rect width="1280" height="640" fill="url(#bg)"/>
   <circle cx="1114" cy="108" r="144" fill="#18D2C3" fill-opacity="0.09"/>
   <circle cx="132" cy="604" r="238" fill="#FF8A00" fill-opacity="0.10"/>
-  <text x="108" y="112" fill="#D9FBFF" font-family="Helvetica, Arial, sans-serif" font-size="24" font-weight="700" letter-spacing="2">PROOFLANE</text>
+  <text x="108" y="112" fill="#D9FBFF" font-family="Helvetica, Arial, sans-serif" font-size="24" font-weight="700" letter-spacing="2">BROWSERCLICKYARD</text>
   <text x="108" y="208" fill="#F8FBFF" font-family="Helvetica, Arial, sans-serif" font-size="48" font-weight="700">AI-native WebUI</text>
   <text x="108" y="266" fill="#F8FBFF" font-family="Helvetica, Arial, sans-serif" font-size="48" font-weight="700">stress lab</text>
   <text x="108" y="338" fill="#A6C8DA" font-family="Helvetica, Arial, sans-serif" font-size="22">Run browser experiments first,</text>

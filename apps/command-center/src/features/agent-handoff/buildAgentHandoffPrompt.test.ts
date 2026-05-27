@@ -59,7 +59,7 @@ describe("buildAgentHandoffPrompt", () => {
       feasibility: null,
     });
 
-    expect(prompt).toContain("\u4f60\u6b63\u5728\u534f\u52a9\u4e00\u4e2a\u53d7\u6cbb\u7406\u7684 Prooflane \u8ddf\u8fdb\u4efb\u52a1");
+    expect(prompt).toContain("\u4f60\u6b63\u5728\u534f\u52a9\u4e00\u4e2a\u53d7\u6cbb\u7406\u7684 Browserclickyard \u8ddf\u8fdb\u4efb\u52a1");
     expect(prompt).toContain("\u8fd0\u884c\u4e0a\u4e0b\u6587");
     expect(prompt).toContain("\u5c1a\u672a\u52a0\u8f7d");
   });

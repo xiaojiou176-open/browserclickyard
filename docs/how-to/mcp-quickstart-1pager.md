@@ -6,13 +6,13 @@
 - A clear default path plus failure branches.
 - Getting to a result first, then drilling into advanced/internal docs.
 - Running the same read-mostly loop from Codex, Claude Code, or another
-  MCP-capable client without pretending Prooflane is a generic assistant.
+  MCP-capable client without pretending Browserclickyard is a generic assistant.
 
 ## Installation Truth
 
 - Repo-native start today: `pnpm mcp:start`
 - Publish-ready package target: `@uiq/mcp-server`
-- Planned CLI / bin name: `prooflane-mcp`
+- Planned CLI / bin name: `browserclickyard-mcp`
 - Protocol today: **stdio only**
 - Local stdio startup does **not** use OAuth
 - `npx -y @uiq/mcp-server` / `pnpm dlx @uiq/mcp-server` is the truthful

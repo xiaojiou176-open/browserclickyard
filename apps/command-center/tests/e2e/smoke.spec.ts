@@ -126,7 +126,7 @@ test.beforeEach(async ({ page }) => {
 test("@smoke frontend shell and primary navigation", async ({ page }) => {
   await page.goto("/");
 
-  await expect(page.getByRole("heading", { level: 1, name: "Prooflane" })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 1, name: "Browserclickyard" })).toBeVisible();
   await expect(page.getByRole("tablist", { name: "Primary navigation" })).toBeVisible();
   await expect(page.getByRole("tab", { name: "Quick Launch" })).toHaveAttribute(
     "aria-selected",

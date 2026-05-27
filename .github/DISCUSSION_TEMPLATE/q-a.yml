@@ -12,7 +12,7 @@ body:
     id: question
     attributes:
       label: Question
-      placeholder: What are you trying to do with Prooflane?
+      placeholder: What are you trying to do with Browserclickyard?
     validations:
       required: true
   - type: textarea

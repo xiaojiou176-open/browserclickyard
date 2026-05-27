@@ -1,6 +1,6 @@
-# Why Prooflane
+# Why Browserclickyard
 
-Prooflane exists for teams that already know a painful truth: browser
+Browserclickyard exists for teams that already know a painful truth: browser
 automation is easy to start, but hard to turn into a reusable **stress lab**
 that people can actually operate.
 
@@ -12,7 +12,7 @@ Most browser stacks break in one of two directions:
 - they become governed but so heavy that nobody wants to use them for everyday
   investigation
 
-Prooflane is the bet that you can keep both layers:
+Browserclickyard is the bet that you can keep both layers:
 
 - a URL-first lab shell for exploration, load, perf, chaos, visual, and
   accessibility work
@@ -24,7 +24,7 @@ Prooflane is the bet that you can keep both layers:
 
 The front door is now being realigned around one simple sentence:
 
-> Give Prooflane a WebUI target, choose the kind of browser experiment you want
+> Give Browserclickyard a WebUI target, choose the kind of browser experiment you want
 > to run, read the result, and only then escalate into deeper governed review.
 
 That means the product surfaces now read like four jobs:
@@ -34,9 +34,9 @@ That means the product surfaces now read like four jobs:
 - **Flow Studio** helps refine the journey behind the result
 - **Advanced Review** is the deeper governed layer, not the first stop
 
-## What Makes Prooflane Different
+## What Makes Browserclickyard Different
 
-| Question | Typical answer elsewhere | Prooflane answer |
+| Question | Typical answer elsewhere | Browserclickyard answer |
 | --- | --- | --- |
 | Where does the work start? | With a script, a dashboard, or a CI job | With a target URL and a lab mode in one operator shell |
 | How do you inspect what happened? | Read logs and screenshots after the fact | Read the latest result first, then drill into reports, evidence, and proof |
@@ -45,7 +45,7 @@ That means the product surfaces now read like four jobs:
 
 ## Current Route B Boundary
 
-Prooflane is not pretending that arbitrary public-web testing is fully open by
+Browserclickyard is not pretending that arbitrary public-web testing is fully open by
 default today.
 
 The honest Route B MVP is:
@@ -60,7 +60,7 @@ substrate and the original “test any WebUI” vision.
 
 ## Who It Is For
 
-Prooflane is a strong fit for:
+Browserclickyard is a strong fit for:
 
 - teams exploring or stress-testing modern WebUI flows locally
 - QA and product teams that need readable browser results, not just raw logs
@@ -71,7 +71,7 @@ Prooflane is a strong fit for:
   truthful **MCP server for Codex / Claude Code sessions** without needing to
   pretend a hosted AI copilot already exists
 
-Prooflane is a weak fit for:
+Browserclickyard is a weak fit for:
 
 - throwaway one-file experiments
 - teams that only want a narrow runner with no operator surface
@@ -92,7 +92,7 @@ That means the public value is not only the code:
 
 ## Why Star Now
 
-Star Prooflane if you want updates on:
+Star Browserclickyard if you want updates on:
 
 - AI-native WebUI stress testing, not just browser snippets
 - public proof systems for browser experiments and governed review

@@ -2,7 +2,7 @@
 
 ## Decision To Make
 
-Should Prooflane continue to grow as a **browser release decision plane**, or
+Should Browserclickyard continue to grow as a **browser release decision plane**, or
 should it be explicitly redirected back toward the original **universal WebUI
 stress lab** vision?
 
@@ -18,11 +18,11 @@ Why:
 ### Evidence for the current-line release decision story
 
 - The front door already speaks in release language:
-  [README](../README.md), [Why Prooflane](../why-prooflane.md), and
+  [README](../README.md), [Why Browserclickyard](../why-browserclickyard.md), and
   [Proof Center](../proof-center.md) emphasize governed proof, review, and ship
   confidence.
 - The live task board and existing master plan explicitly target
-  `Prooflane Release Decision Plane`.
+  `Browserclickyard Release Decision Plane`.
 - The app has a real `Review Board` tab and the backend has a real proof domain
   (`/api/proof/*`, `proof_service.py`).
 - `CHANGELOG.md` records the first release-decision-plane slice as already

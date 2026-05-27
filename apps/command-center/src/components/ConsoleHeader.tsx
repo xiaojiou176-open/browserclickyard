@@ -354,7 +354,7 @@ function ConsoleHeader({
             </svg>
           </div>
           <div className="header-text">
-            <h1>Prooflane</h1>
+            <h1>Browserclickyard</h1>
             <p>{laneMapSummary}</p>
             <p>{recommendedFirstPath}</p>
             <div className="card-raised mt-3" data-tour="launch-priority">

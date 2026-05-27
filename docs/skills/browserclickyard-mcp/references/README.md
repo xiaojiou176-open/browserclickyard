@@ -1,4 +1,4 @@
-# Prooflane MCP References
+# Browserclickyard MCP References
 
 ## File map
 
@@ -9,7 +9,7 @@
 - `OPENCLAW_MCP_CONFIG.json`
   - OpenClaw-style `mcp.servers` snippet
 - `CAPABILITIES.md`
-  - current Prooflane tool families and safe-first order
+  - current Browserclickyard tool families and safe-first order
 - `DEMO.md`
   - first-success prompt and expected tool sequence
 - `TROUBLESHOOTING.md`

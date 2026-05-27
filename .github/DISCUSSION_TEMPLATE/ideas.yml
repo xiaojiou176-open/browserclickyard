@@ -10,7 +10,7 @@ body:
   - type: textarea
     id: problem
     attributes:
-      label: What problem should Prooflane solve better?
+      label: What problem should Browserclickyard solve better?
       placeholder: Describe the pain, not just the feature.
     validations:
       required: true

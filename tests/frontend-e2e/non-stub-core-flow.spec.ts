@@ -277,7 +277,7 @@ test.afterEach(async ({ context, page }) => {
 test("@frontend-nonstub @nonstub run and cancel chain over live local api", async ({ page }) => {
   await gotoRootWithFrontendRetry(page);
 
-  await expect(page.getByRole("heading", { level: 1, name: "Prooflane" })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 1, name: "Browserclickyard" })).toBeVisible();
   const proxiedFrontendOrigin = new URL(page.url()).origin;
   await page.getByLabel("Target site URL (BASE_URL)").fill(proxiedFrontendOrigin);
   if (automationToken) {

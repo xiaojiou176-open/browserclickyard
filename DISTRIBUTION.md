@@ -14,17 +14,17 @@ reuse.
 
 ## Primary lane vs companion lanes
 
-- **Primary lane:** the Prooflane stress-lab front door, localhost-first
+- **Primary lane:** the Browserclickyard stress-lab front door, localhost-first
   product path, and governed run flow
 - **Companion integration lane:** the repo-native MCP server in
   `services/mcp-server/`
 - **Companion packet lane:** the generic in-repo skill packet under
-  `docs/skills/prooflane-mcp/`
+  `docs/skills/browserclickyard-mcp/`
 
 Important boundary:
 
 > companion MCP/package/skill status belongs to those surfaces only.
-> it does not turn Prooflane into a browser extension product, an already
+> it does not turn Browserclickyard into a browser extension product, an already
 > listed marketplace package, or a hosted SaaS.
 
 ## Repo-owned today
@@ -39,7 +39,7 @@ Important boundary:
 - Public GitHub repository under `xiaojiou176-open`
 - GitHub Pages site
 - GitHub Issues and Discussions
-- Public release route for `Prooflane v0.1.0`
+- Public release route for `Browserclickyard v0.1.0`
 
 Use `docs/reference/public-readiness.md` and the latest audit artifacts before
 restating those remote GitHub surfaces as freshly verified current state.
@@ -47,20 +47,20 @@ restating those remote GitHub surfaces as freshly verified current state.
 ## Ready In Repo, But Not Published As Separate Distributions
 
 - Publish-ready MCP package `@uiq/mcp-server`
-- Planned CLI entry `prooflane-mcp`
+- Planned CLI entry `browserclickyard-mcp`
 - Planned package-launch shape `npx -y @uiq/mcp-server` /
   `pnpm dlx @uiq/mcp-server`
 - MCP integration docs and config snippets for Codex, Claude Code, OpenClaw,
   and other MCP-capable clients
-- Generic in-repo skill packet at `docs/skills/prooflane-mcp/`
+- Generic in-repo skill packet at `docs/skills/browserclickyard-mcp/`
 - Release-ready docs, CI governance, and security gate surfaces
 
 ## Companion Skill Host State
 
 - ClawHub listing for the companion skill packet is live at
-  `https://clawhub.ai/xiaojiou176/prooflane-mcp`
+  `https://clawhub.ai/xiaojiou176/browserclickyard-mcp`
 - OpenHands/extensions remains `review-pending` via PR `#161`
-- Those receipts apply to `docs/skills/prooflane-mcp/` only; they do **not**
+- Those receipts apply to `docs/skills/browserclickyard-mcp/` only; they do **not**
   prove npm/PyPI publication, main-product marketplace listing, or hosted SaaS
   availability
 
@@ -79,7 +79,7 @@ restating those remote GitHub surfaces as freshly verified current state.
 - The repo contains Dockerfiles and `docker-compose.yml`.
 - Those files describe a **from-source local stack**, not a published image
   distribution channel.
-- There is **no public Prooflane Docker image published today**.
+- There is **no public Browserclickyard Docker image published today**.
 - Docker is useful for local composition, but it is **not** the primary public
   distribution entry in this pass.
 
@@ -91,10 +91,10 @@ It is truthful to say that:
 - the product runs locally today
 - the governed run and MCP surfaces exist today
 - the publish-ready MCP artifact target is `@uiq/mcp-server`
-- the planned CLI name is `prooflane-mcp`
+- the planned CLI name is `browserclickyard-mcp`
 - MCP and skill packet surfaces are companion lanes, not the primary product
   identity
-- Prooflane is browser-adjacent, but it is not a browser-extension product
+- Browserclickyard is browser-adjacent, but it is not a browser-extension product
 
 It is **not** truthful to say that:
 

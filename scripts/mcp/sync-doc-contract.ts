@@ -37,7 +37,7 @@ const LEGACY_DESCRIPTION_FIELDS = [
 
 const CJK_PATTERN = /[\u3400-\u9fff]/u;
 const PRODUCT_VALUE_PROPOSITION =
-  "Prooflane is an AI-native WebUI stress lab for localhost-first browser experiments, with governed proof and agent-ready workflows when results need deeper review.";
+  "Browserclickyard is an AI-native WebUI stress lab for localhost-first browser experiments, with governed proof and agent-ready workflows when results need deeper review.";
 const CANONICAL_PACKAGE_TOOL_GROUPS = "advanced,analysis,proof";
 const PRODUCT_VALUE_PROPOSITION_PATTERN = new RegExp(
   PRODUCT_VALUE_PROPOSITION.replace(/[.*+?^${}()|[\]\\]/g, "\\$&").replace(/\s+/g, "[\\s>]+"),
@@ -273,8 +273,8 @@ function main(): void {
   const distributionPath = resolve(repoRoot, "DISTRIBUTION.md");
   const integrationsPath = resolve(repoRoot, "INTEGRATIONS.md");
   const entrypointsPath = resolve(repoRoot, "docs/reference/integration-entrypoints.md");
-  const skillPath = resolve(repoRoot, "docs/skills/prooflane-mcp/SKILL.md");
-  const manifestPath = resolve(repoRoot, "docs/skills/prooflane-mcp/manifest.yaml");
+  const skillPath = resolve(repoRoot, "docs/skills/browserclickyard-mcp/SKILL.md");
+  const manifestPath = resolve(repoRoot, "docs/skills/browserclickyard-mcp/manifest.yaml");
   const indexHtmlPath = resolve(repoRoot, "apps/command-center/index.html");
   const docPaths = [
     resolve(repoRoot, "docs/mcp.md"),
@@ -311,8 +311,8 @@ function main(): void {
   if (packageName !== "@uiq/mcp-server") {
     packageMetadataIssues.push("package.json name must stay @uiq/mcp-server");
   }
-  if (binName !== "prooflane-mcp") {
-    packageMetadataIssues.push("package.json bin name must stay prooflane-mcp");
+  if (binName !== "browserclickyard-mcp") {
+    packageMetadataIssues.push("package.json bin name must stay browserclickyard-mcp");
   }
   if (packageJson.publishConfig?.access !== "public") {
     packageMetadataIssues.push("package.json publishConfig.access must stay public");
@@ -450,7 +450,7 @@ function main(): void {
     {
       path: manifestPath,
       patterns: [
-        /^name:\s*prooflane-mcp$/m,
+        /^name:\s*browserclickyard-mcp$/m,
         /^protocol:\s*stdio$/m,
         packageName,
         "UIQ_MCP_API_BASE_URL",
@@ -460,7 +460,7 @@ function main(): void {
     },
     {
       path: indexHtmlPath,
-      patterns: [PRODUCT_VALUE_PROPOSITION, /<title>Prooflane \| AI-native WebUI stress lab<\/title>/],
+      patterns: [PRODUCT_VALUE_PROPOSITION, /<title>Browserclickyard \| AI-native WebUI stress lab<\/title>/],
     },
   ];
 

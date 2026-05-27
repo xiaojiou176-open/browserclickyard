@@ -182,7 +182,7 @@ test("@frontend-nonstub @nonstub command list api and ui rendering stay consiste
   }
 
   await gotoRootWithFrontendRetry(page);
-  await expect(page.getByRole("heading", { level: 1, name: "Prooflane" })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 1, name: "Browserclickyard" })).toBeVisible();
   const proxiedFrontendOrigin = new URL(page.url()).origin;
   await page.getByLabel("Target site URL (BASE_URL)").fill(proxiedFrontendOrigin);
   if (automationToken) {

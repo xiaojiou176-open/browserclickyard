@@ -86,7 +86,7 @@ behavior.
 
 ## Integration Substrate Contract
 
-Prooflane currently exposes three different integration substrate layers on
+Browserclickyard currently exposes three different integration substrate layers on
 purpose.
 
 | Layer | Current role | Contract level |

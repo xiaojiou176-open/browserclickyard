@@ -29,7 +29,7 @@ const LEGACY_DESCRIPTION_FIELDS = [
 
 const CJK_PATTERN = /[\u3400-\u9fff]/u;
 const PRODUCT_VALUE_PROPOSITION =
-  "Prooflane is an AI-native WebUI stress lab for localhost-first browser experiments, with governed proof and agent-ready workflows when results need deeper review.";
+  "Browserclickyard is an AI-native WebUI stress lab for localhost-first browser experiments, with governed proof and agent-ready workflows when results need deeper review.";
 const CANONICAL_PACKAGE_TOOL_GROUPS = "advanced,analysis,proof";
 const PRODUCT_VALUE_PROPOSITION_PATTERN = new RegExp(
   PRODUCT_VALUE_PROPOSITION.replace(/[.*+?^${}()|[\]\\]/g, "\\$&").replace(/\s+/g, "[\\s>]+"),
@@ -347,7 +347,7 @@ test("publish-ready package truth stays aligned across docs, skill scaffold, and
       ],
     },
     {
-      path: "docs/skills/prooflane-mcp/SKILL.md",
+      path: "docs/skills/browserclickyard-mcp/SKILL.md",
       patterns: [
         packageName,
         binName,
@@ -360,9 +360,9 @@ test("publish-ready package truth stays aligned across docs, skill scaffold, and
       ],
     },
     {
-      path: "docs/skills/prooflane-mcp/manifest.yaml",
+      path: "docs/skills/browserclickyard-mcp/manifest.yaml",
       patterns: [
-        /^name:\s*prooflane-mcp$/m,
+        /^name:\s*browserclickyard-mcp$/m,
         /^protocol:\s*stdio$/m,
         packageName,
         "UIQ_MCP_API_BASE_URL",
@@ -373,7 +373,7 @@ test("publish-ready package truth stays aligned across docs, skill scaffold, and
   ];
 
   assert.equal(packageName, "@uiq/mcp-server");
-  assert.equal(binName, "prooflane-mcp");
+  assert.equal(binName, "browserclickyard-mcp");
   assert.equal(packageJson.publishConfig?.access, "public");
   assert.deepEqual(packageJson.files, ["dist", "README.md", ".env.example"]);
   assert.equal(packageJson.engines?.node, ">=20");
@@ -410,7 +410,7 @@ test("front door value proposition stays aligned with command-center metadata", 
   );
   assert.match(
     indexHtml,
-    /<title>Prooflane \| AI-native WebUI stress lab<\/title>/,
+    /<title>Browserclickyard \| AI-native WebUI stress lab<\/title>/,
     "apps/command-center/index.html title must stay product-first and aligned",
   );
 });

@@ -17,7 +17,7 @@ describe("web app routes and UI behavior", () => {
     renderApp("/");
 
     expect(screen.getByTestId("app-shell")).toBeInTheDocument();
-    expect(screen.getByTestId("app-title")).toHaveTextContent("Prooflane Demo");
+    expect(screen.getByTestId("app-title")).toHaveTextContent("Browserclickyard Demo");
     expect(screen.getByRole("navigation", { name: "Main navigation" })).toBeInTheDocument();
     expect(screen.getByTestId("nav-home")).toHaveAttribute("href", "/");
     expect(screen.getByTestId("nav-about")).toHaveAttribute("href", "/about");
