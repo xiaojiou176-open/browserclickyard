@@ -1,0 +1,40 @@
+name: Runtime GC Weekly
+
+on:
+  schedule:
+    - cron: "0 9 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: runtime-gc-weekly-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  runtime-gc:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@bab023d7a2c8eef4351fc96992dc6d83c9561bb2
+        with:
+          clean: true
+          persist-credentials: false
+      - name: Validate runtime-gc scripts syntax
+        run: bash -n scripts/runtime-gc.sh scripts/tests/runtime-gc-smoke.sh
+      - name: Execute runtime-gc (all scopes)
+        run: |
+          mkdir -p .runtime-cache/metrics
+          ./scripts/runtime-gc.sh --scope all --retention-days 7 --keep-runs 50 --dir-size-threshold-mb 256 --max-delete-per-run 1200 --max-log-size-mb 64 --log-tail-lines 4000 --fail-on-error --report-out .runtime-cache/metrics/runtime-gc-output.json >/dev/null
+      - name: Write space audit report
+        run: node scripts/ci/write-space-audit-report.mjs
+      - name: Upload runtime-gc state artifact
+        if: ${{ always() }}
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
+        with:
+          name: runtime-gc-state
+          path: |
+            .runtime-cache/metrics/runtime-gc-state.json
+            .runtime-cache/metrics/runtime-gc-output.json
+            .runtime-cache/artifacts/ci/space-audit-report.json
+          if-no-files-found: error

@@ -1,0 +1,306 @@
+name: Nightly Gate
+
+on:
+  schedule:
+    - cron: "0 9 * * *"
+  workflow_dispatch:
+    inputs:
+      run_manual_observability:
+        description: Run optional Gemini, live, mutation, and deep nightly checks
+        required: false
+        default: false
+        type: boolean
+
+permissions:
+  contents: read
+  security-events: read
+
+concurrency:
+  group: nightly-gate-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  UIQ_HEARTBEAT_INTERVAL_SEC: "60"
+
+jobs:
+  nightly-gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@bab023d7a2c8eef4351fc96992dc6d83c9561bb2
+        with:
+          clean: true
+          persist-credentials: false
+      - name: Activate pnpm from root packageManager
+        run: |
+          set -euo pipefail
+          corepack enable
+          corepack prepare "$(node -p "require('./package.json').packageManager")" --activate
+      - name: Containerized nightly deterministic core
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GITHUB_TOKEN: ${{ github.token }}
+          UIQ_CONTAINER_GATE_SERVICE_OVERRIDE: ci-browser
+          UIQ_CONTAINER_GATE_BUILD_OVERRIDE: ci-browser
+          UIQ_CONTAINER_GATE_COMMAND_OVERRIDE: |
+            bash scripts/ci/run-nightly-deterministic-core.sh
+        run: bash scripts/ci/run-gate-in-container.sh exec
+      - name: Upload test truthiness gate artifacts (always)
+        if: ${{ always() }}
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
+        with:
+          name: uiq-nightly-test-truth-gate
+          path: |
+            .runtime-cache/artifacts/ci/uiq-test-truth-gate-nightly.json
+            .runtime-cache/artifacts/ci/uiq-test-truth-gate-nightly.md
+          retention-days: 14
+          if-no-files-found: warn
+      - name: Build failure bundle
+        if: ${{ failure() || cancelled() }}
+        run: bash scripts/ci/make-failure-bundle.sh || true
+      - name: Upload failure bundle artifact
+        if: ${{ failure() || cancelled() }}
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
+        with:
+          name: uiq-nightly-failure-bundles
+          path: |
+            .runtime-cache/artifacts/ci/failure-bundles/
+          retention-days: 14
+          if-no-files-found: warn
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
+        with:
+          name: uiq-nightly-run
+          path: |
+            .runtime-cache/artifacts/ci/
+            .runtime-cache/artifacts/perf/
+            .runtime-cache/artifacts/api/
+          retention-days: 14
+          if-no-files-found: warn
+
+  nightly-manual-observability:
+    if: ${{ github.event_name == 'workflow_dispatch' && inputs.run_manual_observability }}
+    needs: nightly-gate
+    runs-on: ubuntu-latest
+    environment: owner-approved-sensitive
+    permissions:
+      contents: read
+      issues: write
+    steps:
+      - uses: actions/checkout@bab023d7a2c8eef4351fc96992dc6d83c9561bb2
+        with:
+          clean: true
+          persist-credentials: false
+      - name: Activate pnpm from root packageManager
+        run: |
+          set -euo pipefail
+          corepack enable
+          corepack prepare "$(node -p "require('./package.json').packageManager")" --activate
+      - name: Gemini-only policy report (manual nightly)
+        run: bash scripts/ci/gemini-only-policy.sh --report
+      - name: Require Gemini secret (nightly manual observability)
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          set -euo pipefail
+          if [[ -z "${GEMINI_API_KEY:-}" ]]; then
+            echo "::error::GEMINI_API_KEY is required for nightly manual observability."
+            exit 1
+          fi
+      - name: Provider readiness gate (manual, secret-backed)
+        env:
+          VIDEO_ANALYZER_PROVIDER: "gemini"
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: node scripts/ai/check-provider-readiness.mjs --strict
+      - name: MCP flake stress gate (manual nightly)
+        run: |
+          PARALLEL="${UIQ_MCP_STRESS_PARALLEL:-4}"
+          export UIQ_MCP_STRESS_TIME_BUDGET_MS="${UIQ_MCP_STRESS_TIME_BUDGET_MS:-600000}"
+          node scripts/ci/uiq-mcp-stress-gate.mjs --profile nightly --iterations 100 --parallel "$PARALLEL" --strict true
+      - name: Upload MCP stress gate artifacts (always)
+        if: ${{ always() }}
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
+        with:
+          name: uiq-nightly-mcp-stress-gate
+          path: |
+            .runtime-cache/artifacts/ci/uiq-mcp-stress-gate-nightly.json
+            .runtime-cache/artifacts/ci/uiq-mcp-stress-gate-nightly.md
+          retention-days: 14
+          if-no-files-found: warn
+      - name: frontend-e2e-smoke
+        run: pnpm test:e2e:frontend:smoke
+      - name: frontend-e2e-full-matrix
+        run: pnpm test:e2e:frontend:matrix:nightly
+      - name: Live external web verification (manual nightly)
+        env:
+          UIQ_LIVE_EXTERNAL_ENABLED: "true"
+          UIQ_LIVE_EXTERNAL_URL: ${{ vars.UIQ_LIVE_EXTERNAL_URL || 'https://example.com' }}
+        run: pnpm test:live:web
+      - name: Live LLM preflight (manual nightly)
+        env:
+          UIQ_LIVE_LLM_ENABLED: "true"
+        run: pnpm --dir tooling/automation run live:preflight:key
+      - name: Live LLM verification (manual nightly)
+        env:
+          UIQ_LIVE_LLM_ENABLED: "true"
+        run: pnpm test:live:llm
+      - name: Mutation gate (manual nightly)
+        run: pnpm mutation:effective
+      - name: Nightly real backend MCP verification (manual)
+        env:
+          UIQ_ENABLE_REAL_BACKEND_TESTS: "true"
+        run: pnpm test:mcp-server:real
+      - name: Trust active pnpm bin directory for orchestrator runtime guard
+        shell: bash
+        run: |
+          set -euo pipefail
+          pnpm_bin="$(command -v pnpm)"
+          if [[ -n "${pnpm_bin}" ]]; then
+            pnpm_dir="$(dirname "${pnpm_bin}")"
+            current="${UIQ_TRUSTED_BIN_DIRS:-}"
+            if [[ -z "${current}" ]]; then
+              echo "UIQ_TRUSTED_BIN_DIRS=${pnpm_dir}" >> "$GITHUB_ENV"
+            elif [[ ",${current}," != *",${pnpm_dir},"* ]]; then
+              echo "UIQ_TRUSTED_BIN_DIRS=${current},${pnpm_dir}" >> "$GITHUB_ENV"
+            fi
+          fi
+      - name: Run Nightly Profile
+        id: midscene_primary
+        env:
+          UIQ_GEMINI_PARALLEL_CONSISTENCY: "6"
+        run: |
+          set -euo pipefail
+          run_log=".runtime-cache/logs/ci/nightly-run.log"
+          run_id_file=".runtime-cache/artifacts/ci/nightly-run-id.txt"
+          mkdir -p .runtime-cache/logs/ci .runtime-cache/artifacts/ci
+          set -o pipefail
+          pnpm uiq run --profile nightly --target web.ci | tee "$run_log"
+          run_id="$(grep -E '^runId=' "$run_log" | tail -n1 | cut -d'=' -f2)"
+          if [[ -z "$run_id" ]]; then
+            echo "::error::Nightly profile run did not emit runId="
+            exit 1
+          fi
+          printf '%s\n' "$run_id" > "$run_id_file"
+      - name: Mark nightly fallback path (default)
+        id: midscene_fallback
+        run: echo "nightly fallback path not executed in this workflow run"
+      - name: Write nightly fallback status evidence
+        env:
+          PRIMARY_OUTCOME: ${{ steps.midscene_primary.outcome }}
+          FALLBACK_OUTCOME: ${{ steps.midscene_fallback.outcome }}
+          STRICT_FAILURE_ENFORCED: ${{ steps.midscene_primary.outcome != 'success' }}
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          pointer = Path('.runtime-cache/automation/latest-session.json')
+          session_dir = ""
+          generated_at = ""
+          if pointer.exists():
+            try:
+              payload = json.loads(pointer.read_text(encoding='utf-8'))
+              if isinstance(payload, dict):
+                session_dir = str(payload.get('sessionDir') or "")
+                generated_at = str(payload.get('generatedAt') or "")
+            except Exception:
+              pass
+          Path('.runtime-cache/automation').mkdir(parents=True, exist_ok=True)
+          Path('.runtime-cache/automation/nightly-fallback-hints.json').write_text(
+            json.dumps({"session_dir": session_dir, "generated_at": generated_at}, ensure_ascii=False, indent=2),
+            encoding='utf-8',
+          )
+          PY
+          python - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+
+          status = {
+            "primary_outcome": os.environ.get("PRIMARY_OUTCOME", "unknown"),
+            "fallback_outcome": os.environ.get("FALLBACK_OUTCOME", "skipped"),
+            "strict_failure_enforced": os.environ.get("STRICT_FAILURE_ENFORCED", "false").lower() == "true",
+            "session_dir": os.environ.get("SESSION_DIR", ""),
+            "generated_at": os.environ.get("GENERATED_AT", ""),
+          }
+          Path('.runtime-cache/automation').mkdir(parents=True, exist_ok=True)
+          Path('.runtime-cache/automation/nightly-fallback-status.json').write_text(
+            json.dumps(status, ensure_ascii=False, indent=2),
+            encoding='utf-8',
+          )
+          PY
+      - name: Verify run evidence (hard gate)
+        run: |
+          set -euo pipefail
+          run_id="$(cat .runtime-cache/artifacts/ci/nightly-run-id.txt)"
+          node scripts/ci/verify-run-evidence.mjs --profile nightly --run-id "$run_id"
+      - name: Preflight Gemini report artifact (nightly, fail-fast)
+        run: |
+          set -euo pipefail
+          RUN_ID_FILE=".runtime-cache/artifacts/ci/nightly-run-id.txt"
+          if [[ ! -f "$RUN_ID_FILE" ]]; then
+            echo "::error::Gemini preflight failed: run-id file missing: $RUN_ID_FILE"
+            exit 1
+          fi
+          RUN_ID="$(cat "$RUN_ID_FILE")"
+          if [[ -z "$RUN_ID" ]]; then
+            echo "::error::Gemini preflight failed: empty run id"
+            exit 1
+          fi
+          REPORT_PATH=".runtime-cache/artifacts/runs/${RUN_ID}/reports/ui-ux-gemini-report.json"
+          if [[ ! -f "$REPORT_PATH" ]]; then
+            echo "::error::Gemini preflight failed: report missing: $REPORT_PATH"
+            exit 1
+          fi
+          node - "$REPORT_PATH" <<'JS'
+          const fs = require("fs");
+          const p = process.argv[2];
+          JSON.parse(fs.readFileSync(p, "utf8"));
+          console.log("[gemini-preflight] readable report: " + p);
+          JS
+      - name: Gemini accuracy gate (nightly strict via profile thresholds)
+        run: node scripts/ci/uiq-gemini-accuracy-gate.mjs --profile nightly --strict true
+      - name: Gemini concurrency gate (nightly strict via profile thresholds)
+        run: node scripts/ci/uiq-gemini-concurrency-gate.mjs --profile nightly --strict true
+      - name: Flake budget gate (strict for nightly)
+        run: node scripts/ci/uiq-flake-budget.mjs --profile nightly --strict true --dynamic-baseline false
+      - name: SLA + failure cluster summary (nightly)
+        run: node scripts/ci/uiq-sla-and-clusters.mjs --profile nightly
+      - name: Failure ticketing clusters (nightly)
+        env:
+          UIQ_AUTO_TICKETING: ${{ env.UIQ_AUTO_TICKETING || vars.UIQ_AUTO_TICKETING || 'false' }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          EMIT="${UIQ_AUTO_TICKETING:-false}"
+          node scripts/ci/uiq-failure-ticketing.mjs \
+            --runs-dir .runtime-cache/artifacts/runs \
+            --out-dir .runtime-cache/artifacts/ci \
+            --top-n 20 \
+            --sample-limit 5 \
+            --emit-gh-issues "$EMIT" \
+            --emit-pr-comment false \
+            --repo "${GITHUB_REPOSITORY}"
+      - name: AI review (nightly, manual high+)
+        run: bash scripts/lib/node-bin.sh tsx scripts/ci/uiq-ai-review.mjs --profile nightly --strict true --severity-threshold high --max-artifacts 40 --emit-issue false --emit-pr-comment false
+      - name: Upload AI review artifacts (always)
+        if: ${{ always() }}
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
+        with:
+          name: uiq-nightly-ai-review
+          path: |
+            .runtime-cache/artifacts/ci/uiq-ai-review-nightly.json
+            .runtime-cache/artifacts/ci/uiq-ai-review-nightly.md
+          retention-days: 14
+          if-no-files-found: warn
+      - name: Cross-target benchmark report (nightly)
+        run: node scripts/ci/uiq-cross-target-benchmark.mjs --runs-dir .runtime-cache/artifacts/runs --out-dir .runtime-cache/artifacts/ci --profile nightly --lookback-days 14 --limit 120 --targets web,tauri,swift
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
+        with:
+          name: uiq-nightly-manual-observability
+          path: |
+            .runtime-cache/artifacts/runs/
+            .runtime-cache/artifacts/ci/
+            .runtime-cache/artifacts/perf/
+            .runtime-cache/artifacts/api/
+          retention-days: 14
+          if-no-files-found: warn

@@ -1,0 +1,73 @@
+name: Release Candidate Gate
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_candidate_tag:
+        description: "Release candidate tag to evaluate (defaults to latest tag)"
+        required: false
+        type: string
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-candidate-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  UIQ_HEARTBEAT_INTERVAL_SEC: "60"
+
+jobs:
+  release-gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@bab023d7a2c8eef4351fc96992dc6d83c9561bb2
+        with:
+          clean: true
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Activate pnpm from root packageManager
+        run: |
+          set -euo pipefail
+          corepack enable
+          corepack prepare "$(node -p "require('./package.json').packageManager")" --activate
+      - name: Generate critical non-stub report (release)
+        env:
+          UIQ_CONTAINER_GATE_SERVICE_OVERRIDE: ci-browser
+          UIQ_CONTAINER_GATE_BUILD_OVERRIDE: ci-browser
+          UIQ_CONTAINER_GATE_COMMAND_OVERRIDE: |
+            mkdir -p .runtime-cache/artifacts/ci
+            UIQ_E2E_ARTIFACT_POLICY=failure-only ./scripts/run-e2e.sh apps/command-center/tests/e2e/non-stub-core-flow.spec.ts --reporter=json > .runtime-cache/artifacts/ci/nonstub-critical-report.json
+        run: bash scripts/ci/run-gate-in-container.sh exec
+      - name: Nightly/release authenticity gate (release thresholds)
+        env:
+          UIQ_CONTAINER_GATE_SERVICE_OVERRIDE: ci-browser
+          UIQ_CONTAINER_GATE_BUILD_OVERRIDE: ci-browser
+          UIQ_CONTAINER_GATE_COMMAND_OVERRIDE: |
+            node scripts/ci/nightly-release-e2e-gate.mjs --mode=release --nonstub-report=.runtime-cache/artifacts/ci/nonstub-critical-report.json
+        run: bash scripts/ci/run-gate-in-container.sh exec
+      - name: Run release gate
+        env:
+          RELEASE_CANDIDATE_INPUT: ${{ inputs.release_candidate_tag }}
+          UIQ_CONTAINER_GATE_SERVICE_OVERRIDE: ci-browser
+          UIQ_CONTAINER_GATE_BUILD_OVERRIDE: ci-browser
+          UIQ_CONTAINER_GATE_COMMAND_OVERRIDE: |
+            pnpm gate:github:security-alerts
+            pnpm gate:sensitive-surfaces
+            pnpm gate:secret-leak
+            pnpm gate:iac:consistency
+            if [ -n "${RELEASE_CANDIDATE_INPUT:-}" ]; then
+              RELEASE_CANDIDATE_TAG="${RELEASE_CANDIDATE_INPUT}" pnpm release:gate
+            else
+              pnpm release:gate
+            fi
+        run: bash scripts/ci/run-gate-in-container.sh exec
+      - name: Upload release gate report
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
+        with:
+          name: release-gate-report
+          path: .runtime-cache/release-gate/

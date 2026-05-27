@@ -1,0 +1,30 @@
+services:
+  devcontainer:
+    build:
+      context: ..
+      dockerfile: docker/ci/browser.Dockerfile
+    image: uiq-ci-browser:local
+    working_dir: /workspace
+    init: true
+    command: ["sleep", "infinity"]
+    env_file:
+      - ../.env.example
+    environment:
+      RUNNER_TEMP: /tmp/uiq-runner
+      COREPACK_HOME: /tmp/uiq-runner/uiq-corepack
+      PNPM_STORE_PATH: /tmp/uiq-runner/uiq-pnpm-store
+      UV_CACHE_DIR: /tmp/uiq-runner/uiq-python-cache/uv
+      PIP_CACHE_DIR: /tmp/uiq-runner/uiq-python-cache/pip
+      PLAYWRIGHT_BROWSERS_PATH: /tmp/uiq-runner/uiq-ms-playwright/browser
+      UIQ_RUNTIME_CACHE_ROOT: /workspace/.runtime-cache
+      UIQ_PYTHON_ENV_ROOT: /tmp/uiq-runner/uiq-python-env
+    volumes:
+      - type: bind
+        source: ..
+        target: /workspace
+      - uiq-ci-node-modules:/workspace/node_modules
+    tmpfs:
+      - /tmp:exec,mode=1777
+
+volumes:
+  uiq-ci-node-modules:

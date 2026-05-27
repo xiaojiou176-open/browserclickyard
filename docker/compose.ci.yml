@@ -1,0 +1,55 @@
+services:
+  ci-gate:
+    build:
+      context: ..
+      dockerfile: docker/ci/base.Dockerfile
+    image: ${UIQ_CI_GATE_IMAGE_REF:-uiq-ci-base:local}
+    working_dir: /workspace
+    init: true
+    command: ["bash"]
+    env_file:
+      - ../.env.example
+    environment:
+      RUNNER_TEMP: /tmp/uiq-runner
+      COREPACK_HOME: /tmp/uiq-runner/uiq-corepack
+      PNPM_STORE_PATH: /tmp/uiq-runner/uiq-pnpm-store
+      UV_CACHE_DIR: /tmp/uiq-runner/uiq-python-cache/uv
+      UV_HTTP_TIMEOUT: "120"
+      PIP_CACHE_DIR: /tmp/uiq-runner/uiq-python-cache/pip
+      PLAYWRIGHT_BROWSERS_PATH: /tmp/uiq-runner/uiq-ms-playwright/root
+      UIQ_RUNTIME_CACHE_ROOT: /workspace/.runtime-cache
+    volumes:
+      - type: bind
+        source: ..
+        target: /workspace
+    tmpfs:
+      - /tmp:exec,mode=1777
+
+  ci-browser:
+    build:
+      context: ..
+      dockerfile: docker/ci/browser.Dockerfile
+    image: ${UIQ_CI_BROWSER_IMAGE_REF:-uiq-ci-browser:local}
+    working_dir: /workspace
+    init: true
+    command: ["bash"]
+    env_file:
+      - ../.env.example
+    environment:
+      RUNNER_TEMP: /tmp/uiq-runner
+      COREPACK_HOME: /tmp/uiq-runner/uiq-corepack
+      PNPM_STORE_PATH: /tmp/uiq-runner/uiq-pnpm-store
+      UV_CACHE_DIR: /tmp/uiq-runner/uiq-python-cache/uv
+      UV_HTTP_TIMEOUT: "120"
+      PIP_CACHE_DIR: /tmp/uiq-runner/uiq-python-cache/pip
+      PLAYWRIGHT_BROWSERS_PATH: /ms-playwright
+      UIQ_RUNTIME_CACHE_ROOT: /workspace/.runtime-cache
+    volumes:
+      - type: bind
+        source: ..
+        target: /workspace
+    tmpfs:
+      - /tmp:exec,mode=1777
+
+volumes:
+  uiq-ci-node-modules:

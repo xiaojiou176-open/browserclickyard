@@ -1,0 +1,67 @@
+name: Failure Bundle
+description: Build and upload CI failure bundle artifacts.
+inputs:
+  script-path:
+    description: Script path that builds failure bundle.
+    required: false
+    default: scripts/ci/make-failure-bundle.sh
+  bundle-path:
+    description: Directory containing generated bundle files.
+    required: false
+    default: .runtime-cache/artifacts/ci/failure-bundles/
+  if-no-files-found:
+    description: Upload artifact behavior when no files are found.
+    required: false
+    default: warn
+  retention-days:
+    description: Optional artifact retention days.
+    required: false
+    default: ""
+  artifact-mode:
+    description: Failure bundle publication mode (`private-only` or `public-safe`).
+    required: false
+    default: private-only
+runs:
+  using: composite
+  steps:
+    - name: Build failure bundle
+      shell: bash
+      env:
+        INPUT_ARTIFACT_MODE: ${{ inputs.artifact-mode }}
+        INPUT_SCRIPT_PATH: ${{ inputs.script-path }}
+      run: |
+        set -euo pipefail
+        cd "$GITHUB_WORKSPACE"
+        mkdir -p .runtime-cache/artifacts/ci/failure-bundles
+        script_path="$INPUT_SCRIPT_PATH"
+        artifact_mode="$INPUT_ARTIFACT_MODE"
+        if [[ -f "$script_path" ]]; then
+          bash "$script_path" || true
+        else
+          {
+            echo "missing $script_path"
+            echo "job=${{ github.job }}"
+            echo "run_id=${{ github.run_id }}"
+            echo "run_attempt=${{ github.run_attempt }}"
+          } > .runtime-cache/artifacts/ci/failure-bundles/MISSING_SCRIPT.txt
+        fi
+        cat > .runtime-cache/artifacts/ci/failure-bundles/BUNDLE_MODE.txt <<EOF
+        mode=$artifact_mode
+        policy=public-artifact-policy
+        default_private_only=true
+        EOF
+    - name: Upload failure bundle artifact
+      if: ${{ inputs.retention-days == '' }}
+      uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+      with:
+        name: failure-${{ github.job }}-${{ github.run_id }}-${{ github.run_attempt }}
+        path: ${{ inputs.bundle-path }}
+        if-no-files-found: ${{ inputs.if-no-files-found }}
+    - name: Upload failure bundle artifact (with retention)
+      if: ${{ inputs.retention-days != '' }}
+      uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+      with:
+        name: failure-${{ github.job }}-${{ github.run_id }}-${{ github.run_attempt }}
+        path: ${{ inputs.bundle-path }}
+        if-no-files-found: ${{ inputs.if-no-files-found }}
+        retention-days: ${{ inputs.retention-days }}

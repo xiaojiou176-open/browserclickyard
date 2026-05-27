@@ -1,0 +1,77 @@
+name: Setup Python Smart
+description: Prepare Python shims plus runner.temp-backed uv and pip caches for hosted CI workflows.
+inputs:
+  python-version:
+    description: Requested python version for hosted runners.
+    required: false
+    default: "3.12"
+  uv-lockfile-path:
+    description: Path to uv lockfile used in cache key.
+    required: false
+    default: uv.lock
+  enable-uv-cache:
+    description: Enable uv/pip cache restore.
+    required: false
+    default: "true"
+  restore-cache:
+    description: Whether to restore cache archives for uv/pip.
+    required: false
+    default: "true"
+outputs:
+  python-shim-dir:
+    description: Directory containing generated python/pip shims.
+    value: ${{ steps.prepare-python-shims.outputs.python_shim_dir }}
+  uv-cache-dir:
+    description: Resolved uv cache directory.
+    value: ${{ steps.prepare-cache-paths.outputs.uv_cache_dir }}
+  pip-cache-dir:
+    description: Resolved pip cache directory.
+    value: ${{ steps.prepare-cache-paths.outputs.pip_cache_dir }}
+runs:
+  using: composite
+  steps:
+    - name: Prepare Python shims
+      id: prepare-python-shims
+      shell: bash
+      run: |
+        set -euo pipefail
+        if ! command -v python3 >/dev/null 2>&1; then
+          echo "::error::python3 is required on the CI runner"
+          exit 1
+        fi
+
+        mkdir -p "$RUNNER_TEMP/bin"
+        cat >"$RUNNER_TEMP/bin/python" <<'EOF'
+        #!/usr/bin/env bash
+        exec python3 "$@"
+        EOF
+        cat >"$RUNNER_TEMP/bin/pip" <<'EOF'
+        #!/usr/bin/env bash
+        exec python3 -m pip "$@"
+        EOF
+        chmod +x "$RUNNER_TEMP/bin/python" "$RUNNER_TEMP/bin/pip"
+        echo "python_shim_dir=$RUNNER_TEMP/bin" >> "$GITHUB_OUTPUT"
+        python3 --version
+    - name: Prepare uv and pip cache paths
+      id: prepare-cache-paths
+      shell: bash
+      run: |
+        set -euo pipefail
+        uv_cache="${RUNNER_TEMP}/uiq-python-cache/uv"
+        pip_cache="${RUNNER_TEMP}/uiq-python-cache/pip"
+        mkdir -p "$uv_cache" "$pip_cache"
+        {
+          echo "uv_cache_dir=$uv_cache"
+          echo "pip_cache_dir=$pip_cache"
+        } >> "$GITHUB_OUTPUT"
+    - name: Restore uv and pip cache
+      if: ${{ inputs.enable-uv-cache == 'true' && inputs.restore-cache == 'true' }}
+      uses: actions/cache@1bd1e32a3bdc45362d1e726936510720a7c30a57 # v4.2.0
+      with:
+        path: |
+          ${{ steps.prepare-cache-paths.outputs.uv_cache_dir }}
+          ${{ steps.prepare-cache-paths.outputs.pip_cache_dir }}
+        key: ${{ runner.os }}-${{ runner.arch }}-uv-${{ inputs.python-version }}-${{ hashFiles(inputs.uv-lockfile-path) }}
+        restore-keys: |
+          ${{ runner.os }}-${{ runner.arch }}-uv-${{ inputs.python-version }}-
+          ${{ runner.os }}-${{ runner.arch }}-uv-

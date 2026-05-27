@@ -1,0 +1,37 @@
+title = "UIQ Local Security Baseline"
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Ignore generated/test/sample artifacts, detect-secrets baselines, and common non-secret placeholders"
+paths = [
+  '''(^|/)\.agent/''',
+  '''(^|/)\.agents/''',
+  '''(^|/)\.codex/''',
+  '''(^|/)\.claude/''',
+  '''(^|/)\.serena/''',
+  '''(^|/)\.opencode/''',
+  '''(^|/)\.runtime-cache/''',
+  '''(^|/)artifacts/''',
+  '''(^|/)coverage/''',
+  '''(^|/)test-results/''',
+  '''(^|/)node_modules/''',
+  '''(^|/)tests?/fixtures?/''',
+  '''(^|/)tests?/samples?/''',
+  '''(^|/)tests?/examples?/''',
+  '''(^|/)docs/examples?/''',
+  '''(^|/)automation/package\.json$''',
+  '''(^|/)apps/web/storybook-static/assets/entry-preview-docs-BPwSLUTx\.js$''',
+  '''(^|/)tooling/automation/package\.json$''',
+  '''(^|/)\.lighthouseci/''',
+  '''(^|/)\.secrets\.baseline$''',
+  '''(^|/)secrets\.baseline$''',
+]
+regexes = [
+  '''(?i)\b(example|sample|dummy|placeholder|changeme|notasecret|test[-_]?token|fake[-_]?key)\b''',
+  '''live:preflight:key''',
+  '''AKIAIOSFODNN7EXAMPLE''',
+  '''ghp_example''',
+  '''sk-test''',
+]

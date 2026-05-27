@@ -1,0 +1,122 @@
+# Runtime cache
+.runtime-cache/
+**/.runtime-cache/
+
+# Python
+__pycache__/
+*.pyc
+.coverage
+.coverage.*
+coverage.xml
+htmlcov/
+.mypy_cache/
+.tox/
+.nox/
+.eggs/
+*.egg-info/
+pip-wheel-metadata/
+.venv/
+.pytest_cache/
+.ruff_cache/
+.hypothesis/
+.mutmut-cache/
+
+# Node / Frontend
+node_modules
+**/node_modules
+*.tsbuildinfo
+apps/command-center/dist/
+tests/web-harness/dist/
+tests/web-harness/storybook-static/
+tooling/automation/tests/generated/
+.vite/
+**/.vite/
+.turbo/
+.pnpm-store/
+.parcel-cache/
+.next/
+.nuxt/
+.svelte-kit/
+.eslintcache
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# OS / IDE
+.DS_Store
+.vscode/
+.idea/
+
+# Local tooling
+.agent/
+.agents/
+.codex/
+.codex/repo-map.tree
+.lighthouseci/
+.claude/
+.serena/
+.opencode/
+.cursorrules
+workspace/
+**/.agent/
+**/.agents/
+**/.codex/
+**/.claude/
+**/.serena/
+
+# Test / QA artifacts
+coverage/
+**/coverage/**
+mutants/
+**/mutants/**
+test-results/
+**/test-results/**
+playwright-report/
+**/playwright-report/**
+playwright/.cache/
+**/lcov-report/**
+profiles/tmp-profile-*.yaml
+
+# Logs
+*.log
+**/*.log
+logs/
+log/
+**/logs/
+**/log/
+
+# HAR capture safety: ignore by default, only allow curated sanitized fixtures
+*.har
+*.har.json
+!tooling/automation/tests/fixtures/**/*.har.json
+
+# ENV governance artifacts
+artifacts/config/env-governance-report.json
+artifacts/config/env-reduction-report.json
+artifacts/config/env-reduction-report.md
+
+# Generic caches / build outputs
+cache/
+**/cache/
+.cache/
+**/.cache/
+docs-gate/
+lint-all/
+container-gates/
+test-output/
+automation-runtime/
+services/configs/runtime/
+build/
+**/build/
+dist/
+**/dist/
+tmp/
+apps/command-center/tmp/
+services/mcp-server/tmp/
+tooling/automation/tmp/

@@ -1,0 +1,78 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "browserclickyard"
+version = "0.1.0"
+description = "Automation scaffold with FastAPI backend and browser/API testing support"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+  "fastapi>=0.115.0",
+  "pydantic-settings>=2.7.0",
+  "redis>=5.2.1",
+  "sqlalchemy>=2.0.36",
+  "pg8000>=1.31.2",
+  "uvicorn[standard]>=0.34.0"
+]
+
+[project.optional-dependencies]
+dev = [
+  "alembic>=1.16.0",
+  "bandit>=1.7.10",
+  "google-genai==1.42.0",
+  "httpx>=0.28.0",
+  "mutmut>=3.3.0",
+  "pip-audit>=2.7.3",
+  "pygments>=2.20.0",
+  "pytest>=8.3.0",
+  "pytest-cov>=5.0.0",
+  "pytest-xdist>=3.6.1",
+  "requests>=2.33.0",
+  "ruff>=0.9.0",
+  "schemathesis>=3.36.4"
+]
+
+[tool.pytest.ini_options]
+testpaths = ["services/api/tests"]
+addopts = "-n auto --dist=loadscope --cov=app --cov-branch --cov-report=term-missing --cov-report=xml:.runtime-cache/coverage/backend-coverage.xml --cov-fail-under=95"
+cache_dir = ".runtime-cache/pytest-cache"
+
+[tool.coverage.run]
+branch = true
+source = ["app"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+exclude = ["mutants"]
+force-exclude = true
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["app*"]
+exclude = ["apps/command-center*", "tooling/automation*"]
+
+[tool.mutmut]
+also_copy = [
+  "services/api/app",
+  "services/api/tests",
+  "configs/runtime",
+]
+paths_to_mutate = [
+  "services/api/app/api/integrations_vonage.py",
+  "services/api/app/api/register.py",
+  "services/api/app/services/register_service.py"
+]
+pytest_add_cli_args = ["-n", "0", "-o", "addopts="]
+pytest_add_cli_args_test_selection = [
+  "services/api/tests/test_vonage_integration_api.py",
+  "services/api/tests/test_register.py",
+  "services/api/tests/test_register_service_mutation.py"
+]
+
+[dependency-groups]
+dev = [
+    "mypy>=1.19.1",
+]

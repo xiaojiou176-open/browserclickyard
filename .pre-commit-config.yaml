@@ -1,0 +1,389 @@
+minimum_pre_commit_version: "3.8.0"
+fail_fast: true
+default_language_version:
+  python: python3.12
+default_install_hook_types: [pre-commit, commit-msg, pre-push]
+
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: check-case-conflict
+      - id: check-merge-conflict
+      - id: check-yaml
+        args: [--unsafe]
+      - id: check-json
+      - id: check-toml
+      - id: check-added-large-files
+        args: [--maxkb=1024]
+      - id: end-of-file-fixer
+        exclude: ^tests/web-harness/storybook-static/
+      - id: mixed-line-ending
+        args: [--fix=lf]
+        exclude: ^tests/web-harness/storybook-static/
+      - id: trailing-whitespace
+        exclude: ^tests/web-harness/storybook-static/
+
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.15.2
+    hooks:
+      - id: ruff
+        exclude: ^mutants/
+      - id: ruff-format
+        exclude: ^mutants/
+
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.19.1
+    hooks:
+      - id: mypy
+        files: ^services/api/
+        stages: [pre-push]
+        args: [--ignore-missing-imports]
+
+  - repo: https://github.com/biomejs/pre-commit
+    rev: v2.4.4
+    hooks:
+      - id: biome-check
+        stages: [pre-push]
+        files: ^(apps|frontend|packages|automation|tests|scripts)/.*\.(js|jsx|ts|tsx|json|jsonc|mjs|cjs|css)$
+        exclude: ^tests/web-harness/(src/api-gen/|msw/handlers\.ts$)
+
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.30.0
+    hooks:
+      - id: gitleaks
+        args: [--config=.gitleaks.toml, --redact]
+
+  - repo: https://github.com/Yelp/detect-secrets
+    rev: v1.5.0
+    hooks:
+      - id: detect-secrets
+        args: [--baseline, .secrets.baseline]
+        exclude: ^(\.secrets\.baseline|\.pre-commit-config\.yaml|pnpm-lock\.yaml|apps/command-center/pnpm-lock\.yaml|uv\.lock|tests/web-harness/storybook-static/|tooling/automation/scripts/midscene-driver\.test\.ts$)
+
+  - repo: https://github.com/commitizen-tools/commitizen
+    rev: v4.13.9
+    hooks:
+      - id: commitizen
+        stages: [commit-msg]
+
+  - repo: https://github.com/crate-ci/typos
+    rev: v1.39.1
+    hooks:
+      - id: typos
+        args: [--write-changes]
+        files: ^(services/api/|apps/command-center/|tests/web-harness/src/|tests/|scripts/|docs/|README\.md|AGENTS\.md|CLAUDE\.md|CHANGELOG\.md)
+        exclude: ^(tests/web-harness/storybook-static/|apps/command-center/pnpm-lock\.yaml|tests/web-harness/src/api-gen/)
+
+  - repo: https://github.com/DavidAnson/markdownlint-cli2
+    rev: v0.21.0
+    hooks:
+      - id: markdownlint-cli2
+        args: [--config, .markdownlint-cli2.yaml]
+        files: ^(docs/|README\.md|AGENTS\.md|CLAUDE\.md|CHANGELOG\.md|CONTRIBUTING\.md|SECURITY\.md|SUPPORT\.md)
+        exclude: ^docs/reports/
+
+  - repo: local
+    hooks:
+      - id: uiq-stylelint-front
+        name: UIQ frontend stylelint gate (pre-commit)
+        entry: bash -lc 'bash scripts/lib/node-bin.sh stylelint --fix "$@"'
+        language: system
+        pass_filenames: true
+        stages: [pre-commit]
+        files: ^(apps/command-center|tests/web-harness)/.*\.(css|scss)$
+
+  - repo: https://github.com/shellcheck-py/shellcheck-py
+    rev: v0.11.0.1
+    hooks:
+      - id: shellcheck
+        stages: [pre-push]
+        files: ^(scripts|tooling/automation/scripts|playwright|tests)/.*\.(sh|bash)$
+
+  - repo: https://github.com/hadolint/hadolint
+    rev: v2.14.0
+    hooks:
+      - id: hadolint
+        files: (^|/)([Dd]ockerfile|.*\.dockerfile)$
+
+  - repo: https://github.com/rhysd/actionlint
+    rev: v1.7.11
+    hooks:
+      - id: actionlint
+        stages: [pre-push]
+
+  - repo: local
+    hooks:
+      - id: uiq-key-lint-pre-commit
+        name: UIQ key lint gate (pre-commit)
+        entry: bash -lc 'pnpm typecheck'
+        language: system
+        pass_filenames: false
+        stages: [pre-commit]
+      - id: uiq-docs-ssot-pre-commit
+        name: UIQ docs SSOT gate (pre-commit)
+        entry: node scripts/ci/check-docs-ssot.mjs
+        language: system
+        pass_filenames: false
+        stages: [pre-commit]
+      - id: uiq-doc-governance-consistency-pre-commit
+        name: UIQ doc governance consistency gate (pre-commit)
+        entry: node scripts/ci/check-doc-governance-consistency.mjs
+        language: system
+        pass_filenames: false
+        stages: [pre-commit]
+      - id: uiq-diff-doc-linkage-pre-commit
+        name: UIQ diff doc linkage gate (pre-commit)
+        entry: node scripts/ci/check-diff-doc-linkage.mjs
+        language: system
+        pass_filenames: false
+        stages: [pre-commit]
+      - id: uiq-system2-gates-6-8-pre-commit
+        name: UIQ system2 gates (6-8) pre-commit
+        entry: node scripts/ci/check-system2-gates-6-8.mjs
+        language: system
+        pass_filenames: false
+        stages: [pre-commit]
+      - id: uiq-test-truth-gate-pre-commit
+        name: UIQ test truthiness gate (pre-commit)
+        entry: node scripts/ci/uiq-test-truth-gate.mjs --profile pr --strict true
+        language: system
+        pass_filenames: false
+        stages: [pre-commit]
+      - id: uiq-e2e-authenticity-gate-pre-commit
+        name: UIQ e2e authenticity gate (pre-commit)
+        entry: node scripts/ci/e2e-authenticity-gate.mjs
+        language: system
+        pass_filenames: false
+        stages: [pre-commit]
+      - id: uiq-log-quality-gate-pre-commit
+        name: UIQ log quality gate (pre-commit)
+        entry: node scripts/ci/check-log-quality.mjs
+        language: system
+        pass_filenames: false
+        stages: [pre-commit]
+      - id: uiq-secret-leak-gate-pre-commit
+        name: UIQ secret leak gate (pre-commit)
+        entry: bash -lc 'pnpm gate:secret-leak'
+        language: system
+        pass_filenames: false
+        stages: [pre-commit]
+      - id: uiq-prepush-local-quality-gate
+        name: UIQ pre-push local quality gate (strict)
+        entry: bash scripts/ci/pre-push-local-gate.sh
+        language: system
+        pass_filenames: false
+        always_run: true
+        stages: [pre-push]
+      - id: local-block-real-env
+        name: "Local gate: block real .env files from commit"
+        entry: >-
+          bash -lc '
+          set -euo pipefail;
+          blocked=0;
+          while IFS= read -r f; do
+            [ -n "$f" ] || continue;
+            case "$f" in
+              .env.example|tooling/automation/.env.example|*.env.example) continue ;;
+            esac;
+            case "$f" in
+              .env|.env.*|*/.env|*/.env.*|*.env)
+                echo "blocked env-like file: $f";
+                blocked=1;
+                ;;
+            esac;
+          done < <(git diff --cached --name-only --diff-filter=ACMR);
+          [ "$blocked" -eq 0 ]'
+        language: system
+        pass_filenames: false
+        always_run: true
+        stages: [pre-commit]
+      - id: local-no-new-todo-fixme
+        name: "Local gate: block new task markers in staged hunks"
+        entry: >-
+          bash -lc '
+          set -euo pipefail;
+          if git diff --cached --unified=0 -- . ":(exclude)*.md" ":(exclude)docs/**" ":(exclude).pre-commit-config.yaml" |
+            rg -n "^\+.*\b(TO[ ]?DO|FIXME)\b" >/dev/null; then
+            echo "New task marker found in staged diff.";
+            exit 1;
+          fi'
+        language: system
+        pass_filenames: false
+        always_run: true
+        stages: [pre-commit]
+      - id: local-dotenv-lint
+        name: "Local gate: dotenv format and duplicate-key lint"
+        entry: >-
+          bash -lc '
+          set -euo pipefail;
+          files=$(git ls-files ".env*" "*.env" | grep -Ev "\.secrets\.baseline$|pnpm-lock\.yaml$|uv\.lock$" || true);
+          [ -n "$files" ] || exit 0;
+          for f in $files; do
+            [ -f "$f" ] || continue;
+            awk -F= "
+              /^[[:space:]]*#/ {next}
+              /^[[:space:]]*$/ {next}
+              !/^[A-Z_][A-Z0-9_]*=/ {print FILENAME \": invalid line \" NR \": \" \$0; bad=1; next}
+              {k=\$1; if (seen[k]++) {print FILENAME \": duplicate key \" k \" at line \" NR; bad=1}}
+              END {if (bad) exit 1}
+            " "$f";
+          done'
+        language: system
+        pass_filenames: false
+        always_run: true
+        stages: [pre-commit]
+      - id: local-no-console-log
+        name: "Local gate: block console.log in staged hunks"
+        entry: >-
+          bash -lc '
+          set -euo pipefail;
+          if git diff --cached --unified=0 -- "*.js" "*.jsx" "*.ts" "*.tsx" |
+            rg -n "^\+.*console\.log\(" >/dev/null; then
+            echo "New console.log found in staged diff.";
+            exit 1;
+          fi'
+        language: system
+        pass_filenames: false
+        always_run: true
+        stages: [pre-commit]
+      - id: local-no-focused-tests
+        name: "Local gate: block focused tests in staged hunks"
+        entry: >-
+          bash -lc '
+          set -euo pipefail;
+          files=();
+          while IFS= read -r -d "" f; do
+            files+=("$f");
+          done < <(git diff --cached --name-only -z --diff-filter=ACMR -- "*.js" "*.jsx" "*.ts" "*.tsx" "*.py");
+          [ "${#files[@]}" -gt 0 ] || exit 0;
+          if git diff --cached --unified=0 -- "${files[@]}" |
+            rg -n "^\+.*(\.only\(|\bfdescribe\(|\bfit\(|@pytest\.mark\.only)" >/dev/null; then
+            echo "New focused test marker found in staged diff.";
+            exit 1;
+          fi'
+        language: system
+        pass_filenames: false
+        always_run: true
+        stages: [pre-commit]
+      - id: local-no-new-skipped-tests
+        name: "Local gate: block new skipped-test markers"
+        entry: >-
+          bash -lc '
+          set -euo pipefail;
+          files=();
+          while IFS= read -r -d "" f; do
+            files+=("$f");
+          done < <(git diff --cached --name-only -z --diff-filter=ACMR -- "*.js" "*.jsx" "*.ts" "*.tsx" "*.py");
+          [ "${#files[@]}" -gt 0 ] || exit 0;
+          if git diff --cached --unified=0 -- "${files[@]}" |
+            rg -n "^\+.*(test\.skip\(|describe\.skip\(|it\.skip\(|xtest\(|xit\(|xdescribe\()"
+            >/dev/null; then
+            echo "New skipped-test marker found in staged diff.";
+            exit 1;
+          fi'
+        language: system
+        pass_filenames: false
+        always_run: true
+        stages: [pre-commit]
+      - id: local-no-new-hard-waits-e2e
+        name: "Local gate: block new E2E hard waits"
+        entry: >-
+          bash -lc '
+          set -euo pipefail;
+          files=();
+          while IFS= read -r -d "" f; do
+            files+=("$f");
+          done < <(git diff --cached --name-only -z --diff-filter=ACMR -- "apps/command-center/tests/e2e/*.ts" "tests/frontend-e2e/*.ts");
+          [ "${#files[@]}" -gt 0 ] || exit 0;
+          if git diff --cached --unified=0 -- "${files[@]}" |
+            rg -n "^\+.*(waitForTimeout\s*\(|setTimeout\s*\(\s*resolve\s*,\s*\d+|await\s+setTimeout\s*\(\s*\d+|sleep\s*\()" >/dev/null; then
+            echo "New E2E hard wait found in staged diff.";
+            exit 1;
+          fi'
+        language: system
+        pass_filenames: false
+        always_run: true
+        stages: [pre-commit]
+      - id: local-no-new-brittle-locators-e2e
+        name: "Local gate: block new brittle CSS locators in E2E"
+        entry: >-
+          bash -lc '
+          set -euo pipefail;
+          files=();
+          while IFS= read -r -d "" f; do
+            files+=("$f");
+          done < <(git diff --cached --name-only -z --diff-filter=ACMR -- "apps/command-center/tests/e2e/*.ts" "tests/frontend-e2e/*.ts");
+          [ "${#files[@]}" -gt 0 ] || exit 0;
+          if git diff --cached --unified=0 -- "${files[@]}" |
+            rg -n "^\+.*\\.locator\\(\\s*[\"\\x27](\\.[^\"\\x27]+|#[^\"\\x27]+|[^\"\\x27]*(nth-child|first-child|last-child|:has\\()[^\"\\x27]*)" >/dev/null; then
+            echo "New brittle locator found in staged E2E diff; avoid class/id/structure-coupled locator and prefer getByRole/getByLabel/getByTestId.";
+            exit 1;
+          fi'
+        language: system
+        pass_filenames: false
+        always_run: true
+        stages: [pre-commit]
+      - id: local-no-new-suppressions
+        name: "Local gate: block new suppression annotations"
+        entry: >-
+          bash -lc '
+          set -euo pipefail;
+          files=();
+          while IFS= read -r -d "" f; do
+            files+=("$f");
+          done < <(git diff --cached --name-only -z --diff-filter=ACMR -- "*.js" "*.jsx" "*.ts" "*.tsx" "*.py");
+          [ "${#files[@]}" -gt 0 ] || exit 0;
+          if git diff --cached --unified=0 -- "${files[@]}" |
+            rg -n "^\+.*(@ts-ignore|eslint-disable|noqa|type:\s*ignore)" >/dev/null; then
+            echo "New suppression annotation found in staged diff.";
+            exit 1;
+          fi'
+        language: system
+        pass_filenames: false
+        always_run: true
+        stages: [pre-commit]
+      - id: local-ai-context-files-check
+        name: "Local gate: AI context files exist"
+        entry: >-
+          bash -lc '
+          set -euo pipefail;
+          for f in AGENTS.md CLAUDE.md; do
+            if [ ! -s "$f" ]; then
+              echo "missing or empty required file: $f";
+              exit 1;
+            fi;
+          done;
+          if [ ! -s ".cursorrules" ]; then
+            echo "missing or empty required file: .cursorrules";
+            exit 1;
+          fi'
+        language: system
+        pass_filenames: false
+        always_run: true
+        stages: [pre-commit]
+      - id: local-precommit-outdated-check
+        name: "Local gate: detect outdated pre-commit revs (pre-push)"
+        entry: >-
+          bash -lc '
+          set -euo pipefail;
+          tmp="$(mktemp /tmp/pre-commit.XXXXXX.yaml)";
+          cp .pre-commit-config.yaml "$tmp";
+          pre-commit autoupdate --config "$tmp" >/dev/null 2>&1 || true;
+          if ! diff -q .pre-commit-config.yaml "$tmp" >/dev/null 2>&1; then
+            echo "pre-commit hook rev updates available. Run: pre-commit autoupdate";
+            diff .pre-commit-config.yaml "$tmp" || true;
+            rm -f "$tmp";
+            exit 1;
+          fi;
+          rm -f "$tmp"'
+        language: system
+        pass_filenames: false
+        always_run: true
+        stages: [pre-push]
+      - id: uiq-commit-msg-conventional
+        name: UIQ commit message conventional gate (commit-msg)
+        entry: bash -lc 'pnpm exec commitlint --config commitlint.config.cjs --edit "$1"' --
+        language: system
+        pass_filenames: true
+        stages: [commit-msg]

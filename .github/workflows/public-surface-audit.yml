@@ -1,0 +1,41 @@
+name: Public Surface Audit
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "45 10 * * 1"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: public-surface-audit-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  public-surface-audit:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@bab023d7a2c8eef4351fc96992dc6d83c9561bb2
+        with:
+          clean: true
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Run public surface audit
+        run: |
+          set -euo pipefail
+          node scripts/ci/public-surface-audit.mjs --repo "${GITHUB_REPOSITORY}"
+      - name: Publish public surface audit summary
+        if: ${{ always() }}
+        run: cat .runtime-cache/artifacts/ci/public-surface-audit.md >> "$GITHUB_STEP_SUMMARY"
+      - name: Upload public surface audit artifacts
+        if: ${{ always() }}
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
+        with:
+          name: public-surface-audit
+          path: |
+            .runtime-cache/artifacts/ci/public-surface-audit.json
+            .runtime-cache/artifacts/ci/public-surface-audit.md
+          retention-days: 14

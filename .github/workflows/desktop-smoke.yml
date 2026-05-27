@@ -1,0 +1,105 @@
+name: Desktop Smoke
+
+on:
+  workflow_dispatch:
+    inputs:
+      tauri_app_path:
+        description: "Required absolute macOS .app path used by the tauri smoke/soak matrix."
+        required: true
+        type: string
+      swift_bundle_id:
+        description: "Required macOS bundle id used by the swift smoke/soak matrix."
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: desktop-smoke-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  UIQ_HEARTBEAT_INTERVAL_SEC: "60"
+
+jobs:
+  desktop-smoke:
+    if: ${{ vars.UIQ_ENABLE_MACOS_WORKFLOWS == 'true' }}
+    runs-on: macos-latest
+    environment: owner-approved-sensitive
+    strategy:
+      fail-fast: false
+      matrix:
+        target: [tauri, swift]
+        profile: [smoke, soak]
+    env:
+      TAURI_APP_PATH_INPUT: ${{ github.event.inputs.tauri_app_path }}
+      SWIFT_BUNDLE_ID_INPUT: ${{ github.event.inputs.swift_bundle_id }}
+      MATRIX_TARGET: ${{ matrix.target }}
+      MATRIX_PROFILE: ${{ matrix.profile }}
+    steps:
+      - uses: actions/checkout@bab023d7a2c8eef4351fc96992dc6d83c9561bb2
+        with:
+          clean: true
+          persist-credentials: false
+      - name: Activate pnpm from root packageManager
+        run: |
+          set -euo pipefail
+          corepack enable
+          corepack prepare "$(node -p "require('./package.json').packageManager")" --activate
+      - name: Verify desktop smoke prerequisites
+        run: |
+          set -euo pipefail
+          xcodebuild -version
+          if [[ "${MATRIX_TARGET}" == "tauri" ]]; then
+            if [[ -z "${TAURI_APP_PATH_INPUT}" ]]; then
+              echo "TAURI_APP_PATH_INPUT is required for tauri.${MATRIX_PROFILE}" >&2
+              exit 1
+            fi
+          else
+            if [[ -z "${SWIFT_BUNDLE_ID_INPUT}" ]]; then
+              echo "SWIFT_BUNDLE_ID_INPUT is required for swift.${MATRIX_PROFILE}" >&2
+              exit 1
+            fi
+          fi
+          if ! command -v tauri-driver >/dev/null 2>&1; then
+            if ! command -v cargo >/dev/null 2>&1; then
+              echo "cargo is required to install tauri-driver on macOS runners" >&2
+              exit 1
+            fi
+            cargo install tauri-driver --locked
+            echo "$HOME/.cargo/bin" >> "$GITHUB_PATH"
+            export PATH="$HOME/.cargo/bin:$PATH"
+          fi
+          tauri-driver --help >/dev/null
+      - name: Run desktop profile (matrix)
+        run: |
+          set -euo pipefail
+          profile_name="${MATRIX_TARGET}.${MATRIX_PROFILE}"
+          run_log=".runtime-cache/logs/ci/desktop-${MATRIX_TARGET}-${MATRIX_PROFILE}.log"
+          run_id_file=".runtime-cache/artifacts/ci/desktop-${MATRIX_TARGET}-${MATRIX_PROFILE}-run-id.txt"
+          mkdir -p .runtime-cache/logs/ci .runtime-cache/artifacts/ci
+          if [[ "${MATRIX_TARGET}" == "tauri" ]]; then
+            set -o pipefail
+            pnpm uiq run --profile "${profile_name}" --target tauri.macos --app "${TAURI_APP_PATH_INPUT}" | tee "$run_log"
+          else
+            set -o pipefail
+            pnpm uiq run --profile "${profile_name}" --target swift.macos --bundle-id "${SWIFT_BUNDLE_ID_INPUT}" | tee "$run_log"
+          fi
+          run_id="$(grep -E '^runId=' "$run_log" | tail -n1 | cut -d'=' -f2)"
+          if [[ -z "$run_id" ]]; then
+            echo "::error::Desktop smoke run did not emit runId="
+            exit 1
+          fi
+          printf '%s\n' "$run_id" > "$run_id_file"
+      - name: Verify desktop evidence (hard gate)
+        run: |
+          set -euo pipefail
+          run_id="$(cat ".runtime-cache/artifacts/ci/desktop-${MATRIX_TARGET}-${MATRIX_PROFILE}-run-id.txt")"
+          node scripts/ci/verify-run-evidence.mjs --profile "${MATRIX_TARGET}.${MATRIX_PROFILE}" --run-id "$run_id"
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
+        with:
+          name: uiq-desktop-${{ matrix.target }}-${{ matrix.profile }}-run
+          path: .runtime-cache/artifacts/runs/
+          retention-days: 14

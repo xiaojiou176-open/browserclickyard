@@ -1,0 +1,7 @@
+fail-on-severity: high
+fail-on-scopes:
+  - runtime
+  - development
+comment-summary-in-pr: never
+license-check: false
+show-openssf-scorecard: true

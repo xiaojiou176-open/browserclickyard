@@ -1,0 +1,41 @@
+name: System Audit
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 11 * * 1"
+
+permissions:
+  actions: read
+  contents: read
+  security-events: read
+
+concurrency:
+  group: system-audit-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  system-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@bab023d7a2c8eef4351fc96992dc6d83c9561bb2
+        with:
+          clean: true
+          persist-credentials: false
+      - name: Containerized system audit
+        env:
+          UIQ_CONTAINER_GATE_SERVICE_OVERRIDE: ci-gate
+          UIQ_CONTAINER_GATE_BUILD_OVERRIDE: ci-gate
+          UIQ_CONTAINER_GATE_COMMAND_OVERRIDE: |
+            bash scripts/ci/system-audit.sh
+        shell: bash
+        run: bash scripts/ci/run-gate-in-container.sh exec
+
+      - name: Upload system audit artifact
+        if: always()
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
+        with:
+          name: system-audit
+          path: .runtime-cache/artifacts/ci/system-audit.json
+          if-no-files-found: error

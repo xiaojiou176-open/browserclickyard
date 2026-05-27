@@ -1,0 +1,21 @@
+title: "[Show and tell] "
+labels:
+  - showcase
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Share what you built, tested, or learned with Browserclickyard.
+        Public-safe screenshots, diagrams, and writeups are welcome.
+  - type: textarea
+    id: built
+    attributes:
+      label: What did you build or validate?
+      placeholder: Describe the workflow, run, or integration you want to show.
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Public-safe evidence
+      placeholder: Link to screenshots, docs, or public-safe artifacts.

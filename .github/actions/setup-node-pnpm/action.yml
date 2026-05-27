@@ -1,0 +1,59 @@
+name: Setup Node + pnpm
+description: Setup pnpm and Node.js with pnpm cache.
+inputs:
+  node-version:
+    description: Node.js version.
+    required: false
+    default: "20"
+  cache-dependency-path:
+    description: Path to lockfile used for pnpm cache.
+    required: false
+    default: pnpm-lock.yaml
+  restore-cache:
+    description: Whether to restore pnpm store cache.
+    required: false
+    default: "true"
+outputs:
+  modules-dir:
+    description: Resolved shared node_modules directory.
+    value: ${{ steps.resolve-paths.outputs.modules_dir }}
+  store-path:
+    description: Resolved pnpm store directory.
+    value: ${{ steps.resolve-paths.outputs.store_path }}
+  virtual-store-dir:
+    description: Resolved pnpm virtual store directory.
+    value: ${{ steps.resolve-paths.outputs.virtual_store_dir }}
+runs:
+  using: composite
+  steps:
+    - uses: actions/setup-node@0bc26deefe2041d1d27fd1bcb7acfe0320b2bc08
+      with:
+        node-version: ${{ inputs.node-version }}
+    - name: Activate pnpm from root packageManager
+      shell: bash
+      run: |
+        corepack enable
+        corepack prepare "$(node -p "require('./package.json').packageManager")" --activate
+        pnpm --version
+    - name: Resolve pnpm store path
+      id: resolve-paths
+      shell: bash
+      run: |
+        modules_dir="${RUNNER_TEMP}/uiq-node-modules"
+        store_path="${RUNNER_TEMP}/uiq-pnpm-store"
+        virtual_store_dir="$modules_dir/.pnpm"
+        mkdir -p "$modules_dir/.pnpm"
+        mkdir -p "$store_path"
+        {
+          echo "modules_dir=$modules_dir"
+          echo "store_path=$store_path"
+          echo "virtual_store_dir=$virtual_store_dir"
+        } >> "$GITHUB_OUTPUT"
+    - name: Restore pnpm store cache
+      if: ${{ inputs.restore-cache == 'true' }}
+      uses: actions/cache@1bd1e32a3bdc45362d1e726936510720a7c30a57 # v4.2.0
+      with:
+        path: ${{ steps.resolve-paths.outputs.store_path }}
+        key: ${{ runner.os }}-${{ runner.arch }}-pnpm-store-${{ hashFiles(inputs.cache-dependency-path) }}
+        restore-keys: |
+          ${{ runner.os }}-${{ runner.arch }}-pnpm-store-

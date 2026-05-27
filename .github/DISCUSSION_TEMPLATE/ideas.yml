@@ -1,0 +1,23 @@
+title: "[Idea] "
+labels:
+  - idea
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this space for product direction, workflow ideas, and category bets.
+        Keep secrets and private runtime artifacts out of public discussions.
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem should Browserclickyard solve better?
+      placeholder: Describe the pain, not just the feature.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed direction
+      placeholder: Explain the idea in product language first.
+    validations:
+      required: true
