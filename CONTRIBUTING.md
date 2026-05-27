@@ -18,7 +18,7 @@ surfaces.
 
 ## Verification Layers
 
-Browserclickyard deliberately keeps the local default path lighter than the cloud
+Pagestress deliberately keeps the local default path lighter than the cloud
 paths.
 
 - **pre-commit**: `.pre-commit-config.yaml` runs lightweight correctness,

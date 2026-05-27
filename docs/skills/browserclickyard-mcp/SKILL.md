@@ -1,30 +1,30 @@
-# Browserclickyard MCP Skill
+# Pagestress MCP Skill
 
 Use this skill when an agent needs to **clone, install, configure, verify, and
-use Browserclickyard's current MCP and local product surfaces** without overclaiming
+use Pagestress's current MCP and local product surfaces** without overclaiming
 package-registry or hosted distribution that does not exist yet.
 
 ## Use When
 
-- You want to evaluate Browserclickyard from the canonical public repository.
+- You want to evaluate Pagestress from the canonical public repository.
 - You want to connect Codex, Claude Code, OpenClaw, or another MCP-capable
-  client to Browserclickyard's repo-native MCP server.
+  client to Pagestress's repo-native MCP server.
 - You need a truthful walkthrough for local UI first-look, MCP setup, and
   governed run verification.
 
 ## Truthful Boundaries
 
-- Browserclickyard is public and distribution-ready on GitHub today.
+- Pagestress is public and distribution-ready on GitHub today.
 - The MCP server is real and repo-native today.
-- The package shape `@uiq/mcp-server` / `browserclickyard-mcp` is publish-ready, but
+- The package shape `@uiq/mcp-server` / `pagestress-mcp` is publish-ready, but
   it is **not published to npm yet**.
 - MCP today means **stdio only**.
 - Local stdio startup does **not** use OAuth; protected HTTP/API and
   automation surfaces keep the existing token/header contract.
-- Browserclickyard is **not** currently a hosted SaaS service.
+- Pagestress is **not** currently a hosted SaaS service.
 - This skill remains a generic in-repo scaffold and is now published on
   ClawHub as a companion packet, but that does **not** imply npm publication,
-  hosted Browserclickyard distribution, or main-product marketplace listing.
+  hosted Pagestress distribution, or main-product marketplace listing.
 
 ## Prerequisites
 
@@ -32,13 +32,13 @@ package-registry or hosted distribution that does not exist yet.
 - Node.js 20+
 - pnpm
 - Python 3.12+
-- A local shell session inside the cloned `browserclickyard` checkout
+- A local shell session inside the cloned `pagestress` checkout
 
 ## Canonical Repo
 
 ```bash
-git clone https://github.com/xiaojiou176-open/browserclickyard.git
-cd browserclickyard
+git clone https://github.com/xiaojiou176-open/pagestress.git
+cd pagestress
 ```
 
 ## Install
@@ -103,7 +103,7 @@ Do **not** claim this package is published until registry publication really hap
     "uiq": {
       "command": "pnpm",
       "args": ["mcp:start"],
-      "cwd": "/absolute/path/to/browserclickyard",
+      "cwd": "/absolute/path/to/pagestress",
       "env": {
         "UIQ_MCP_API_BASE_URL": "http://127.0.0.1:18080",
         "UIQ_MCP_TOOL_GROUPS": "advanced,analysis,proof"
@@ -143,7 +143,7 @@ Do **not** claim this package is published until registry publication really hap
 
 ## Minimal Verification
 
-Run these from your cloned `browserclickyard` checkout:
+Run these from your cloned `pagestress` checkout:
 
 ```bash
 pnpm mcp:check

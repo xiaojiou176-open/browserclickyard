@@ -37,7 +37,7 @@ const LEGACY_DESCRIPTION_FIELDS = [
 
 const CJK_PATTERN = /[\u3400-\u9fff]/u;
 const PRODUCT_VALUE_PROPOSITION =
-  "Browserclickyard is an AI-native WebUI stress lab for localhost-first browser experiments, with governed proof and agent-ready workflows when results need deeper review.";
+  "Pagestress is an AI-native WebUI stress lab for localhost-first browser experiments, with governed proof and agent-ready workflows when results need deeper review.";
 const CANONICAL_PACKAGE_TOOL_GROUPS = "advanced,analysis,proof";
 const PRODUCT_VALUE_PROPOSITION_PATTERN = new RegExp(
   PRODUCT_VALUE_PROPOSITION.replace(/[.*+?^${}()|[\]\\]/g, "\\$&").replace(/\s+/g, "[\\s>]+"),
@@ -273,8 +273,8 @@ function main(): void {
   const distributionPath = resolve(repoRoot, "DISTRIBUTION.md");
   const integrationsPath = resolve(repoRoot, "INTEGRATIONS.md");
   const entrypointsPath = resolve(repoRoot, "docs/reference/integration-entrypoints.md");
-  const skillPath = resolve(repoRoot, "docs/skills/browserclickyard-mcp/SKILL.md");
-  const manifestPath = resolve(repoRoot, "docs/skills/browserclickyard-mcp/manifest.yaml");
+  const skillPath = resolve(repoRoot, "docs/skills/pagestress-mcp/SKILL.md");
+  const manifestPath = resolve(repoRoot, "docs/skills/pagestress-mcp/manifest.yaml");
   const indexHtmlPath = resolve(repoRoot, "apps/command-center/index.html");
   const docPaths = [
     resolve(repoRoot, "docs/mcp.md"),
@@ -311,8 +311,8 @@ function main(): void {
   if (packageName !== "@uiq/mcp-server") {
     packageMetadataIssues.push("package.json name must stay @uiq/mcp-server");
   }
-  if (binName !== "browserclickyard-mcp") {
-    packageMetadataIssues.push("package.json bin name must stay browserclickyard-mcp");
+  if (binName !== "pagestress-mcp") {
+    packageMetadataIssues.push("package.json bin name must stay pagestress-mcp");
   }
   if (packageJson.publishConfig?.access !== "public") {
     packageMetadataIssues.push("package.json publishConfig.access must stay public");
@@ -450,7 +450,7 @@ function main(): void {
     {
       path: manifestPath,
       patterns: [
-        /^name:\s*browserclickyard-mcp$/m,
+        /^name:\s*pagestress-mcp$/m,
         /^protocol:\s*stdio$/m,
         packageName,
         "UIQ_MCP_API_BASE_URL",
@@ -460,7 +460,7 @@ function main(): void {
     },
     {
       path: indexHtmlPath,
-      patterns: [PRODUCT_VALUE_PROPOSITION, /<title>Browserclickyard \| AI-native WebUI stress lab<\/title>/],
+      patterns: [PRODUCT_VALUE_PROPOSITION, /<title>Pagestress \| AI-native WebUI stress lab<\/title>/],
     },
   ];
 

@@ -1,6 +1,6 @@
 # Proof Center
 
-This page is the public map for what Browserclickyard is willing to prove in the open,
+This page is the public map for what Pagestress is willing to prove in the open,
 what remains private by default, and where to inspect the deeper governed
 evidence **after** a stress-lab result becomes worth preserving.
 
@@ -24,7 +24,7 @@ governs itself.
 | Shipping history | What has changed recently | [CHANGELOG.md](../CHANGELOG.md) |
 | First public release notes | How the repo now presents its first public launch surface | [docs/releases/v0.1.0-public-launch.md](./releases/v0.1.0-public-launch.md) |
 | Historical closure snapshot | What was closed out to make the repository publicly maintainable at the time of the first public release | [docs/releases/v0.1.0-public-closure.md](./releases/v0.1.0-public-closure.md) |
-| Discussions and releases | How the public conversation and shipping rhythm evolve | [GitHub Discussions](https://github.com/xiaojiou176-open/browserclickyard/discussions), [GitHub Releases](https://github.com/xiaojiou176-open/browserclickyard/releases) |
+| Discussions and releases | How the public conversation and shipping rhythm evolve | [GitHub Discussions](https://github.com/xiaojiou176-open/pagestress/discussions), [GitHub Releases](https://github.com/xiaojiou176-open/pagestress/releases) |
 
 Current GitHub-side metadata and enforcement remain audit-backed states. This
 page should point you at the proof path, not quietly replace the latest
@@ -32,7 +32,7 @@ public-surface or branch-protection audit artifact.
 
 ## Single Public-Safe Proof Sample
 
-Browserclickyard keeps exactly one public-safe sample surface in this repo:
+Pagestress keeps exactly one public-safe sample surface in this repo:
 [docs/examples/public-proof-sample/README.md](./examples/public-proof-sample/README.md).
 
 What it is:
@@ -50,7 +50,7 @@ What it is not:
 
 ## Public-Safe Vs Private-Only
 
-Browserclickyard is public, but not every runtime artifact is public-safe.
+Pagestress is public, but not every runtime artifact is public-safe.
 
 ### Public-safe by policy
 
@@ -93,7 +93,7 @@ this repo today:
 If these surfaces become publicly queryable later, they should be promoted into
 this page only after the proof path is machine-verifiable and documented.
 
-## What "Proof" Means In Browserclickyard
+## What "Proof" Means In Pagestress
 
 Proof is not a marketing word here. In this repo, it means at least one of the
 following:
@@ -103,12 +103,12 @@ following:
 - A published artifact or summary that can be inspected later
 - A release or discussion trail that shows how the public surface evolves
 
-This is also why the operator UI and the browserclickyard are related but different:
+This is also why the operator UI and the pagestress are related but different:
 
 - Stress Lab starts commands and workflow runs
 - Runs & Blocks tracks status and manual gates
 - Advanced Review helps compare governed evidence
-- The governed browserclickyard is still the source of release-grade proof
+- The governed pagestress is still the source of release-grade proof
 
 Not every visible panel is proof. Proof is the part that remains inspectable
 after the moment has passed.
@@ -126,11 +126,11 @@ surfaces:
 - Release notes and changelog history
 - Discussions as a durable public context layer
 
-![Browserclickyard proof stack showing product story, contract truth, public-safe artifacts, and private-only runtime evidence boundaries.](./assets/browserclickyard-proof-stack.svg)
+![Pagestress proof stack showing product story, contract truth, public-safe artifacts, and private-only runtime evidence boundaries.](./assets/pagestress-proof-stack.svg)
 
 ## If You Want To Go Deeper
 
-- Product story: [docs/why-browserclickyard.md](./why-browserclickyard.md)
+- Product story: [docs/why-pagestress.md](./why-pagestress.md)
 - Guided walkthrough: [docs/examples/public-stress-lab-guided-demo.md](./examples/public-stress-lab-guided-demo.md)
 - Result-first quickstart: [docs/get-started.md](./get-started.md)
 - First release notes: [docs/releases/v0.1.0-public-launch.md](./releases/v0.1.0-public-launch.md)

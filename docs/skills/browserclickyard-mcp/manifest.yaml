@@ -1,8 +1,8 @@
-name: browserclickyard-mcp
+name: pagestress-mcp
 version: 0.1.0
 summary: >
   Generic skill scaffold for teaching an agent to clone, install, configure,
-  verify, and use the Browserclickyard repo-native MCP server and local product paths.
+  verify, and use the Pagestress repo-native MCP server and local product paths.
 protocol: stdio
 entrypoint: SKILL.md
 package_shape: skill-folder
@@ -10,33 +10,33 @@ registry_targets:
   clawhub:
     status: listed-live
     package_shape: skill-folder
-    listing_url: https://clawhub.ai/xiaojiou176/browserclickyard-mcp
-    submit_via: clawhub publish . --slug browserclickyard-mcp --name "Browserclickyard MCP Skill" --version 0.1.0 --tags mcp,proof,automation,review,browserclickyard
+    listing_url: https://clawhub.ai/xiaojiou176/pagestress-mcp
+    submit_via: clawhub publish . --slug pagestress-mcp --name "Pagestress MCP Skill" --version 0.1.0 --tags mcp,proof,automation,review,pagestress
   openhands-extensions:
     status: review-pending
     package_shape: skill-folder
     submission_url: https://github.com/OpenHands/extensions/pull/161
-    submit_via: submit this folder as skills/browserclickyard-mcp/ in OpenHands/extensions
+    submit_via: submit this folder as skills/pagestress-mcp/ in OpenHands/extensions
 boundaries:
   packet_role: companion-skill-packet
   primary_product_lane: ai-native WebUI stress lab front door
-  listing_scope_note: OpenHands or ClawHub status applies to this skill packet only and does not prove Browserclickyard browser/store publication, package publication, or hosted SaaS distribution.
+  listing_scope_note: OpenHands or ClawHub status applies to this skill packet only and does not prove Pagestress browser/store publication, package publication, or hosted SaaS distribution.
   not_claimed:
     - No browser-extension product or browser-store listing is claimed here
     - No published npm or PyPI package is claimed here
-    - No hosted Browserclickyard SaaS state is claimed here
+    - No hosted Pagestress SaaS state is claimed here
 installation:
-  repo: https://github.com/xiaojiou176-open/browserclickyard
+  repo: https://github.com/xiaojiou176-open/pagestress
   steps:
-    - git clone https://github.com/xiaojiou176-open/browserclickyard.git
-    - cd browserclickyard
+    - git clone https://github.com/xiaojiou176-open/pagestress.git
+    - cd pagestress
     - ./scripts/setup.sh
 configuration:
   repo_native:
     command: pnpm
     args:
       - mcp:start
-    cwd: /absolute/path/to/browserclickyard
+    cwd: /absolute/path/to/pagestress
     env:
       UIQ_MCP_API_BASE_URL: http://127.0.0.1:18080
       UIQ_MCP_TOOL_GROUPS: advanced,analysis,proof
@@ -48,7 +48,7 @@ configuration:
     env:
       UIQ_MCP_API_BASE_URL: http://127.0.0.1:18080
       UIQ_MCP_TOOL_GROUPS: advanced,analysis,proof
-    note: publish-ready scoped package shape only; not published yet; bin inside remains browserclickyard-mcp
+    note: publish-ready scoped package shape only; not published yet; bin inside remains pagestress-mcp
 verification:
   steps:
     - pnpm mcp:check

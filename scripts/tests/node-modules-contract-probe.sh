@@ -162,9 +162,9 @@ if ! uiq_workspace_node_modules_topology_ready "$workspace_root" "$authoritative
 fi
 
 rm -f "$workspace_root/apps/command-center/node_modules"
-mkdir -p "$workspace_root/apps/command-center/home/runner/work/browserclickyard/browserclickyard"
+mkdir -p "$workspace_root/apps/command-center/home/runner/work/pagestress/pagestress"
 ln -s ../../../../../../node_modules \
-  "$workspace_root/apps/command-center/home/runner/work/browserclickyard/browserclickyard/node_modules"
+  "$workspace_root/apps/command-center/home/runner/work/pagestress/pagestress/node_modules"
 
 if uiq_workspace_node_modules_topology_ready "$workspace_root" "$authoritative_root"; then
   echo "expected corrupted workspace bridge topology to be rejected" >&2

@@ -1,7 +1,7 @@
 # How-To: MCP Agent Review Loop
 
 Use this page when you want to connect **Codex**, **Claude Code**, or another
-**MCP-capable client** to Browserclickyard's deeper review layer without turning the
+**MCP-capable client** to Pagestress's deeper review layer without turning the
 product into a generic chat assistant.
 
 ## What This Integration Is
@@ -25,7 +25,7 @@ Use this loop after a result already exists.
 Think of it like asking a well-prepared operator to hand you the clipboard,
 not like opening a second control room.
 
-Browserclickyard still starts from:
+Pagestress still starts from:
 
 1. **Stress Lab** for the target and experiment mode
 2. **Runs & Blocks** for the latest result and manual-gate state
@@ -72,7 +72,7 @@ These capabilities are backed by repo-owned surfaces today:
 
 So the truthful statement is:
 
-> Browserclickyard works with Codex, Claude Code, and other MCP-capable clients
+> Pagestress works with Codex, Claude Code, and other MCP-capable clients
 > through a governed, read-mostly MCP surface.
 
 That is very different from claiming a native chat product or a hosted AI

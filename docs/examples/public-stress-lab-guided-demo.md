@@ -1,6 +1,6 @@
 # Public Stress Lab Guided Demo
 
-This is the fastest **public-safe, no-setup** way to understand what Browserclickyard
+This is the fastest **public-safe, no-setup** way to understand what Pagestress
 is today.
 
 Think of it like a guided museum route:
@@ -14,7 +14,7 @@ Think of it like a guided museum route:
 
 - a read-only walkthrough of the current product story
 - a public-safe demo layer for external evaluators
-- a bridge between the stress-lab front door and the deeper governed browserclickyard
+- a bridge between the stress-lab front door and the deeper governed pagestress
 
 ## What This Demo Is Not
 
@@ -25,7 +25,7 @@ Think of it like a guided museum route:
 
 ## Step 1. Understand The Product In One Sentence
 
-> **Browserclickyard is an AI-native WebUI stress lab for localhost-first browser
+> **Pagestress is an AI-native WebUI stress lab for localhost-first browser
 > experiments, with governed proof and agent-ready workflows when results need
 > deeper review.**
 
@@ -39,7 +39,7 @@ That sentence is doing three jobs:
 
 The current launch-first shell map is shown here:
 
-![Browserclickyard studio preview showing the launch-first operator path: Stress Lab first, then Runs and Blocks, then Flow Studio, with Advanced Review as the deeper governed layer behind the first visible result.](../assets/browserclickyard-studio-preview.svg)
+![Pagestress studio preview showing the launch-first operator path: Stress Lab first, then Runs and Blocks, then Flow Studio, with Advanced Review as the deeper governed layer behind the first visible result.](../assets/pagestress-studio-preview.svg)
 
 This is a semantic front-door preview, not a literal runtime screenshot. That
 keeps the public demo aligned with the current IA without treating an older
@@ -57,7 +57,7 @@ Read it in this order:
 This diagram shows how the public front door and the governed deeper lane fit
 together:
 
-![Browserclickyard result path diagram showing the local first-look path, the governed run path, and the MCP connection route.](../assets/browserclickyard-result-path.svg)
+![Pagestress result path diagram showing the local first-look path, the governed run path, and the MCP connection route.](../assets/pagestress-result-path.svg)
 
 Plain-language rule:
 
@@ -67,7 +67,7 @@ Plain-language rule:
 
 ## Step 4. Inspect One Public-Safe Proof Object
 
-Browserclickyard keeps exactly one public-safe proof sample in the repo:
+Pagestress keeps exactly one public-safe proof sample in the repo:
 
 - [Public Proof Sample](./public-proof-sample/README.md)
 
@@ -108,5 +108,5 @@ That is a product boundary, not just a marketing disclaimer.
 
 - See the front door: [README.md](../../README.md)
 - Follow the quickstart: [docs/get-started.md](../get-started.md)
-- Read the positioning: [docs/why-browserclickyard.md](../why-browserclickyard.md)
-- Inspect the public browserclickyard: [docs/proof-center.md](../proof-center.md)
+- Read the positioning: [docs/why-pagestress.md](../why-pagestress.md)
+- Inspect the public pagestress: [docs/proof-center.md](../proof-center.md)

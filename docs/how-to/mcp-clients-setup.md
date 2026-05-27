@@ -13,7 +13,7 @@ compatibility statement, not a partnership claim.
 ## Installation Truth
 
 - Publish-ready package target: `@uiq/mcp-server`
-- Planned CLI / bin name: `browserclickyard-mcp`
+- Planned CLI / bin name: `pagestress-mcp`
 - Protocol today: **stdio only**
 - Auth boundary today: local stdio startup does **not** use OAuth; protected
   HTTP/API and automation surfaces keep the existing token/header contract
@@ -166,7 +166,7 @@ next action.
 ## Recommended MCP Review Loop
 
 Use this loop when a Codex session, Claude Code session, or another MCP-capable
-client needs to understand the latest result without turning Browserclickyard into a
+client needs to understand the latest result without turning Pagestress into a
 generic chat tool:
 
 1. `uiq_run_overview`
@@ -239,7 +239,7 @@ Legacy fields `browser/platform/device/headless/timeout/env` are intentionally e
 
 ## Resources
 
-- Generic skill scaffold: `docs/skills/browserclickyard-mcp/SKILL.md`
+- Generic skill scaffold: `docs/skills/pagestress-mcp/SKILL.md`
 - `uiq://runs/latest/manifest`
 - `uiq://runs/latest/summary`
 - `uiq://review/latest-release-brief`

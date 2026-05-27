@@ -205,6 +205,6 @@ describe("ReviewBoardView", () => {
     await screen.findByText("Agent 交接提示");
     expect(
       (screen.getByLabelText("Agent 交接提示") as HTMLTextAreaElement).value,
-    ).toContain("你正在协助一个受治理的 Browserclickyard 跟进任务");
+    ).toContain("你正在协助一个受治理的 Pagestress 跟进任务");
   });
 });

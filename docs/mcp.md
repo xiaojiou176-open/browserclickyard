@@ -11,7 +11,7 @@ Server entrypoint: `services/mcp-server/src/server.ts` (stdio transport).
 ## Package Truth
 
 - Publish-ready package target: `@uiq/mcp-server`
-- Planned CLI / bin name: `browserclickyard-mcp`
+- Planned CLI / bin name: `pagestress-mcp`
 - Protocol today: **stdio only**
 - Auth boundary today: local stdio startup does **not** use OAuth; protected
   HTTP/API and automation surfaces keep the existing token/header contract
@@ -63,7 +63,7 @@ Default backend note:
 This second shape is the intended package entry once `@uiq/mcp-server` is
 actually published. It is **not truthful** to claim that command works from a
 registry today. The package keeps the scoped name `@uiq/mcp-server` in this
-pass, while the bin inside it remains `browserclickyard-mcp`.
+pass, while the bin inside it remains `pagestress-mcp`.
 
 ## Builder Entry
 

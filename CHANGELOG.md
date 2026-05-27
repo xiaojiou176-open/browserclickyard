@@ -4,9 +4,9 @@
 
 - Promoted `services/mcp-server` into the only publish-ready MCP artifact
   target for this repo by completing scoped package metadata
-  (`@uiq/mcp-server`), the `browserclickyard-mcp` bin contract, prepack + pack-smoke
+  (`@uiq/mcp-server`), the `pagestress-mcp` bin contract, prepack + pack-smoke
   verification, truthful repo/package launch docs, and a generic in-repo Skill
-  scaffold under `docs/skills/browserclickyard-mcp/` without overclaiming registry or
+  scaffold under `docs/skills/pagestress-mcp/` without overclaiming registry or
   marketplace publication.
 - Refreshed the transitive security baseline again after the first GitHub
   release by advancing `hono` to `4.12.12`, `@hono/node-server` to `1.19.13`,
@@ -103,7 +103,7 @@
   draft so the repo now has a tracked launch story before the first GitHub
   release is published.
 - Added new public docs for evaluation and navigation: `docs/get-started.md`,
-  `docs/why-browserclickyard.md`, `docs/proof-center.md`, and `docs/faq.md`.
+  `docs/why-pagestress.md`, `docs/proof-center.md`, and `docs/faq.md`.
 - Rebuilt `docs/index.md` as a layered navigation hub instead of a governance-only router.
 - Added public visual assets and social preview source files under `docs/assets/`,
   including an alt-text registry for reuse across README, docs, releases, and discussions.
@@ -112,7 +112,7 @@
 - Fixed local launch tooling so `./scripts/dev-up.sh` now uses the repo-safe
   pnpm entrypoint, path-stable Alembic invocation, and an absolute SQLite
   runtime path.
-- Aligned the Command Center product identity with the public Browserclickyard brand
+- Aligned the Command Center product identity with the public Pagestress brand
   across the visible UI header, browser title, and related frontend assertions.
 - Enabled GitHub Discussions and aligned the public interaction model around
   discussions for questions, ideas, announcements, and show-and-tell posts.

@@ -19,7 +19,7 @@ export function App(): JSX.Element {
             <div>
               <p className="ui-eyebrow">UI Pressure Lab</p>
               <CardTitle className="app-title" data-testid="app-title">
-                Browserclickyard Demo
+                Pagestress Demo
               </CardTitle>
               <CardDescription>
                 A shadcn-style verification surface for deterministic UI states, smoke flows, and

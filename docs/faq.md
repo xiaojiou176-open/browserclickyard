@@ -1,8 +1,8 @@
 # FAQ
 
-## What is Browserclickyard in plain English?
+## What is Pagestress in plain English?
 
-Browserclickyard is an **AI-native WebUI stress lab**. Instead of leaving browser
+Pagestress is an **AI-native WebUI stress lab**. Instead of leaving browser
 experiments scattered across scripts, CI logs, and hidden artifacts, it gives
 you one place to launch a target, read the result, and only then move into
 governed proof and deeper review.
@@ -52,7 +52,7 @@ canonical documentation surface.
 
 Yes, through MCP compatibility.
 
-Browserclickyard exposes a read-mostly MCP surface that Codex, Claude Code, and other
+Pagestress exposes a read-mostly MCP surface that Codex, Claude Code, and other
 MCP-capable clients can call. That is a protocol compatibility statement, not
 an official partnership claim.
 
@@ -69,7 +69,7 @@ OpenAPI + direct HTTP contract described in
 
 CI is good at saying pass or fail. It is much worse at being the product
 surface where people understand what happened, why it failed, and what to do
-next. Browserclickyard tries to connect both.
+next. Pagestress tries to connect both.
 
 ## What should I read first if I am evaluating the repo?
 
@@ -77,7 +77,7 @@ Use this order:
 
 1. [README.md](../README.md)
 2. [docs/get-started.md](./get-started.md)
-3. [docs/why-browserclickyard.md](./why-browserclickyard.md)
+3. [docs/why-pagestress.md](./why-pagestress.md)
 4. [docs/proof-center.md](./proof-center.md)
 
 ## What should I read first if I want contracts and hard truth?

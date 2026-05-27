@@ -7,10 +7,10 @@ frontend or the main backend business surface.
 In plain language:
 
 > this package is the companion translator booth for MCP-capable clients.
-> it is not the main Browserclickyard exhibit and it is not a browser-extension
+> it is not the main Pagestress exhibit and it is not a browser-extension
 > product.
 
-This package is the **publish-ready MCP artifact target** for Browserclickyard.
+This package is the **publish-ready MCP artifact target** for Pagestress.
 Today it still ships from the repository. It is **not** yet published to npm or
 another registry.
 
@@ -39,7 +39,7 @@ another registry.
 ## Package Truth
 
 - Package name: `@uiq/mcp-server`
-- Binary name: `browserclickyard-mcp`
+- Binary name: `pagestress-mcp`
 - Protocol today: **stdio**
 - Auth model today: local stdio startup does not use OAuth; protected HTTP/API
   surfaces keep the existing token/header contract
@@ -84,4 +84,4 @@ pnpm dlx @uiq/mcp-server
 
 That command shape is **ready**, but it is not truthful to claim it is already
 published today. The package keeps the scoped name `@uiq/mcp-server` in this
-pass, while the bin inside it remains `browserclickyard-mcp`.
+pass, while the bin inside it remains `pagestress-mcp`.

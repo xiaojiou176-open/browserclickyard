@@ -20,7 +20,7 @@ The chosen Wave 1 slice was:
 
 - `README.md`
 - `docs/get-started.md`
-- `docs/why-browserclickyard.md`
+- `docs/why-pagestress.md`
 - `docs/proof-center.md`
 - `docs/reference/universal-api.md`
 

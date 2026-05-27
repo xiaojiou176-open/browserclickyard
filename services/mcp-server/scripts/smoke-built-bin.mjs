@@ -21,9 +21,9 @@ assert.equal(
   "package smoke expects the scoped package name to stay @uiq/mcp-server",
 );
 assert.equal(
-  packageJson.bin?.["browserclickyard-mcp"],
+  packageJson.bin?.["pagestress-mcp"],
   "./dist/server.js",
-  "package smoke expects browserclickyard-mcp to resolve to ./dist/server.js",
+  "package smoke expects pagestress-mcp to resolve to ./dist/server.js",
 );
 
 let child;
@@ -61,7 +61,7 @@ try {
   assert.equal(
     child.exitCode,
     null,
-    `browserclickyard-mcp should remain alive after startup, got exitCode=${child.exitCode}, stderr=${stderr}`,
+    `pagestress-mcp should remain alive after startup, got exitCode=${child.exitCode}, stderr=${stderr}`,
   );
 
   child.kill("SIGTERM");

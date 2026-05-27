@@ -2,7 +2,7 @@ import { expect, type Page, test } from "@playwright/test";
 
 async function step1OpenHome(page: Page) {
   await page.goto("/");
-  await expect(page.getByTestId("app-title")).toContainText("Browserclickyard Demo");
+  await expect(page.getByTestId("app-title")).toContainText("Pagestress Demo");
   await expect(page.getByRole("navigation", { name: "Main navigation" })).toBeVisible();
   await expect(page.getByTestId("nav-home")).toHaveAttribute("aria-current", "page");
 }

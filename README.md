@@ -2,16 +2,16 @@
   <img src="https://em-content.zobj.net/source/apple/391/desktop-computer_1f5a5-fe0f.png" width="120" alt="desktop computer" />
 </p>
 
-<h1 align="center">browserclickyard</h1>
+<h1 align="center">pagestress</h1>
 
 <p align="center">
   <strong>your AI clicks, your browser obeys</strong>
 </p>
 
 <p align="center">
-  <a href="https://github.com/xiaojiou176-open/browserclickyard/stargazers"><img src="https://img.shields.io/github/stars/xiaojiou176-open/browserclickyard?style=flat&color=yellow" alt="Stars"></a>
-  <a href="https://github.com/xiaojiou176-open/browserclickyard/commits/main"><img src="https://img.shields.io/github/last-commit/xiaojiou176-open/browserclickyard?style=flat" alt="Last Commit"></a>
-  <a href="LICENSE"><img src="https://img.shields.io/github/license/xiaojiou176-open/browserclickyard?style=flat" alt="License"></a>
+  <a href="https://github.com/xiaojiou176-open/pagestress/stargazers"><img src="https://img.shields.io/github/stars/xiaojiou176-open/pagestress?style=flat&color=yellow" alt="Stars"></a>
+  <a href="https://github.com/xiaojiou176-open/pagestress/commits/main"><img src="https://img.shields.io/github/last-commit/xiaojiou176-open/pagestress?style=flat" alt="Last Commit"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/github/license/xiaojiou176-open/pagestress?style=flat" alt="License"></a>
 </p>
 
 <p align="center">
@@ -23,7 +23,7 @@
 
 ---
 
-browserclickyard is the cockpit for AI-driven browser automation. Hand a goal to your agent, watch the panel, take over with one keypress when needed.
+pagestress is the cockpit for AI-driven browser automation. Hand a goal to your agent, watch the panel, take over with one keypress when needed.
 
 ```
 ┌──────────────────────────────────────┐
@@ -53,14 +53,14 @@ browserclickyard is the cockpit for AI-driven browser automation. Hand a goal to
 ## Install
 
 ```bash
-git clone https://github.com/xiaojiou176-open/browserclickyard.git
-cd browserclickyard
+git clone https://github.com/xiaojiou176-open/pagestress.git
+cd pagestress
 # follow the per-stack quickstart in INSTALL.md or docs/
 ```
 
 Three commands. No `curl | sh`. No login. Read what you run.
 
-Install break? Open your favorite agent and say *"Read AGENTS.md and bootstrap browserclickyard for me."* Agent fix own brain. Long version: [`docs/`](./docs/).
+Install break? Open your favorite agent and say *"Read AGENTS.md and bootstrap pagestress for me."* Agent fix own brain. Long version: [`docs/`](./docs/).
 
 ## How It Work
 
@@ -69,7 +69,7 @@ The repo is seven layers — exactly the seven commits in `git log`. New work go
 | Layer | What |
 |---|---|
 | `chore: scaffold` | License, governance, hygiene gates, CI scaffolding. |
-| `feat(core)` | The primary engine. The reason browserclickyard exists. |
+| `feat(core)` | The primary engine. The reason pagestress exists. |
 | `feat(modules)` | Packages, adapters, services, plugins. The second floor. |
 | `feat(contracts)` | Schemas, configs, public boundaries. Other code talks here. |
 | `test:` | Receipts. Everything in this layer must run. |
@@ -80,12 +80,12 @@ The repo is seven layers — exactly the seven commits in `git log`. New work go
 
 ## Ecosystem
 
-browserclickyard lives in the **yard family**: seven yards. one philosophy: structured input, structured output, structured proof.
+pagestress lives in the **yard family**: seven yards. one philosophy: structured input, structured output, structured proof.
 
 | Repo | What |
 |---|---|
 | [**switchyard**](https://github.com/xiaojiou176-open/switchyard) | model & agent runtime switch board |
-| [**browserclickyard**](https://github.com/xiaojiou176-open/browserclickyard) *(you here)* | your AI clicks, your browser obeys |
+| [**pagestress**](https://github.com/xiaojiou176-open/pagestress) *(you here)* | your AI clicks, your browser obeys |
 | [**noteyard**](https://github.com/xiaojiou176-open/noteyard) | your Apple Notes never really die |
 | [**dealyard**](https://github.com/xiaojiou176-open/dealyard) | let prices fight, you sit and watch |
 | [**docyard**](https://github.com/xiaojiou176-open/docyard) | docs site in, markdown out, no scraping by hand |
@@ -100,9 +100,9 @@ Cross-family taste:
 
 ## Star This Repo
 
-If browserclickyard saves you a click, an hour, or a headache — star costs zero. Fair trade. ⭐
+If pagestress saves you a click, an hour, or a headache — star costs zero. Fair trade. ⭐
 
-[![Star History Chart](https://api.star-history.com/svg?repos=xiaojiou176-open/browserclickyard&type=Date)](https://star-history.com/#xiaojiou176-open/browserclickyard&Date)
+[![Star History Chart](https://api.star-history.com/svg?repos=xiaojiou176-open/pagestress&type=Date)](https://star-history.com/#xiaojiou176-open/pagestress&Date)
 
 ## Also by Yifeng[Terry] Yu
 

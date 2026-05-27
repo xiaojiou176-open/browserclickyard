@@ -1,6 +1,6 @@
 # Get Started
 
-Browserclickyard makes the most sense when you start from the **WebUI you want to
+Pagestress makes the most sense when you start from the **WebUI you want to
 test**, not from the installation checklist.
 
 This page separates three different wins:
@@ -54,7 +54,7 @@ What success looks like:
 - The header locale toggle can switch the highest-traffic shell guidance between **English** and **简体中文** without changing command ids or API routes
 - The shell can now keep navigation, onboarding, help, Flow Studio guidance, parameter panels, dialogs, and operator feedback chrome aligned in English or Simplified Chinese
 
-![Browserclickyard studio preview showing the launch-first operator path: Stress Lab first, then Runs and Blocks, then Flow Studio, with Advanced Review as the deeper governed layer behind the first visible result.](./assets/browserclickyard-studio-preview.svg)
+![Pagestress studio preview showing the launch-first operator path: Stress Lab first, then Runs and Blocks, then Flow Studio, with Advanced Review as the deeper governed layer behind the first visible result.](./assets/pagestress-studio-preview.svg)
 
 This preview card is the current **front-door orientation visual** for the
 launch-first IA. It is useful for understanding the product map before you boot
@@ -80,7 +80,7 @@ If this is your first run in a fresh checkout, bootstrap once first:
 | Produce a localhost-first governed experiment | Orchestrator path | Generate a run manifest, summary, and proof indexes for a localhost WebUI with a valid `GEMINI_API_KEY` |
 | Connect from an MCP client | MCP path | Expose the same runtime to an agent or operator client |
 
-![Browserclickyard result path diagram showing the local first-look path, the governed run path, and the MCP connection route.](./assets/browserclickyard-result-path.svg)
+![Pagestress result path diagram showing the local first-look path, the governed run path, and the MCP connection route.](./assets/pagestress-result-path.svg)
 
 ## Current Route B Boundary
 
@@ -95,7 +95,7 @@ The front door is now stress-lab-first, but the honest MVP is still
 
 ## Run Lane Map
 
-Browserclickyard uses several run surfaces on purpose.
+Pagestress uses several run surfaces on purpose.
 
 | Surface | Think of it as | What it writes |
 | --- | --- | --- |
@@ -138,7 +138,7 @@ repeatable release evidence.
 
 ## Path 1: Launch The Stress Lab Locally
 
-Use this path when you want to experience Browserclickyard as a stress lab, not just
+Use this path when you want to experience Pagestress as a stress lab, not just
 as a set of scripts.
 
 This path is the honest "I can see the lab working locally" checkpoint. It does
@@ -202,7 +202,7 @@ If you want the deeper contract, read
 
 ## Path 3: Connect Through MCP
 
-Use this path when you want Browserclickyard to show up as a controlled tool surface
+Use this path when you want Pagestress to show up as a controlled tool surface
 inside an MCP-capable client such as Codex, Claude Code, or another MCP host.
 
 The truthful install path **today** is the repo-native command:
@@ -214,7 +214,7 @@ pnpm mcp:start
 Package truth for this path:
 
 - publish-ready package target: `@uiq/mcp-server`
-- planned CLI name: `browserclickyard-mcp`
+- planned CLI name: `pagestress-mcp`
 - protocol today: **stdio only**
 - local stdio startup does **not** use OAuth
 - the truthful package-launch shape is `npx -y @uiq/mcp-server` /
@@ -245,7 +245,7 @@ not a second truth surface that replaces workflow runs or governed proof.
 
 ## What To Read Next
 
-- Product story: [docs/why-browserclickyard.md](./why-browserclickyard.md)
+- Product story: [docs/why-pagestress.md](./why-pagestress.md)
 - Public proof map: [docs/proof-center.md](./proof-center.md)
 - Repo-side public boundary and remote-audit paths:
   [docs/reference/public-readiness.md](./reference/public-readiness.md)

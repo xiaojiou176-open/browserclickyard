@@ -1,10 +1,10 @@
-# Install And Attach Browserclickyard MCP
+# Install And Attach Pagestress MCP
 
 ## Local repo setup
 
 ```bash
-git clone https://github.com/xiaojiou176-open/browserclickyard.git
-cd browserclickyard
+git clone https://github.com/xiaojiou176-open/pagestress.git
+cd pagestress
 ./scripts/setup.sh
 ```
 
@@ -12,7 +12,7 @@ If you already trust the workspace toolchain, `pnpm install` is enough for JS
 dependencies.
 
 Before loading the host config snippets in this folder, replace
-`/absolute/path/to/browserclickyard` with the real path to your
+`/absolute/path/to/pagestress` with the real path to your
 local clone.
 
 ## Start the current repo-native MCP server
@@ -34,5 +34,5 @@ pnpm mcp:smoke
 ## Truth boundary
 
 This packet teaches the repo-native stdio MCP surface that works today.
-The package shape `@uiq/mcp-server` / `browserclickyard-mcp` is publish-ready but not
+The package shape `@uiq/mcp-server` / `pagestress-mcp` is publish-ready but not
 yet published.

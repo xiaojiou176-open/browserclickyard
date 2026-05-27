@@ -47,7 +47,7 @@ behavior.
 - Component-test runtime contract: `tests/web-harness/tests/ct` uses
   `@playwright/test` with Playwright CT core fixtures/register wiring, while
   `tests/frontend-e2e` remains the product-frontend E2E surface.
-- Orchestrator-first governed browserclickyard: `pnpm uiq <command>` composes
+- Orchestrator-first governed pagestress: `pnpm uiq <command>` composes
   profile + target and writes one evidence bundle per run.
 - Manifest-first: every run writes
   `.runtime-cache/artifacts/runs/<runId>/manifest.json`.
@@ -86,7 +86,7 @@ behavior.
 
 ## Integration Substrate Contract
 
-Browserclickyard currently exposes three different integration substrate layers on
+Pagestress currently exposes three different integration substrate layers on
 purpose.
 
 | Layer | Current role | Contract level |
@@ -123,8 +123,8 @@ model.
 | Local product lane | `./scripts/dev-up.sh` | Boot the operator UI and FastAPI locally | `.runtime-cache/dev/*`, `.runtime-cache/logs/*` | Local first-look path only. It does not write a governed proof bundle. |
 | Automation command lane | `POST /api/automation/run` | Queue allowlisted command execution | `AutomationTask` ledger | May invoke script-pipeline commands such as `script-pipeline-full` and `script-pipeline-capture`. Deprecated `run*` aliases are no longer the current contract. |
 | Workflow run lane | `POST /api/runs` | Create operator-facing runs from saved templates | Universal workflow ledger (`Session -> Flow -> Template -> Run`) | Bridges to `AutomationTask` through `Run.task_id`. |
-| Script pipeline lane | `./scripts/run-pipeline.sh` | Run record/extract/generate/replay flow automation | Runtime-side automation session files and generated flow/test assets | This lane currently backs specific automation commands. It is not the governed browserclickyard. |
-| Governed browserclickyard | `pnpm uiq run --profile <profile> --target <target>` | Produce release / gate evidence bundles | `.runtime-cache/artifacts/runs/<runId>/manifest.json` | Canonical browserclickyard for manifest/summary/evidence-index output. |
+| Script pipeline lane | `./scripts/run-pipeline.sh` | Run record/extract/generate/replay flow automation | Runtime-side automation session files and generated flow/test assets | This lane currently backs specific automation commands. It is not the governed pagestress. |
+| Governed pagestress | `pnpm uiq run --profile <profile> --target <target>` | Produce release / gate evidence bundles | `.runtime-cache/artifacts/runs/<runId>/manifest.json` | Canonical pagestress for manifest/summary/evidence-index output. |
 | MCP adapter lane | `pnpm mcp:start` | Expose API, governed proof, and artifact reads as MCP tools/resources | Reuses existing ledgers and governed proof artifacts | Adapter only. It is not an independent execution model. |
 
 Canonical wording in docs and UI should follow this table:
@@ -154,7 +154,7 @@ Canonical wording in docs and UI should follow this table:
     index under `.runtime-cache/artifacts/runs/<runId>/`.
 - `POST /api/runs` is the canonical operator-facing workflow run surface. It
   creates `Run` records and may dispatch underlying `AutomationTask`
-  execution, but it does not replace the governed browserclickyard.
+  execution, but it does not replace the governed pagestress.
 - `scripts/run-register-flow.sh` is historical only and must not be used in
   new automation or CI wiring.
 

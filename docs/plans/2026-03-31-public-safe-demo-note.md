@@ -2,14 +2,14 @@
 
 ## What ships in Prompt 5
 
-The public-safe demo surface for Browserclickyard is now:
+The public-safe demo surface for Pagestress is now:
 
 - [Public Stress Lab Guided Demo](../examples/public-stress-lab-guided-demo.md)
 - [Public Proof Sample](../examples/public-proof-sample/README.md)
 
 ## Why this is the right demo shape
 
-Browserclickyard cannot safely promise a live hosted demo without risking secrets, private artifacts, or misleading claims about current runtime access.
+Pagestress cannot safely promise a live hosted demo without risking secrets, private artifacts, or misleading claims about current runtime access.
 
 So the safe shape is:
 

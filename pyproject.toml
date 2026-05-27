@@ -3,7 +3,7 @@ requires = ["setuptools>=68", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "browserclickyard"
+name = "pagestress"
 version = "0.1.0"
 description = "Automation scaffold with FastAPI backend and browser/API testing support"
 readme = "README.md"

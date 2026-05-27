@@ -13,7 +13,7 @@
 
 - The front door now explains one operator journey:
   start in Quick Launch, track in Task Center, decide in Review Board.
-- `docs/get-started.md`, `docs/why-browserclickyard.md`, `docs/proof-center.md`, and
+- `docs/get-started.md`, `docs/why-pagestress.md`, `docs/proof-center.md`, and
   `docs/reference/universal-api.md` now share the same lane/truth-language.
 - The app shell now exposes one route-neutral lane map across:
   - `ConsoleHeader`
@@ -164,7 +164,7 @@ one fuzzy roadmap:
 ### If Route B Is Confirmed
 
 - `README.md`
-- `docs/why-browserclickyard.md`
+- `docs/why-pagestress.md`
 - `apps/command-center/src/views/QuickLaunchView.tsx`
 - `packages/orchestrator/src/commands/load.ts`
 - `packages/orchestrator/src/commands/perf.ts`
