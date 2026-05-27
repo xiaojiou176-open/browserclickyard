@@ -1,0 +1,33 @@
+<svg width="1280" height="420" viewBox="0 0 1280 420" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Browserclickyard studio preview</title>
+  <desc id="desc">Preview card for Browserclickyard showing a stress-lab-first browser workflow with deeper governed review behind it.</desc>
+  <defs>
+    <linearGradient id="bg" x1="76" y1="30" x2="1200" y2="390" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0F172A"/>
+      <stop offset="0.5" stop-color="#111827"/>
+      <stop offset="1" stop-color="#1E293B"/>
+    </linearGradient>
+    <linearGradient id="orbA" x1="888" y1="44" x2="1182" y2="230" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#38BDF8"/>
+      <stop offset="1" stop-color="#1D4ED8"/>
+    </linearGradient>
+    <linearGradient id="orbB" x1="930" y1="150" x2="1174" y2="330" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#22C55E"/>
+      <stop offset="1" stop-color="#15803D"/>
+    </linearGradient>
+  </defs>
+  <rect x="24" y="24" width="1232" height="372" rx="32" fill="url(#bg)"/>
+  <circle cx="1040" cy="118" r="122" fill="url(#orbA)" fill-opacity="0.22"/>
+  <circle cx="1128" cy="246" r="92" fill="url(#orbB)" fill-opacity="0.16"/>
+  <rect x="86" y="72" width="246" height="34" rx="17" fill="#0B1220" stroke="#334155"/>
+  <text x="108" y="94" fill="#E2E8F0" font-family="ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="15" font-weight="700">xiaojiou176-open studio system</text>
+  <text x="86" y="164" fill="#F8FAFC" font-family="ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="52" font-weight="800">Browserclickyard</text>
+  <text x="86" y="212" fill="#CBD5E1" font-family="ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="24" font-weight="600">Run WebUI experiments, read the result,</text>
+  <text x="86" y="246" fill="#CBD5E1" font-family="ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="24" font-weight="600">and open governed review only when it matters.</text>
+  <rect x="86" y="292" width="212" height="30" rx="15" fill="#111827" stroke="#1F2937"/>
+  <rect x="312" y="292" width="200" height="30" rx="15" fill="#111827" stroke="#1F2937"/>
+  <rect x="526" y="292" width="192" height="30" rx="15" fill="#111827" stroke="#1F2937"/>
+  <text x="116" y="312" fill="#BFDBFE" font-family="ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="14" font-weight="700">START STRESS LAB</text>
+  <text x="360" y="312" fill="#86EFAC" font-family="ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="14" font-weight="700">READ RESULT</text>
+  <text x="547" y="312" fill="#DDD6FE" font-family="ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="14" font-weight="700">OPEN DEEP REVIEW</text>
+</svg>

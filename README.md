@@ -1,390 +1,117 @@
-# Browserclickyard
+<p align="center">
+  <img src="https://em-content.zobj.net/source/apple/391/desktop-computer_1f5a5-fe0f.png" width="120" alt="desktop computer" />
+</p>
 
-> Browserclickyard is an AI-native WebUI stress lab for localhost-first browser
-> experiments, with governed proof and agent-ready workflows when results need
-> deeper review.
+<h1 align="center">browserclickyard</h1>
 
-[Start with results](./docs/get-started.md) ·
-[Proof center](./docs/proof-center.md) ·
-[Docs map](./docs/index.md) ·
-[MCP after first result](./docs/how-to/mcp-quickstart-1pager.md)
+<p align="center">
+  <strong>your AI clicks, your browser obeys</strong>
+</p>
 
-![Browserclickyard studio preview card](./docs/assets/browserclickyard-studio-preview.svg)
+<p align="center">
+  <a href="https://github.com/xiaojiou176-open/browserclickyard/stargazers"><img src="https://img.shields.io/github/stars/xiaojiou176-open/browserclickyard?style=flat&color=yellow" alt="Stars"></a>
+  <a href="https://github.com/xiaojiou176-open/browserclickyard/commits/main"><img src="https://img.shields.io/github/last-commit/xiaojiou176-open/browserclickyard?style=flat" alt="Last Commit"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/github/license/xiaojiou176-open/browserclickyard?style=flat" alt="License"></a>
+</p>
 
-## At A Glance
+<p align="center">
+  <a href="#what-you-get">What You Get</a> •
+  <a href="#install">Install</a> •
+  <a href="#how-it-work">How It Work</a> •
+  <a href="#ecosystem">Ecosystem</a>
+</p>
 
-If you only want the shortest truthful filter before reading deeper, use this
-table first:
+---
 
-| What you need to know | Current answer |
-| --- | --- |
-| Product thesis | an AI-native WebUI stress lab for localhost-first browser experiments |
-| Canonical front door | start in Stress Lab, read the result in Runs & Blocks, go deeper only if needed |
-| First visible win | target-first experiment -> readable result |
-| Deeper layer | proof, advanced review, and MCP only after a result exists |
-| Second ring only | MCP quickstart, distribution truth, skill packet, and package lanes |
-| What it must never be reduced to | a browser extension, package-listed MCP marketplace artifact, or hosted SaaS |
+browserclickyard is the cockpit for AI-driven browser automation. Hand a goal to your agent, watch the panel, take over with one keypress when needed.
 
-## What this repo is
-
-| Layer | Short answer | Why it matters |
-| --- | --- | --- |
-| Category | **AI-native WebUI stress lab** | Start from a target URL and run browser experiments without stitching together ad hoc scripts and CI fragments. |
-| First visible win | **Target-first experiment -> readable result** | A newcomer should get one clear result path before opening proof/governance depth. |
-| Deeper layer | **Governed proof + agent-ready workflows** | MCP, AI review, and release briefs stay behind the first experiment result instead of replacing the front door story. |
-
-## Primary Product vs Companion Surfaces
-
-Use this like a museum map:
-
-| Surface | Role | What it proves | What it must not be mistaken for |
-| --- | --- | --- | --- |
-| `README.md` + `docs/get-started.md` + the local stress-lab shell | primary product lane | Browserclickyard is an AI-native WebUI stress lab | a package listing, a browser extension, or a hosted SaaS proof |
-| `docs/proof-center.md` + `Advanced Review` story | deeper governed layer | proof, review, and AI summaries still exist behind the first result | the first-use front door |
-| `services/mcp-server/` + `docs/skills/browserclickyard-mcp/` | companion integration lane | MCP-capable clients can attach to the same governed runtime | the main product identity or proof that a marketplace/package listing already happened |
-
-In plain language:
-
-> browser-adjacent does not mean browser-extension product.
-> MCP-ready does not mean package-listed.
->
-> Start in Stress Lab, read the result in Runs & Blocks, go deeper only if
-> needed.
-
-## Start with one visible win
-
-Choose the shortest honest path before you read the heavier engineering stack:
-
-1. **No local setup yet?** Open the
-   [public-safe guided demo](./docs/examples/public-stress-lab-guided-demo.md).
-2. **Want the real shell locally?** Start with
-   [docs/get-started.md](./docs/get-started.md), then run `./scripts/dev-up.sh`.
-3. **Want MCP after the first result exists?** Read
-   [MCP quickstart](./docs/how-to/mcp-quickstart-1pager.md) and
-   [INTEGRATIONS.md](./INTEGRATIONS.md).
-
-![Browserclickyard Command Center running locally with Stress Lab, Runs and Blocks, Flow Studio, and Advanced Review available in the operator shell. This is a maintainer-local product view, not a hosted public demo or proof of live GitHub settings.](./docs/assets/browserclickyard-command-center-real.png)
-![Browserclickyard result path diagram showing the local first-look path, the governed run path, and the MCP connection route.](./docs/assets/browserclickyard-result-path.svg)
-
-## Distribution Truth Today
-
-Browserclickyard already has a **public GitHub front door today**, but its package,
-marketplace, and hosted lanes still stay in separate, claim-gated buckets.
-
-- **Repo-owned now**: the localhost-first stress-lab path, governed runs, the
-  repo-native MCP command `pnpm mcp:start`, and public-safe proof/demo docs.
-- **Remote GitHub routes exist**: the public repository, homepage, release
-  channel, Discussions, and issue templates are part of the current front-door
-  route, but their current live state stays audit-backed.
-- **Ready but not live yet**: the publish-ready MCP package
-  `@uiq/mcp-server` and the planned `browserclickyard-mcp` CLI shape.
-- **Companion skill host state**: the packet at `docs/skills/browserclickyard-mcp/`
-  is now listed live on ClawHub and still `review-pending` on
-  OpenHands/extensions; those receipts apply only to the companion skill lane.
-- **Not published yet**: PyPI, npm registry distribution, official plugin
-  marketplaces, additional public Skills registry listings beyond the ClawHub
-  companion packet, public Docker images, and hosted SaaS distribution claims.
-- **Audit rule**: use
-  [docs/reference/public-readiness.md](./docs/reference/public-readiness.md)
-  before restating live GitHub metadata, homepage, release presence, or branch
-  enforcement as fresh fact.
-- **Manual later**: custom GitHub social preview upload still belongs to
-  GitHub Settings rather than a tracked repo action.
-
-## New Here?
-
-- **Want the product story first?** Start with
-  [Start with results](./docs/get-started.md).
-- **Want the publish-ready MCP artifact truth?** Read
-  [INTEGRATIONS.md](./INTEGRATIONS.md).
-- **Want the governed proof layer?** Use
-  [docs/proof-center.md](./docs/proof-center.md) and
-  [docs/mcp.md](./docs/mcp.md).
-- **Want the MCP-capable client path?** Start with
-  [docs/how-to/mcp-agent-review-loop.md](./docs/how-to/mcp-agent-review-loop.md).
-
-## 30-Second First Look
-
-If you want the fastest visible result, start the local stress-lab shell
-first. This is the quickest way to confirm that the Command Center and API boot
-on your machine after setup. It is not the same thing as producing governed run
-proof.
-
-```bash
-./scripts/dev-up.sh
+```
+┌──────────────────────────────────────┐
+│  LOCAL-FIRST          ████████ 100%  │
+│  SOURCE-TRACEABLE     ████████ 100%  │
+│  TYPING REQUIRED      ░░░░░░░░   0%  │
+│  VIBES                ████████ ZERO  │
+│                                FILLER│
+└──────────────────────────────────────┘
 ```
 
-If this is your first time in a fresh checkout, bootstrap once and then launch:
+> Command center for browser automation. CDP under the hood, agent on top.
+
+## What You Get
+
+| Surface | What |
+|---|---|
+| `command center` | Live console for goals, runs, params, and results. |
+| `mcp services` | Expose browser automation to any MCP-compatible agent. |
+| `contracts` | Versioned goal/run/result schemas. Replays are deterministic. |
+| `packages` | Shared CDP primitives, locator stability helpers, retry policies. |
+| `public skills` | Drop into Claude/Codex/OpenClaw. Goal in, browser obeys. |
+
+> [!IMPORTANT]
+> Local-first by default. No silent telemetry. No cloud round-trip. Your data stays on your machine until you explicitly ship it somewhere.
+
+## Install
 
 ```bash
-./scripts/setup.sh && ./scripts/dev-up.sh
+git clone https://github.com/xiaojiou176-open/browserclickyard.git
+cd browserclickyard
+# follow the per-stack quickstart in INSTALL.md or docs/
 ```
 
-What you should see:
+Three commands. No `curl | sh`. No login. Read what you run.
 
-- The Command Center on `http://127.0.0.1:17373`
-- API health on `http://127.0.0.1:17380/health/`
-- A live Stress Lab surface with URL-first parameters, lab-mode guidance, Runs & Blocks, and Advanced Review instead of a static docs-only experience
+Install break? Open your favorite agent and say *"Read AGENTS.md and bootstrap browserclickyard for me."* Agent fix own brain. Long version: [`docs/`](./docs/).
 
-The preview card above is the current **public-facing shell map** for the
-launch-first IA. It is intentionally a semantic front-door visual, not a
-literal runtime screenshot, so README does not freeze an outdated local shell
-capture as if it were current product truth.
+## How It Work
 
-## What Browserclickyard Gives You Right Now
+The repo is seven layers — exactly the seven commits in `git log`. New work goes in as small named PRs. No 50-file mystery commits.
 
-Browserclickyard takes browser automation out of the "test folder plus tribal
-knowledge" trap and turns it into an **AI-native WebUI stress lab** with a
-governed deep-review layer behind it.
+| Layer | What |
+|---|---|
+| `chore: scaffold` | License, governance, hygiene gates, CI scaffolding. |
+| `feat(core)` | The primary engine. The reason browserclickyard exists. |
+| `feat(modules)` | Packages, adapters, services, plugins. The second floor. |
+| `feat(contracts)` | Schemas, configs, public boundaries. Other code talks here. |
+| `test:` | Receipts. Everything in this layer must run. |
+| `feat(ops)` | Scripts, infra, CI helpers, build glue. |
+| `docs:` | Public docs surface. The pretty face. |
 
-- Start from a target URL, choose a lab mode, and run browser experiments
-  without stitching together local scripts, CI fragments, and hidden debug
-  artifacts.
-- Check reusable journey target fit before you launch, so a saved template does
-  not silently drift onto the wrong target family.
-- Read the latest result, failures, waiting states, and screenshots from one
-  operator surface instead of hunting through logs and test outputs.
-- Use the Runs & Blocks report surface to jump from the latest run into summary
-  and lens-specific artifact paths, and treat the Manual Gate inbox as the
-  operator queue for paused runs.
-- Switch the operator shell guidance between **English** and **简体中文**
-  without changing command ids, artifact paths, or MCP/API contracts.
-- Escalate into proof campaigns, AI findings, and governed comparison only when
-  the experiment result needs deeper review.
-- Read grouped AI findings in Advanced Review by severity and finding family,
-  not as one flat pile of review output.
-- Use the cross-target feasibility advisor when a reusable journey needs to
-  move across target families, so migration hints stay attached to the same
-  governed review surface.
-- Copy an **agent handoff prompt** from Advanced Review when you want Codex,
-  Claude Code, or another MCP-capable client to continue the same governed
-  follow-up without rebuilding the run context by hand.
-- Switch key shell guidance between English and Simplified Chinese when you
-  want the main navigation, onboarding, and help surfaces to match the
-  operator's preferred reading language.
-- Connect Codex, Claude Code, or another MCP-capable client to the same deeper
-  layer through release-brief, similar-failure, feasibility, and manual-gate
-  read surfaces instead of a generic chat wrapper.
-- Keep AI and MCP as amplifiers over the same runtime instead of inventing a
-  second truth surface.
-- Reuse the same substrate for exploration, stress, performance, resilience,
-  visual, and accessibility work.
+`git log` reads like a building floor plan. Look once, know the whole shape.
 
-## Product Map
+## Ecosystem
 
-This is the shortest way to understand how the layers fit together without
-turning the homepage into a slogan pileup.
+browserclickyard lives in the **yard family**: seven yards. one philosophy: structured input, structured output, structured proof.
 
-| Layer | What it means |
-| --- | --- |
-| Main product | Browserclickyard is an **AI-native WebUI stress lab** for localhost-first browser experiments. |
-| First-use path | Start with a target, choose a lab mode, read the latest result, then refine or compare. |
-| AI layer | AI writes briefs, summarizes findings, and suggests next checks after a result exists. |
-| MCP layer | MCP gives coding agents and operator copilots access to the same runtime and governed read surfaces through a real MCP server, not a fake chat wrapper. |
-| Proof / review layer | Governed proof and `Advanced Review` are the deeper layer for comparison, audits, and handoff. |
+| Repo | What |
+|---|---|
+| [**switchyard**](https://github.com/xiaojiou176-open/switchyard) | model & agent runtime switch board |
+| [**browserclickyard**](https://github.com/xiaojiou176-open/browserclickyard) *(you here)* | your AI clicks, your browser obeys |
+| [**noteyard**](https://github.com/xiaojiou176-open/noteyard) | your Apple Notes never really die |
+| [**dealyard**](https://github.com/xiaojiou176-open/dealyard) | let prices fight, you sit and watch |
+| [**docyard**](https://github.com/xiaojiou176-open/docyard) | docs site in, markdown out, no scraping by hand |
+| [**fileyard**](https://github.com/xiaojiou176-open/fileyard) | messy folders in, organized library out |
+| [**proofyard**](https://github.com/xiaojiou176-open/proofyard) | every claim ships with its receipt |
 
-## Bilingual Shell
+Cross-family taste:
+[**BeamMe**](https://github.com/xiaojiou176-open/BeamMe) ·
+[**BrewMe**](https://github.com/xiaojiou176-open/BrewMe) ·
+[**OpenVibeCoding**](https://github.com/xiaojiou176-open/OpenVibeCoding) ·
+[**proofyard**](https://github.com/xiaojiou176-open/proofyard).
 
-The Command Center now keeps the same operator path available in **English**
-and **简体中文** for the highest-traffic shell guidance.
+## Star This Repo
 
-- Use the language toggle in the header when you want bilingual navigation,
-  onboarding, review framing, parameter guidance, and operator feedback chrome.
-- Command ids, artifact paths, MCP tool ids, and API routes stay stable across
-  both languages.
-- Detailed runtime diagnostics remain English-first today, so operators and
-  agent logs keep one contract while the shell guidance becomes easier to scan.
-- Advanced Review also drafts a copy-ready agent handoff prompt, so bilingual
-  operators can switch shell guidance language without changing the underlying
-  Codex / Claude Code / MCP workflow contract.
-- Flow Studio, confirmation dialogs, toasts, and the latest operator shell
-  feedback now follow the same bilingual shell layer instead of dropping back
-  to English-only chrome at the edges.
+If browserclickyard saves you a click, an hour, or a headache — star costs zero. Fair trade. ⭐
 
-## Start With Results
+[![Star History Chart](https://api.star-history.com/svg?repos=xiaojiou176-open/browserclickyard&type=Date)](https://star-history.com/#xiaojiou176-open/browserclickyard&Date)
 
-Choose the path that matches the result you want first. Governance and deep
-references come after the first visible win.
+## Also by Yifeng[Terry] Yu
 
-| I want to... | Run this | What you get |
-| --- | --- | --- |
-| Understand the product without local setup | Open [the guided demo](./docs/examples/public-stress-lab-guided-demo.md) | A public-safe walkthrough of the target -> experiment -> result -> advanced-review path |
-| See the stress-lab shell fast | `./scripts/dev-up.sh` | Command Center on `http://127.0.0.1:17373`, API health on `http://127.0.0.1:17380/health/`, and a live Stress Lab surface when dependencies are already installed |
-| Bootstrap then open the stress lab | `./scripts/setup.sh && ./scripts/dev-up.sh` | The same stress-lab surface, plus local dependencies and Playwright installed for a fresh checkout |
-| Run a localhost-first governed experiment | `GEMINI_API_KEY=<your-key> pnpm uiq run --profile deep-localhost --target web.any-localhost --base-url http://127.0.0.1:3000` | A governed run for a localhost WebUI that writes `manifest.json`, `reports/summary.json`, diagnostics indexes, and evidence indexes under `.runtime-cache/artifacts/runs/<runId>/` |
-| Connect the platform through MCP | `pnpm mcp:start` | The core Browserclickyard tool surface for MCP-capable clients |
+- **[switchyard](https://github.com/xiaojiou176-open/switchyard)** — model & agent runtime switch board
+- **[noteyard](https://github.com/xiaojiou176-open/noteyard)** — your Apple Notes never really die
+- **[BeamMe](https://github.com/xiaojiou176-open/BeamMe)** — beam your agent config to any planet
+- **[BrewMe](https://github.com/xiaojiou176-open/BrewMe)** — wake up, news already brewed
+- **[OpenVibeCoding](https://github.com/xiaojiou176-open/OpenVibeCoding)** — AI codes overnight, you ship in the morning
 
-For a step-by-step path, go to [docs/get-started.md](./docs/get-started.md).
+## License
 
-MCP packaging note:
-
-- the publish-ready artifact target is `@uiq/mcp-server`
-- the planned CLI name is `browserclickyard-mcp`
-- the truthful package-launch shape is `npx -y @uiq/mcp-server` or
-  `pnpm dlx @uiq/mcp-server`
-- that package shape is **ready in repo, not published yet**
-
-## Current Route B Boundary
-
-Browserclickyard is now deliberately telling the **stress-lab-first** story at the
-front door, but the current MVP is still **localhost-first / governed-target
-first**.
-
-- `web.any-localhost` is the current honest “any WebUI” bridge for local apps.
-- `--base-url` is guarded to `localhost`, `127.0.0.1`, or `::1` unless a
-  target explicitly allowlists something broader.
-- Advanced Review, proof campaigns, AI summaries, and MCP remain available, but
-  they are the deeper layer after the first experiment result exists.
-
-## Run Lanes At A Glance
-
-Not every surface that says "run" means the same thing.
-
-| Surface | What it is for | Primary truth / output |
-| --- | --- | --- |
-| `./scripts/dev-up.sh` | Boot the local product UI + API | `.runtime-cache/dev/*`, local logs, local health surfaces |
-| `POST /api/runs` | Create a workflow run from saved templates in the operator product | Universal workflow ledger (`Session -> Flow -> Template -> Run`) |
-| `POST /api/automation/run` | Queue an allowlisted automation command such as `script-pipeline-capture` or `script-pipeline-full` | `AutomationTask` ledger |
-| `pnpm uiq run --profile ... --target ...` | Produce governed experiment evidence and deeper proof | `.runtime-cache/artifacts/runs/<runId>/manifest.json` and related reports |
-| `pnpm mcp:start` | Expose the API + governed proof surfaces to MCP clients | Reuses the same API and governed artifact bundle contracts |
-
-The canonical run-lane contract lives in
-[docs/architecture.md](./docs/architecture.md). Read that contract before
-treating `/api/runs`, `/api/automation/run`, and `pnpm uiq run` as
-interchangeable.
-
-## One Stress-Lab Journey
-
-If you are new to the product surface, this is the shortest mental model:
-
-1. **Start in Stress Lab** when you want to point the system at a WebUI and
-   choose the kind of experiment to run.
-2. **Move to Runs & Blocks** when you need to inspect the latest outcome,
-   follow execution, or clear a manual gate.
-3. **Open Flow Studio** when the result tells you the journey itself needs to
-   be refined.
-4. **Open Advanced Review** only when you already have a meaningful result and
-   need governed comparison, AI summaries, or proof bundles.
-
-Think of these pages as **start**, **read**, **refine**, and **deep-compare**.
-They are related, but they are not interchangeable truth surfaces.
-
-![Browserclickyard result path diagram showing the local first-look path, the governed run path, and the MCP connection route.](./docs/assets/browserclickyard-result-path.svg)
-
-## Why Teams Reach For Browserclickyard
-
-### 1. It starts from the WebUI you care about
-
-Browserclickyard does not start with a governance board. It starts with the target URL
-and the experiment question: explore, load, perf, chaos, visual, or
-accessibility.
-
-### 2. It keeps results readable before it asks for deeper proof
-
-The operator shell is being realigned so you can read the latest experiment
-result first, then decide whether you need Flow Studio or Advanced Review.
-
-### 3. It still preserves governed depth when you need it
-
-Proof bundles, AI summaries, manual-gate tooling, and MCP do not disappear in
-Route B. They move behind the lab result as the deeper layer for comparison,
-handoff, and governance.
-
-## Why Browserclickyard Instead Of The Usual Alternatives
-
-| Option | Good at | What breaks down | Why Browserclickyard is different |
-| --- | --- | --- | --- |
-| Raw Playwright scripts | Fast local experiments | Ownership, visibility, reusable proof, and repeatable result reading | Browserclickyard adds a stress-lab shell, governed run bundles, and deeper review surfaces |
-| CI-only quality gates | Hard blocking checks | Weak operator context and weak debugging ergonomics | Browserclickyard connects failures back to experiment results, diagnostics, and governed proof |
-| Synthetic monitoring or perf-only tools | One slice of the browser story | Weak coverage across interaction, chaos, visual, and accessibility signals | Browserclickyard keeps multiple browser lab modes on one substrate |
-
-See the longer positioning note in [docs/why-browserclickyard.md](./docs/why-browserclickyard.md).
-
-## Public Proof, Not Vibes
-
-We want the public repo to show more than opinions. The public story has one
-public-safe sample surface and a set of contracts around it:
-
-- [docs/proof-center.md](./docs/proof-center.md): the public proof map, the
-  single public-safe proof sample, and the boundary between public-safe and
-  private-only evidence
-- [docs/architecture.md](./docs/architecture.md): canonical architecture and
-  primary execution path
-- [docs/reference/ci-governance.md](./docs/reference/ci-governance.md):
-  required CI topology and thresholds
-- [docs/reference/public-readiness.md](./docs/reference/public-readiness.md):
-  public boundary stance
-- [CHANGELOG.md](./CHANGELOG.md): current shipping history
-- [docs/releases/v0.1.0-public-launch.md](./docs/releases/v0.1.0-public-launch.md):
-  first public release notes
-- [docs/releases/v0.1.0-public-closure.md](./docs/releases/v0.1.0-public-closure.md):
-  closure record for the first public Browserclickyard surface
-
-In this repo, **proof** means governed evidence that can be revisited later. It
-does **not** mean every operator panel, log line, or local screenshot. The
-Command Center helps you work with runs, but the governed browserclickyard is still
-the source of release-grade evidence.
-
-If you want a no-setup walkthrough of this exact layering, start with the
-[public-safe guided demo](./docs/examples/public-stress-lab-guided-demo.md).
-
-Mock-backed usability studies stay out of the public-browserclickyard. They are
-internal design evidence, not public proof.
-
-![Browserclickyard architecture map showing the Command Center, FastAPI control plane, orchestrator path, MCP boundary, and run evidence.](./docs/assets/browserclickyard-architecture.svg)
-
-## Why Star Browserclickyard Now
-
-Star the repo if you want a front-row seat to the public build-out of:
-
-- An AI-native WebUI stress lab, not just another test helper
-- Public proof surfaces that make experiment results and governed review easier
-  to trust
-- MCP-native operator workflows for browser testing and deeper comparison
-- A stronger open workflow around releases, discussions, proof publishing, and
-  differentiated docs
-
-Starring now is useful if you care about where browser automation is heading,
-even before you adopt the full stack in production.
-
-## Docs By Depth
-
-| If you want... | Start here |
-| --- | --- |
-| The fastest first win | [docs/get-started.md](./docs/get-started.md) |
-| The testing pyramid and coverage map | [docs/reference/testing-strategy.md](./docs/reference/testing-strategy.md) |
-| The product story and differentiation | [docs/why-browserclickyard.md](./docs/why-browserclickyard.md) |
-| Public evidence and boundary rules | [docs/proof-center.md](./docs/proof-center.md) |
-| The first public release story | [docs/releases/v0.1.0-public-launch.md](./docs/releases/v0.1.0-public-launch.md) |
-| A map of the documentation stack | [docs/index.md](./docs/index.md) |
-| Runtime, contracts, and architecture truth | [docs/architecture.md](./docs/architecture.md) |
-| MCP usage | [docs/how-to/mcp-quickstart-1pager.md](./docs/how-to/mcp-quickstart-1pager.md) |
-
-## Public Boundary
-
-Browserclickyard is public, but broad runtime evidence and failure bundles remain
-private-only by default unless a path is explicitly allowlisted as public-safe.
-
-- Public boundary: [docs/reference/public-readiness.md](./docs/reference/public-readiness.md)
-- Public artifact policy:
-  [docs/reference/public-artifact-policy.md](./docs/reference/public-artifact-policy.md)
-- CI and branch-protection truth:
-  [docs/reference/ci-governance.md](./docs/reference/ci-governance.md)
-- GitHub-side metadata such as homepage, topics, social preview, and security
-  settings stay audit-backed and should be verified through the latest
-  public-surface or branch-protection audit artifacts instead of repo prose
-- Secret-backed live, desktop, and privileged governance workflows stay on
-  GitHub-hosted runners and bind the `owner-approved-sensitive` protected
-  environment instead of relying on any shared maintainer runner pool
-
-## Stack
-
-- Python = 3.12.x
-- Node.js = `20.x`
-- pnpm = `10.22.0`
-- Product UI: `apps/command-center/`
-- API control plane: `services/api/`
-- Orchestrator entry: `pnpm uiq <command>`
-- MCP adapter: `services/mcp-server/`
-- Canonical architecture:
-  [docs/architecture.md](./docs/architecture.md)
+MIT — small print, big freedom.

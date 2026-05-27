@@ -1,0 +1,61 @@
+{
+  "log": {
+    "entries": [
+      {
+        "startedDateTime": "2025-02-19T10:10:00.000Z",
+        "request": {
+          "method": "GET",
+          "url": "https://secure.local/register",
+          "headers": [{ "name": "Accept", "value": "text/html" }]
+        },
+        "response": {
+          "status": 200,
+          "headers": [
+            { "name": "Set-Cookie", "value": "session_id=__fixture_session_id__; Path=/; HttpOnly" }
+          ]
+        }
+      },
+      {
+        "startedDateTime": "2025-02-19T10:10:01.000Z",
+        "request": {
+          "method": "GET",
+          "url": "https://secure.local/api/csrf-token",
+          "headers": [{ "name": "Accept", "value": "application/json" }]
+        },
+        "response": {
+          "status": 200,
+          "headers": [
+            { "name": "Set-Cookie", "value": "csrf_cookie=__fixture_csrf_cookie__; Path=/" }
+          ]
+        }
+      },
+      {
+        "startedDateTime": "2025-02-19T10:10:02.000Z",
+        "request": {
+          "method": "POST",
+          "url": "https://secure.local/api/register",
+          "headers": [
+            { "name": "Content-Type", "value": "application/json" },
+            { "name": "Origin", "value": "https://secure.local" },
+            { "name": "Referer", "value": "https://secure.local/register" },
+            { "name": "Authorization", "value": "Bearer __fixture_bearer_token__" },
+            {
+              "name": "Cookie",
+              "value": "session_id=__fixture_session_id__; csrf_cookie=__fixture_csrf_cookie__; theme=dark"
+            },
+            { "name": "X-CSRF-Token", "value": "__fixture_csrf_header_token__" },
+            { "name": "Accept", "value": "application/json" }
+          ],
+          "postData": {
+            "mimeType": "application/json",
+            "text": "{\"email\":\"bootstrap.user@example.com\",\"password\":\"__fixture_password__\",\"otp\":\"__fixture_otp__\"}"
+          }
+        },
+        "response": {
+          "status": 201,
+          "headers": []
+        }
+      }
+    ]
+  }
+}
