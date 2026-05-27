@@ -1,0 +1,69 @@
+schema_version: 1
+rules:
+  - rule_id: packages_no_app_or_service_or_tooling_imports
+    description: packages must not depend on product apps, services, tooling, or tests
+    scope_roots:
+      - packages
+    file_extensions:
+      - .ts
+      - .tsx
+      - .js
+      - .mjs
+      - .cjs
+    forbidden_import_patterns:
+      - from ["'](?:\.\.?/)*(?:apps|services|tooling|tests)/
+      - import\(["'](?:\.\.?/)*(?:apps|services|tooling|tests)/
+  - rule_id: business_code_no_test_imports
+    description: business code must not import test helpers or test fixtures
+    scope_roots:
+      - apps
+      - services
+      - tooling
+      - packages
+    file_extensions:
+      - .ts
+      - .tsx
+      - .js
+      - .mjs
+      - .cjs
+      - .py
+      - .sh
+    forbidden_import_patterns:
+      - from ["'](?:\.\.?/)*tests/
+      - import\(["'](?:\.\.?/)*tests/
+      - from tests(?:\.|/)
+      - import tests(?:\.|/)
+  - rule_id: apps_use_contract_or_package_boundaries
+    description: apps must depend on contracts or packages instead of service internals
+    scope_roots:
+      - apps
+    file_extensions:
+      - .ts
+      - .tsx
+      - .js
+      - .mjs
+      - .cjs
+    forbidden_import_patterns:
+      - from ["'](?:\.\.?/)*(?:services/api/app|services/api/tests)/
+      - import\(["'](?:\.\.?/)*(?:services/api/app|services/api/tests)/
+  - rule_id: tooling_use_public_boundaries_only
+    description: tooling must not import app or service internals directly
+    scope_roots:
+      - tooling
+      - scripts
+    file_extensions:
+      - .ts
+      - .tsx
+      - .js
+      - .mjs
+      - .cjs
+      - .py
+      - .sh
+    forbidden_import_patterns:
+      - from ["'](?:\.\.?/)*(?:apps/command-center/src|services/api/app|services/mcp-server/src)/
+      - import\(["'](?:\.\.?/)*(?:apps/command-center/src|services/api/app|services/mcp-server/src)/
+glue_layer_allowlist:
+  - services/mcp-server
+  - tooling/automation
+  - packages/drivers
+  - packages/orchestrator

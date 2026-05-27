@@ -1,0 +1,47 @@
+lexical:
+  - delete
+  - remove
+  - drop
+  - destroy
+  - pay
+  - payment
+  - purchase
+  - checkout
+  - transfer
+  - submit
+  - send
+  - commit
+  - 删除
+  - 移除
+  - 支付
+  - 付款
+  - 购买
+  - 下单
+  - 转账
+  - 提交
+  - 发送
+roles:
+  - menuitem
+selectors:
+  - '[data-danger="true"]'
+  - '[data-testid*="delete"]'
+  - '[data-testid*="remove"]'
+  - '[data-testid*="pay"]'
+  - '[data-testid*="purchase"]'
+  - '[data-testid*="transfer"]'
+  - '[aria-label*="delete" i]'
+  - '[aria-label*="remove" i]'
+  - '[aria-label*="pay" i]'
+  - '[aria-label*="purchase" i]'
+  - '[aria-label*="transfer" i]'
+  - '[aria-label*="submit" i]'
+urlPatterns:
+  - /delete
+  - /remove
+  - /drop
+  - /destroy
+  - /purchase
+  - /checkout
+  - /payment
+  - /transfer
+  - /submit

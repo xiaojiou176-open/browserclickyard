@@ -1,0 +1,24 @@
+schema_version: 1
+current_mode: private-default-with-public-safe-preview
+public_workflow_enabled: true
+default_failure_bundle_mode: private-only
+private_only_paths:
+  - .runtime-cache/artifacts/ci/failure-bundles/
+  - .runtime-cache/artifacts/runs/
+  - .runtime-cache/artifacts/proof-campaigns/
+  - .runtime-cache/logs/
+  - .runtime-cache/release-gate/
+public_safe_candidates:
+  - .runtime-cache/artifacts/ci/branch-protection-audit.json
+  - .runtime-cache/artifacts/ci/branch-protection-audit.md
+  - .runtime-cache/artifacts/ci/upstream-verification-ledger-<profile>.json
+policy_statement: >-
+  Failure bundles and broad runtime evidence remain private-only by default.
+  Public-safe publication is allowed only for the explicit allowlist below and
+  only through dedicated audit-style workflows; broad runtime publication
+  remains forbidden. Machine-local absolute paths, personal identifiers,
+  unsanitized logs, and secret-like material are never public-safe repo
+  content.
+enforcement_checks:
+  - scripts/ci/check-public-artifact-policy.mjs
+  - scripts/ci/check-sensitive-surface-leaks.mjs

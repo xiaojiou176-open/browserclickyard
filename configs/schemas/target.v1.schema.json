@@ -1,0 +1,222 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://uiq.local/schemas/target.v1.json",
+  "title": "UIQ Target v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["name", "type", "driver"],
+  "properties": {
+    "name": { "type": "string", "minLength": 1 },
+    "type": { "type": "string", "enum": ["web", "tauri", "swift"] },
+    "driver": { "type": "string", "minLength": 1 },
+    "geminiAccuracyMin": { "type": "number", "minimum": 0, "maximum": 1 },
+    "geminiParallelConsistencyMin": { "type": "number", "minimum": 0, "maximum": 1 },
+    "geminiSampleSizeMin": { "type": "integer", "minimum": 1, "maximum": 1000000 },
+    "baseUrl": { "type": "string", "minLength": 1 },
+    "start": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "web": { "type": "string" },
+        "api": { "type": "string" }
+      }
+    },
+    "healthcheck": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "url": { "type": "string" }
+      }
+    },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "domains": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
+        "allowLocalhostAnyPort": { "type": "boolean" }
+      }
+    },
+    "app": { "type": "string" },
+    "bundleId": { "type": "string" },
+    "explore": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "engine": { "type": "string", "enum": ["builtin", "crawlee"], "default": "builtin" },
+        "budgetSeconds": { "type": "integer", "minimum": 1, "maximum": 86400 },
+        "maxDepth": { "type": "integer", "minimum": 0, "maximum": 50 },
+        "maxStates": { "type": "integer", "minimum": 1, "maximum": 100000 },
+        "seed": { "type": "integer", "minimum": 0, "maximum": 2147483647 },
+        "denylist": { "type": "array", "items": { "type": "string" } },
+        "policyFile": { "type": "string" }
+      }
+    },
+    "chaos": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "seed": { "type": "integer", "minimum": 0, "maximum": 2147483647 },
+        "budgetSeconds": { "type": "integer", "minimum": 1, "maximum": 86400 },
+        "eventRatio": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "click": { "type": "number", "minimum": 0, "maximum": 100 },
+            "input": { "type": "number", "minimum": 0, "maximum": 100 },
+            "scroll": { "type": "number", "minimum": 0, "maximum": 100 },
+            "keyboard": { "type": "number", "minimum": 0, "maximum": 100 }
+          }
+        }
+      }
+    },
+    "diagnostics": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "maxItems": { "type": "integer", "minimum": 1, "maximum": 1000 }
+      }
+    },
+    "a11y": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "standard": { "type": "string", "enum": ["wcag2a", "wcag2aa", "wcag2aaa"] },
+        "maxIssues": { "type": "integer", "minimum": 0, "maximum": 1000000 },
+        "engine": { "type": "string", "enum": ["axe", "builtin"] }
+      }
+    },
+    "perf": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "preset": { "type": "string", "enum": ["mobile", "desktop"] },
+        "engine": { "type": "string", "enum": ["lhci", "builtin"] }
+      }
+    },
+    "visual": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "engine": {
+          "type": "string",
+          "enum": ["builtin", "lostpixel", "backstop"],
+          "default": "builtin"
+        },
+        "mode": { "type": "string", "enum": ["diff", "update"] },
+        "baselineDir": { "type": "string" },
+        "maxDiffPixels": { "type": "number", "minimum": 0, "maximum": 1000000000 }
+      }
+    },
+    "aiReview": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "enabled": { "type": "boolean", "default": false },
+        "maxArtifacts": { "type": "integer", "minimum": 1, "maximum": 500, "default": 40 },
+        "emitIssue": { "type": "boolean", "default": false },
+        "emitPrComment": { "type": "boolean", "default": false },
+        "severityThreshold": {
+          "type": "string",
+          "enum": ["critical", "high", "medium", "low"],
+          "default": "high"
+        }
+      }
+    },
+    "computerUse": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "task": { "type": "string" },
+        "maxSteps": { "type": "integer", "minimum": 1, "maximum": 10000 },
+        "speedMode": { "type": "boolean" }
+      }
+    },
+    "load": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "vus": { "type": "integer", "minimum": 1, "maximum": 1000000 },
+        "durationSeconds": { "type": "integer", "minimum": 1, "maximum": 86400 },
+        "requestTimeoutMs": { "type": "integer", "minimum": 100, "maximum": 120000 },
+        "engines": {
+          "type": "array",
+          "items": { "type": "string", "enum": ["builtin", "artillery", "k6"] }
+        }
+      }
+    },
+    "security": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "engine": { "type": "string", "enum": ["builtin", "semgrep"] },
+        "maxFileSizeKb": { "type": "integer", "minimum": 1, "maximum": 1000000 },
+        "includeExtensions": { "type": "array", "items": { "type": "string" } },
+        "excludeDirs": { "type": "array", "items": { "type": "string" } },
+        "rulesFile": { "type": "string" }
+      }
+    },
+    "desktopSoak": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "durationSeconds": { "type": "integer", "minimum": 5, "maximum": 86400 },
+        "intervalSeconds": { "type": "integer", "minimum": 1, "maximum": 3600 },
+        "gates": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "rssGrowthMbMax": { "type": "number", "minimum": 0, "maximum": 1000000 },
+            "cpuAvgPercentMax": { "type": "number", "minimum": 0, "maximum": 100 },
+            "crashCountMax": { "type": "integer", "minimum": 0, "maximum": 1000000 }
+          }
+        }
+      }
+    },
+    "gates": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "consoleErrorMax": { "type": "number", "minimum": 0, "maximum": 1000000 },
+        "pageErrorMax": { "type": "number", "minimum": 0, "maximum": 1000000 },
+        "http5xxMax": { "type": "number", "minimum": 0, "maximum": 1000000 },
+        "contractStatus": { "type": "string", "enum": ["passed"] },
+        "dangerousActionHitsMax": { "type": "number", "minimum": 0, "maximum": 1000000 },
+        "securityHighVulnMax": { "type": "number", "minimum": 0, "maximum": 1000000 },
+        "a11ySeriousMax": { "type": "number", "minimum": 0, "maximum": 1000000 },
+        "perfLcpMsMax": { "type": "number", "minimum": 0, "maximum": 1000000 },
+        "perfFcpMsMax": { "type": "number", "minimum": 0, "maximum": 1000000 },
+        "visualDiffPixelsMax": { "type": "number", "minimum": 0, "maximum": 1000000000 },
+        "loadFailedRequestsMax": { "type": "number", "minimum": 0, "maximum": 1000000000 },
+        "loadP95MsMax": { "type": "number", "minimum": 0, "maximum": 1000000 },
+        "loadP99MsMax": { "type": "number", "minimum": 0, "maximum": 1000000 },
+        "loadRpsMin": { "type": "number", "minimum": 0, "maximum": 1000000 },
+        "loadErrorBudgetMax": { "type": "number", "minimum": 0, "maximum": 1000000000 },
+        "loadStageFailureMax": { "type": "number", "minimum": 0, "maximum": 1000000000 },
+        "loadEngineReadyRequired": { "type": "boolean" },
+        "perfEngineReadyRequired": { "type": "boolean" },
+        "visualBaselineReadyRequired": { "type": "boolean" },
+        "exploreUnderExploredRequired": { "type": "boolean" },
+        "exploreMinDiscoveredStates": { "type": "number", "minimum": 1, "maximum": 1000000 },
+        "uxScoreMin": { "type": "number", "minimum": 0, "maximum": 1000000 },
+        "uxCriticalIssuesMax": { "type": "number", "minimum": 0, "maximum": 1000000 },
+        "autofixRegressionPassedRequired": { "type": "boolean" },
+        "coverageInteractiveControlsMin": { "type": "number", "minimum": 0, "maximum": 1 }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "type": { "const": "web" } }, "required": ["type"] },
+      "then": { "required": ["baseUrl", "scope"] }
+    },
+    {
+      "if": { "properties": { "type": { "const": "tauri" } }, "required": ["type"] },
+      "then": { "required": ["app"] }
+    },
+    {
+      "if": { "properties": { "type": { "const": "swift" } }, "required": ["type"] },
+      "then": { "required": ["bundleId"] }
+    }
+  ]
+}

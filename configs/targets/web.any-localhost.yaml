@@ -1,0 +1,52 @@
+name: web.any-localhost
+type: web
+driver: web-playwright
+baseUrl: http://127.0.0.1:4173
+scope:
+  allowLocalhostAnyPort: true
+explore:
+  budgetSeconds: 180
+  maxDepth: 4
+  maxStates: 60
+  denylist:
+    - delete
+    - remove
+    - pay
+    - submit
+    - purchase
+    - send
+    - commit
+    - drop
+chaos:
+  seed: 20260220
+  budgetSeconds: 180
+  eventRatio:
+    click: 55
+    input: 20
+    scroll: 15
+    keyboard: 10
+diagnostics:
+  maxItems: 50
+load:
+  vus: 12
+  durationSeconds: 20
+  requestTimeoutMs: 8000
+  engines:
+    - builtin
+    - artillery
+    - k6
+a11y:
+  standard: wcag2aa
+  maxIssues: 500
+  engine: axe
+perf:
+  preset: mobile
+  engine: lhci
+visual:
+  mode: diff
+security:
+  engine: builtin
+  maxFileSizeKb: 512
+  rulesFile: configs/security-rules.yaml
+  excludeDirs:
+    - coverage

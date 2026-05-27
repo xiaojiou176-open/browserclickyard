@@ -1,0 +1,166 @@
+schema_version: 2
+correlation_contract:
+  default_required_fields:
+    - runId
+    - component
+    - evidenceClass
+  request_scoped_required_fields:
+    - request_id
+    - trace_id
+  gate_required_fields:
+    - profile
+    - gateName
+  suite_required_fields:
+    - suiteId
+  source_of_truth:
+    run_bundle: reports/evidence.index.json
+    manifest_index: manifest.evidenceIndex
+    diagnostics_index: reports/diagnostics.index.json
+log_sinks:
+  - sink_id: backend_runtime
+    sink_kind: request_scoped
+    owner: services/api/app/core/observability.py
+    path_pattern: .runtime-cache/logs/runtime/service-api.app.jsonl
+    kind: service_log
+    format: jsonl
+    evidence_class: log
+    required_fields:
+      - request_id
+      - trace_id
+      - component
+      - evidenceClass
+      - event
+      - severity
+    retention:
+      days: 7
+      max_bytes: 5242880
+      backups: 5
+  - sink_id: mcp_audit
+    sink_kind: run_scoped
+    owner: services/mcp-server/src/core/io.ts
+    path_pattern: .runtime-cache/logs/mcp-audit.jsonl
+    kind: audit_log
+    format: jsonl
+    evidence_class: log
+    required_fields:
+      - runId
+      - component
+      - evidenceClass
+      - event
+      - status
+    retention:
+      days: 7
+      max_bytes: 2097152
+      backups: 4
+  - sink_id: automation_universal_audit
+    sink_kind: request_scoped
+    owner: services/api/app/services/universal_platform_service.py
+    path_pattern: .runtime-cache/logs/automation/universal.audit.jsonl
+    kind: audit_log
+    format: jsonl
+    evidence_class: log
+    required_fields:
+      - request_id
+      - trace_id
+      - component
+      - evidenceClass
+      - event
+      - status
+    retention:
+      days: 7
+      max_bytes: 5242880
+      backups: 5
+  - sink_id: automation_vonage_audit
+    sink_kind: request_scoped
+    owner: services/api/app/services/vonage_inbox.py
+    path_pattern: .runtime-cache/logs/automation/vonage.callback-audit.jsonl
+    kind: audit_log
+    format: jsonl
+    evidence_class: log
+    required_fields:
+      - request_id
+      - trace_id
+      - component
+      - evidenceClass
+      - event
+      - status
+    retention:
+      days: 7
+      max_bytes: 2097152
+      backups: 4
+  - sink_id: ci_ops_summary
+    sink_kind: gate_scoped
+    owner: scripts/ci/uiq-sla-and-clusters.mjs
+    path_pattern: .runtime-cache/artifacts/ci/uiq-<profile>-ops-summary.json
+    kind: ci_summary
+    format: json
+    evidence_class: report
+    required_fields:
+      - runId
+      - component
+      - profile
+      - gateName
+      - evidenceClass
+    retention:
+      days: 14
+  - sink_id: upstream_verification_ledger
+    sink_kind: gate_scoped
+    owner: scripts/ci/write-upstream-verification-ledger.mjs
+    path_pattern: .runtime-cache/artifacts/ci/upstream-verification-ledger-<profile>.json
+    kind: ci_summary
+    format: json
+    evidence_class: report
+    required_fields:
+      - component
+      - profile
+      - gateName
+      - evidenceClass
+    retention:
+      days: 14
+  - sink_id: run_bundle_index
+    sink_kind: run_scoped
+    owner: packages/orchestrator/src/commands/run/profile-finalize.ts
+    path_pattern: .runtime-cache/artifacts/runs/<runId>/reports/evidence.index.json
+    kind: run_index
+    format: json
+    evidence_class: report
+    required_fields:
+      - runId
+      - evidenceClass
+      - component
+    retention:
+      days: 30
+  - sink_id: proof_campaign_index
+    sink_kind: run_scoped
+    owner: services/api/app/services/proof_service.py
+    path_pattern: .runtime-cache/artifacts/proof-campaigns/<campaignId>/campaign.index.json
+    kind: run_index
+    format: json
+    evidence_class: report
+    required_fields:
+      - component
+      - evidenceClass
+    retention:
+      days: 30
+evidence_contract:
+  required_bundle_paths:
+    - manifest.json
+    - reports/summary.json
+    - reports/diagnostics.index.json
+    - reports/evidence.index.json
+  indexed_evidence_classes:
+    - log
+    - report
+    - trace
+    - screenshot
+    - video
+    - network
+    - coverage
+redaction_and_retention:
+  canonical_policy_docs:
+    - docs/reference/runtime-storage-policy.md
+    - docs/reference/logging-and-cache-policy.md
+  root_log_surfaces_forbidden: true
+  allowed_sink_roots:
+    - .runtime-cache/logs
+    - .runtime-cache/artifacts

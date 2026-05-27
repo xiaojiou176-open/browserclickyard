@@ -1,0 +1,2679 @@
+openapi: 3.0.3
+info:
+  title: UIQ Platform API
+  version: 0.2.0
+  description: "Default server: http://localhost:17380, API base path: /api"
+servers:
+  - url: http://localhost:17380
+paths:
+  /:
+    get:
+      operationId: getRoot
+      summary: Service readiness
+      responses:
+        "200":
+          description: Service ready message
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RootResponse"
+  /health/:
+    get:
+      operationId: getHealth
+      summary: Health check
+      responses:
+        "200":
+          description: Service health
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthResponse"
+  /health/diagnostics:
+    get:
+      operationId: getDiagnostics
+      summary: Runtime diagnostics
+      responses:
+        "200":
+          description: Diagnostics snapshot
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DiagnosticsResponse"
+  /health/alerts:
+    get:
+      operationId: getAlerts
+      summary: Alert status
+      responses:
+        "200":
+          description: Alerts snapshot
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AlertsResponse"
+  /health/metrics:
+    get:
+      operationId: getHealthMetrics
+      summary: Prometheus metrics snapshot
+      responses:
+        "200":
+          description: Prometheus text format
+          content:
+            text/plain:
+              schema:
+                type: string
+  /health/rum:
+    post:
+      operationId: postRumMetric
+      summary: Ingest frontend RUM metric sample
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RumMetricIngestRequest"
+      responses:
+        "202":
+          description: RUM metric accepted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RumMetricIngestResponse"
+  /metrics:
+    get:
+      operationId: getMetrics
+      summary: Prometheus metrics snapshot
+      responses:
+        "200":
+          description: Prometheus text format
+          content:
+            text/plain:
+              schema:
+                type: string
+  /api/csrf:
+    get:
+      operationId: getCsrfToken
+      summary: Issue csrf token
+      responses:
+        "200":
+          description: CSRF token payload
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CsrfResponse"
+  /api/register:
+    post:
+      operationId: postRegisterUser
+      summary: Register user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RegisterRequest"
+      responses:
+        "201":
+          description: Registered user
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RegisterResponse"
+  /api/automation/commands:
+    parameters:
+      - $ref: "#/components/parameters/XAutomationClientIdHeader"
+    get:
+      operationId: listAutomationCommands
+      summary: List automation commands
+      responses:
+        "200":
+          description: Automation command list
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AutomationCommandListResponse"
+              example:
+                commands:
+                  - command_id: script-pipeline-capture
+                    title: "Script pipeline: capture only (manual)"
+                    description: "Run ./scripts/run-pipeline.sh manual ui-only and stop after capture."
+                    tags: [pipeline, script-lane, manual, capture-only]
+                    accepts_env: true
+  /api/automation/tasks:
+    parameters:
+      - $ref: "#/components/parameters/XAutomationClientIdHeader"
+    get:
+      operationId: listAutomationTasks
+      summary: List automation tasks
+      responses:
+        "200":
+          description: Task list
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AutomationTaskListResponse"
+  /api/automation/tasks/{task_id}:
+    parameters:
+      - $ref: "#/components/parameters/XAutomationClientIdHeader"
+    get:
+      operationId: getAutomationTask
+      summary: Get task by id
+      parameters:
+        - in: path
+          name: task_id
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Task detail
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AutomationTaskResponse"
+  /api/automation/run:
+    parameters:
+      - $ref: "#/components/parameters/XAutomationClientIdHeader"
+    post:
+      operationId: runAutomationCommand
+      summary: Run automation command
+      description: |
+        Create an automation task.
+        Compatibility notes:
+        - Preferred request key is `command`; legacy alias `command_id` is still accepted.
+        - `params` is preferred. Deprecated `env` is still accepted during compatibility window.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AutomationRunRequest"
+            examples:
+              paramsPreferred:
+                summary: Preferred payload using params
+                value:
+                  command: script-pipeline-capture
+                  params:
+                    BASE_URL: https://example.com
+                    FLOW_STEP_ID: step-3
+              deprecatedEnvCompat:
+                summary: Deprecated env compatibility payload
+                value:
+                  command_id: script-pipeline-capture
+                  env:
+                    BASE_URL: https://example.com
+      responses:
+        "200":
+          description: Created automation task
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AutomationRunResponse"
+              example:
+                task:
+                  task_id: task_123
+                  command: script-pipeline-capture
+                  command_id: script-pipeline-capture
+                  status: queued
+                  requested_by: 127.0.0.1:client-a
+                  attempt: 1
+                  max_attempts: 1
+                  created_at: "2026-02-25T10:00:00Z"
+                  updated_at: "2026-02-25T10:00:00Z"
+                  started_at: null
+                  finished_at: null
+                  exit_code: null
+                  message: null
+                  output_tail: ""
+  /api/automation/tasks/{task_id}/cancel:
+    parameters:
+      - $ref: "#/components/parameters/XAutomationClientIdHeader"
+    post:
+      operationId: cancelAutomationTask
+      summary: Cancel automation task
+      parameters:
+        - in: path
+          name: task_id
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Task snapshot after cancellation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AutomationTaskResponse"
+  /api/computer-use/sessions:
+    parameters:
+      - $ref: "#/components/parameters/XAutomationClientIdHeader"
+    post:
+      operationId: createComputerUseSession
+      summary: Create computer-use session
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateComputerUseSessionRequest"
+      responses:
+        "200":
+          description: Created computer-use session
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ComputerUseSessionResponse"
+  /api/computer-use/sessions/{session_id}/preview:
+    parameters:
+      - $ref: "#/components/parameters/XAutomationClientIdHeader"
+    post:
+      operationId: previewComputerUseAction
+      summary: Preview computer-use action
+      parameters:
+        - in: path
+          name: session_id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PreviewComputerUseActionRequest"
+      responses:
+        "200":
+          description: Previewed action
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ComputerUseActionResponse"
+        "403":
+          description: Forbidden. Session does not belong to current actor.
+  /api/computer-use/sessions/{session_id}/confirm/{action_id}:
+    parameters:
+      - $ref: "#/components/parameters/XAutomationClientIdHeader"
+    post:
+      operationId: confirmComputerUseAction
+      summary: Confirm or reject computer-use action
+      parameters:
+        - in: path
+          name: session_id
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: action_id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ConfirmComputerUseActionRequest"
+      responses:
+        "200":
+          description: Action confirmation snapshot
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ComputerUseActionResponse"
+        "403":
+          description: Forbidden. Session/action does not belong to current actor.
+  /api/computer-use/sessions/{session_id}/execute/{action_id}:
+    parameters:
+      - $ref: "#/components/parameters/XAutomationClientIdHeader"
+    post:
+      operationId: executeComputerUseAction
+      summary: Execute computer-use action
+      parameters:
+        - in: path
+          name: session_id
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: action_id
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Execution result (idempotent for repeated same-action calls)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ExecuteComputerUseActionResponse"
+        "403":
+          description: Forbidden. Session/action does not belong to current actor.
+        "409":
+          description: Action is not executable in current state.
+  /api/computer-use/sessions/{session_id}/evidence:
+    parameters:
+      - $ref: "#/components/parameters/XAutomationClientIdHeader"
+    get:
+      operationId: readComputerUseEvidence
+      summary: Read computer-use evidence timeline
+      parameters:
+        - in: path
+          name: session_id
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Computer-use evidence snapshot
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ComputerUseEvidenceResponse"
+        "403":
+          description: Forbidden. Session evidence does not belong to current actor.
+  /api/embeddings/batch:
+    parameters:
+      - $ref: "#/components/parameters/XAutomationClientIdHeader"
+    post:
+      operationId: createBatchEmbeddings
+      summary: Create Gemini embedding vectors for a batch of texts
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EmbeddingBatchRequest"
+      responses:
+        "200":
+          description: Batch embedding vectors
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EmbeddingBatchResponse"
+  /api/sessions:
+    parameters:
+      - $ref: "#/components/parameters/XAutomationClientIdHeader"
+    get:
+      operationId: listSessions
+      summary: List sessions
+      responses:
+        "200":
+          description: Session list
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SessionListResponse"
+  /api/sessions/start:
+    parameters:
+      - $ref: "#/components/parameters/XAutomationClientIdHeader"
+    post:
+      operationId: startSession
+      summary: Start session
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SessionStartRequest"
+      responses:
+        "200":
+          description: Started session
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SessionRecord"
+  /api/sessions/{session_id}/finish:
+    parameters:
+      - $ref: "#/components/parameters/XAutomationClientIdHeader"
+    post:
+      operationId: finishSession
+      summary: Finish session
+      parameters:
+        - in: path
+          name: session_id
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Finished session
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SessionRecord"
+  /api/flows:
+    parameters:
+      - $ref: "#/components/parameters/XAutomationClientIdHeader"
+    get:
+      operationId: listFlows
+      summary: List flows
+      responses:
+        "200":
+          description: Flow list
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FlowListResponse"
+    post:
+      operationId: createFlow
+      summary: Create flow
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FlowCreateRequest"
+      responses:
+        "200":
+          description: Created flow
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FlowRecord"
+  /api/flows/import-latest:
+    parameters:
+      - $ref: "#/components/parameters/XAutomationClientIdHeader"
+    post:
+      operationId: importLatestFlow
+      summary: Import latest flow draft
+      responses:
+        "200":
+          description: Imported flow
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FlowRecord"
+  /api/flows/{flow_id}:
+    parameters:
+      - $ref: "#/components/parameters/XAutomationClientIdHeader"
+    get:
+      operationId: getFlow
+      summary: Get flow by id
+      parameters:
+        - in: path
+          name: flow_id
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Flow detail
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FlowRecord"
+    patch:
+      operationId: patchFlow
+      summary: Update flow
+      parameters:
+        - in: path
+          name: flow_id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FlowUpdateRequest"
+      responses:
+        "200":
+          description: Updated flow
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FlowRecord"
+  /api/templates:
+    parameters:
+      - $ref: "#/components/parameters/XAutomationClientIdHeader"
+    get:
+      operationId: listTemplates
+      summary: List templates
+      responses:
+        "200":
+          description: Template list
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TemplateListResponse"
+    post:
+      operationId: createTemplate
+      summary: Create template
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TemplateCreateRequest"
+      responses:
+        "200":
+          description: Created template
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TemplateRecord"
+  /api/templates/from-artifacts:
+    parameters:
+      - $ref: "#/components/parameters/XAutomationClientIdHeader"
+    post:
+      operationId: postTemplatesFromArtifacts
+      summary: Create template from artifacts
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OrchestrateFromArtifactsRequest"
+      responses:
+        "200":
+          description: Created template from artifacts
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OrchestrateFromArtifactsResponse"
+  /api/templates/{template_id}:
+    parameters:
+      - $ref: "#/components/parameters/XAutomationClientIdHeader"
+    get:
+      operationId: getTemplate
+      summary: Get template by id
+      parameters:
+        - in: path
+          name: template_id
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Template detail
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TemplateRecord"
+    patch:
+      operationId: patchTemplate
+      summary: Update template
+      parameters:
+        - in: path
+          name: template_id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TemplateUpdateRequest"
+      responses:
+        "200":
+          description: Updated template
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TemplateRecord"
+  /api/templates/{template_id}/export:
+    parameters:
+      - $ref: "#/components/parameters/XAutomationClientIdHeader"
+    get:
+      operationId: exportTemplate
+      summary: Export template
+      parameters:
+        - in: path
+          name: template_id
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Exported template payload
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TemplateExportResponse"
+  /api/templates/promote:
+    parameters:
+      - $ref: "#/components/parameters/XAutomationClientIdHeader"
+    post:
+      operationId: promoteTemplate
+      summary: Promote flow or run output into a versioned template asset
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TemplatePromoteRequest"
+      responses:
+        "200":
+          description: Promoted template
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TemplateRecord"
+  /api/templates/{template_id}/history:
+    parameters:
+      - $ref: "#/components/parameters/XAutomationClientIdHeader"
+    get:
+      operationId: getTemplateHistory
+      summary: List versions in one template family
+      parameters:
+        - in: path
+          name: template_id
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Template history
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TemplateHistoryResponse"
+  /api/templates/{template_id}/fork-version:
+    parameters:
+      - $ref: "#/components/parameters/XAutomationClientIdHeader"
+    post:
+      operationId: forkTemplateVersion
+      summary: Create a new template version in the same family
+      parameters:
+        - in: path
+          name: template_id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TemplateVersionForkRequest"
+      responses:
+        "200":
+          description: Forked template version
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TemplateRecord"
+  /api/templates/{template_id}/mark-recommended:
+    parameters:
+      - $ref: "#/components/parameters/XAutomationClientIdHeader"
+    post:
+      operationId: markTemplateRecommended
+      summary: Mark one template version as the recommended version
+      parameters:
+        - in: path
+          name: template_id
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Recommended template version
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TemplateRecord"
+  /api/profiles/resolve:
+    parameters:
+      - $ref: "#/components/parameters/XAutomationClientIdHeader"
+    post:
+      operationId: resolveProfile
+      summary: Resolve target profile from artifacts
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProfileResolveRequest"
+      responses:
+        "200":
+          description: Resolved profile
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProfileResolveResponse"
+  /api/reconstruction/preview:
+    parameters:
+      - $ref: "#/components/parameters/XAutomationClientIdHeader"
+    post:
+      operationId: previewReconstruction
+      summary: Create reconstruction preview
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ReconstructionPreviewRequest"
+      responses:
+        "200":
+          description: Reconstruction preview
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReconstructionPreviewResponse"
+  /api/reconstruction/generate:
+    parameters:
+      - $ref: "#/components/parameters/XAutomationClientIdHeader"
+    post:
+      operationId: generateReconstruction
+      summary: Generate flow/template from reconstruction
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ReconstructionGenerateRequest"
+      responses:
+        "200":
+          description: Reconstruction generation result
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReconstructionGenerateResponse"
+  /api/runs:
+    parameters:
+      - $ref: "#/components/parameters/XAutomationClientIdHeader"
+    get:
+      operationId: listRuns
+      summary: List platform runs
+      responses:
+        "200":
+          description: Run list
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RunListResponse"
+    post:
+      operationId: createRun
+      summary: Create run from template
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RunCreateRequest"
+      responses:
+        "200":
+          description: Created run
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RunResponse"
+  /api/runs/{run_id}:
+    parameters:
+      - $ref: "#/components/parameters/XAutomationClientIdHeader"
+    get:
+      operationId: getRun
+      summary: Get run by id
+      parameters:
+        - in: path
+          name: run_id
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Run detail
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RunResponse"
+  /api/runs/{run_id}/otp:
+    parameters:
+      - $ref: "#/components/parameters/XAutomationClientIdHeader"
+    post:
+      operationId: submitRunOtp
+      summary: Resume run from manual gate
+      deprecated: true
+      description: |
+        Compatibility wrapper for the canonical `/api/runs/{run_id}/resume` endpoint.
+        Reuses the same resume semantics for both wait states:
+        - `waiting_otp`: `otp_code` should be provided.
+        - `waiting_user`: manual gate for protected payment providers or other protection challenges; `otp_code` may be omitted when no OTP value is required.
+      parameters:
+        - in: path
+          name: run_id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RunOtpSubmitRequest"
+      responses:
+        "200":
+          description: Updated run
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RunResponse"
+  /api/runs/{run_id}/resume:
+    parameters:
+      - $ref: "#/components/parameters/XAutomationClientIdHeader"
+    post:
+      operationId: resumeRun
+      summary: Resume run from a typed manual-gate action
+      description: |
+        Canonical resume endpoint for manual-gate states.
+        `kind` determines how the operator resumes execution:
+        - `otp`: provide OTP/3DS style code input
+        - `approval`: approve and continue
+        - `input`: provide supplemental text input
+        - `checkpoint_ack`: acknowledge a manual checkpoint and continue
+      parameters:
+        - in: path
+          name: run_id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RunResumeRequest"
+      responses:
+        "200":
+          description: Updated run
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RunResponse"
+  /api/runs/{run_id}/cancel:
+    parameters:
+      - $ref: "#/components/parameters/XAutomationClientIdHeader"
+    post:
+      operationId: cancelRun
+      summary: Cancel run
+      parameters:
+        - in: path
+          name: run_id
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Cancelled run
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RunResponse"
+  /api/proof/campaigns:
+    parameters:
+      - $ref: "#/components/parameters/XAutomationClientIdHeader"
+    get:
+      operationId: listProofCampaigns
+      summary: List proof campaigns
+      responses:
+        "200":
+          description: Proof campaign list
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProofCampaignListResponse"
+    post:
+      operationId: createProofCampaign
+      summary: Build a proof campaign from one or more existing runs
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProofCampaignCreateRequest"
+      responses:
+        "200":
+          description: Created proof campaign
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProofCampaignResponse"
+  /api/proof/campaigns/{campaign_id}:
+    parameters:
+      - $ref: "#/components/parameters/XAutomationClientIdHeader"
+    get:
+      operationId: getProofCampaign
+      summary: Read one proof campaign
+      parameters:
+        - in: path
+          name: campaign_id
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Proof campaign detail
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProofCampaignResponse"
+  /api/proof/campaigns/{campaign_id}/diff:
+    parameters:
+      - $ref: "#/components/parameters/XAutomationClientIdHeader"
+    post:
+      operationId: diffProofCampaign
+      summary: Diff two proof campaigns
+      parameters:
+        - in: path
+          name: campaign_id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProofCampaignDiffRequest"
+      responses:
+        "200":
+          description: Proof campaign diff
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProofCampaignDiffResponse"
+  /api/proof/runs/compare:
+    parameters:
+      - $ref: "#/components/parameters/XAutomationClientIdHeader"
+    post:
+      operationId: compareRunsForProof
+      summary: Compare two run bundles for operator review
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProofRunCompareRequest"
+      responses:
+        "200":
+          description: Run compare result
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProofRunCompareResponse"
+  /api/proof/runs/{run_id}/ai-review:
+    parameters:
+      - $ref: "#/components/parameters/XAutomationClientIdHeader"
+    get:
+      operationId: getRunAiReviewProjection
+      summary: Read operator-facing AI review projection for one run
+      parameters:
+        - in: path
+          name: run_id
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: AI review projection
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RunAiReviewProjectionResponse"
+  /api/proof/templates/{template_id}/feasibility:
+    parameters:
+      - $ref: "#/components/parameters/XAutomationClientIdHeader"
+    get:
+      operationId: getTemplateTargetFeasibility
+      summary: Evaluate whether one template is feasible on a target
+      parameters:
+        - in: path
+          name: template_id
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: target
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Template feasibility result
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TargetFeasibilityResponse"
+  /api/integrations/vonage/inbound-sms:
+    parameters:
+      - $ref: "#/components/parameters/XAutomationClientIdHeader"
+    get:
+      operationId: getVonageInboundSms
+      summary: Receive inbound Vonage SMS callback
+      description: "Use header x-vonage-inbound-token. Query token fallback is no longer supported and always rejected. Signature verification currently supports only VONAGE_SIGNATURE_ALGO=sha256."
+      responses:
+        "200":
+          description: Inbound callback accepted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/VonageInboundResponse"
+    post:
+      operationId: postVonageInboundSms
+      summary: Receive inbound Vonage SMS callback (POST)
+      description: "Use header x-vonage-inbound-token. Query token fallback is no longer supported and always rejected. Signature verification currently supports only VONAGE_SIGNATURE_ALGO=sha256."
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      responses:
+        "200":
+          description: Inbound callback accepted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/VonageInboundResponse"
+  /api/command-tower/overview:
+    parameters:
+      - $ref: "#/components/parameters/XAutomationClientIdHeader"
+    get:
+      operationId: getCommandTowerOverview
+      summary: Get command-tower overview
+      responses:
+        "200":
+          description: Diagnostics, alerts and latest flow preview
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CommandTowerOverviewResponse"
+  /api/command-tower/latest-flow:
+    parameters:
+      - $ref: "#/components/parameters/XAutomationClientIdHeader"
+    get:
+      operationId: getCommandTowerLatestFlow
+      summary: Get latest flow preview
+      parameters:
+        - $ref: "#/components/parameters/SessionIdQueryCommandTower"
+      responses:
+        "200":
+          description: Latest flow preview for the resolved session
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FlowPreviewResponse"
+  /api/command-tower/latest-flow-draft:
+    parameters:
+      - $ref: "#/components/parameters/XAutomationClientIdHeader"
+    get:
+      operationId: getCommandTowerLatestFlowDraft
+      summary: Get latest flow draft document
+      parameters:
+        - $ref: "#/components/parameters/SessionIdQueryCommandTower"
+      responses:
+        "200":
+          description: Latest flow draft payload
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FlowDraftDocumentResponse"
+    patch:
+      operationId: patchCommandTowerLatestFlowDraft
+      summary: Update latest flow draft document
+      parameters:
+        - $ref: "#/components/parameters/SessionIdQueryCommandTower"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FlowDraftDocumentUpdateRequest"
+      responses:
+        "200":
+          description: Updated flow draft payload
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FlowDraftDocumentResponse"
+  /api/command-tower/replay-latest:
+    parameters:
+      - $ref: "#/components/parameters/XAutomationClientIdHeader"
+    post:
+      operationId: postCommandTowerReplayLatest
+      summary: Trigger replay for latest flow draft
+      parameters:
+        - $ref: "#/components/parameters/SessionIdQueryCommandTower"
+      responses:
+        "200":
+          description: Created replay task
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RunCommandResponse"
+  /api/command-tower/orchestrate-from-artifacts:
+    parameters:
+      - $ref: "#/components/parameters/XAutomationClientIdHeader"
+    post:
+      operationId: postCommandTowerOrchestrateFromArtifacts
+      summary: Create template (and optional run) from reconstruction artifacts
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OrchestrateFromArtifactsRequest"
+      responses:
+        "200":
+          description: Orchestration result
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OrchestrateFromArtifactsResponse"
+  /api/command-tower/replay-latest-from-step:
+    parameters:
+      - $ref: "#/components/parameters/XAutomationClientIdHeader"
+    post:
+      operationId: postCommandTowerReplayLatestFromStep
+      summary: Trigger replay from a specific step
+      parameters:
+        - $ref: "#/components/parameters/SessionIdQueryCommandTower"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ReplayFromStepRequest"
+      responses:
+        "200":
+          description: Created replay task
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RunCommandResponse"
+  /api/command-tower/replay-latest-step:
+    parameters:
+      - $ref: "#/components/parameters/XAutomationClientIdHeader"
+    post:
+      operationId: postCommandTowerReplayLatestStep
+      summary: Trigger replay for a single step
+      parameters:
+        - $ref: "#/components/parameters/SessionIdQueryCommandTower"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ReplayLatestStepRequest"
+      responses:
+        "200":
+          description: Created step replay task
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RunCommandResponse"
+  /api/command-tower/evidence:
+    parameters:
+      - $ref: "#/components/parameters/XAutomationClientIdHeader"
+    get:
+      operationId: getCommandTowerStepEvidence
+      summary: Get evidence by step id
+      parameters:
+        - $ref: "#/components/parameters/StepIdQuery"
+        - $ref: "#/components/parameters/SessionIdQueryCommandTower"
+      responses:
+        "200":
+          description: Step evidence payload
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StepEvidenceResponse"
+  /api/command-tower/evidence-timeline:
+    parameters:
+      - $ref: "#/components/parameters/XAutomationClientIdHeader"
+    get:
+      operationId: getCommandTowerEvidenceTimeline
+      summary: Get evidence timeline
+      parameters:
+        - $ref: "#/components/parameters/SessionIdQueryCommandTower"
+      responses:
+        "200":
+          description: Session evidence timeline
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EvidenceTimelineResponse"
+components:
+  parameters:
+    XAutomationClientIdHeader:
+      in: header
+      name: x-automation-client-id
+      required: false
+      schema:
+        type: string
+      description: Required when token auth is enabled and x-automation-token is present; used for audit trace alignment and requester ownership isolation.
+    SessionIdQueryCommandTower:
+      in: query
+      name: session_id
+      required: false
+      schema:
+        type: string
+      description: |
+        Optional explicit session selector for command-tower endpoints.
+        - Omit to resolve to the latest session owned by current requester.
+        - Provide non-empty session_id to pin a specific owned session.
+        - Empty value returns 422.
+        - Unknown/unowned session or missing session directory returns 404.
+    StepIdQuery:
+      in: query
+      name: step_id
+      required: true
+      schema:
+        type: string
+      description: Target step id for evidence lookup.
+
+  schemas:
+    RootResponse:
+      type: object
+      required: [message]
+      properties:
+        message:
+          type: string
+          example: service ready
+
+    HealthResponse:
+      type: object
+      required: [status]
+      properties:
+        status:
+          type: string
+          example: ok
+
+    CsrfResponse:
+      type: object
+      required: [csrf_token]
+      properties:
+        csrf_token:
+          type: string
+
+    RegisterRequest:
+      type: object
+      required: [email, password]
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+
+    RegisterResponse:
+      type: object
+      required: [user_id, email]
+      properties:
+        user_id:
+          type: string
+        email:
+          type: string
+
+    SessionStartRequest:
+      type: object
+      required: [start_url]
+      properties:
+        start_url:
+          type: string
+        mode:
+          type: string
+          default: manual
+
+    SessionRecord:
+      type: object
+      additionalProperties: true
+
+    SessionListResponse:
+      type: object
+      required: [sessions]
+      properties:
+        sessions:
+          type: array
+          items:
+            $ref: "#/components/schemas/SessionRecord"
+
+    CreateComputerUseSessionRequest:
+      type: object
+      required: [instruction]
+      properties:
+        instruction:
+          type: string
+        model:
+          type: string
+          nullable: true
+        metadata:
+          type: object
+          additionalProperties: true
+
+    ComputerUseSessionResponse:
+      type: object
+      required: [session_id, model, instruction, created_at]
+      properties:
+        session_id:
+          type: string
+        model:
+          type: string
+        instruction:
+          type: string
+        created_at:
+          type: string
+
+    PreviewComputerUseActionRequest:
+      type: object
+      properties:
+        screenshot_base64:
+          type: string
+          nullable: true
+        screenshot_mime_type:
+          type: string
+        instruction:
+          type: string
+          nullable: true
+        include_thoughts:
+          type: boolean
+
+    ConfirmComputerUseActionRequest:
+      type: object
+      properties:
+        approved:
+          type: boolean
+        confirmation_reason:
+          type: string
+          nullable: true
+
+    ComputerUseActionResponse:
+      type: object
+      required: [session_id, action_id, name, args, rationale, risk_level, action_digest, require_confirmation, safety_decision, status]
+      properties:
+        session_id:
+          type: string
+        action_id:
+          type: string
+        name:
+          type: string
+        args:
+          type: object
+          additionalProperties: true
+        rationale:
+          type: string
+        risk_level:
+          type: string
+        confirmation_reason:
+          type: string
+          nullable: true
+        action_digest:
+          type: string
+        require_confirmation:
+          type: boolean
+        safety_decision:
+          type: string
+        status:
+          type: string
+        confirmed_by:
+          type: string
+          nullable: true
+        executed_at:
+          type: string
+          nullable: true
+
+    ExecuteComputerUseActionResponse:
+      type: object
+      required: [session_id, action_id, status, executor, executed_at, executed_by, applied_args, evidence]
+      properties:
+        session_id:
+          type: string
+        action_id:
+          type: string
+        status:
+          type: string
+        executor:
+          type: string
+        executed_at:
+          type: string
+        executed_by:
+          type: string
+        applied_args:
+          type: object
+          additionalProperties: true
+        risk_level:
+          type: string
+          nullable: true
+        confirmation_reason:
+          type: string
+          nullable: true
+        action_digest:
+          type: string
+          nullable: true
+        evidence:
+          type: object
+          additionalProperties: true
+
+    ComputerUseEvidenceResponse:
+      type: object
+      required: [session_id, event_count, events, evidence_path]
+      properties:
+        session_id:
+          type: string
+        event_count:
+          type: integer
+        events:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+        evidence_path:
+          type: string
+
+    EmbeddingBatchRequest:
+      type: object
+      required: [texts]
+      properties:
+        texts:
+          type: array
+          items:
+            type: string
+        model:
+          type: string
+          nullable: true
+
+    EmbeddingBatchResponse:
+      type: object
+      required: [model, vector_count, dimension, vectors]
+      properties:
+        model:
+          type: string
+        vector_count:
+          type: integer
+        dimension:
+          type: integer
+        vectors:
+          type: array
+          items:
+            type: array
+            items:
+              type: number
+
+    FlowRecord:
+      type: object
+      additionalProperties: true
+
+    FlowListResponse:
+      type: object
+      required: [flows]
+      properties:
+        flows:
+          type: array
+          items:
+            $ref: "#/components/schemas/FlowRecord"
+
+    FlowCreateRequest:
+      type: object
+      required: [session_id, start_url]
+      properties:
+        session_id:
+          type: string
+        start_url:
+          type: string
+        source_event_count:
+          type: integer
+          default: 0
+        steps:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+
+    FlowUpdateRequest:
+      type: object
+      properties:
+        start_url:
+          type: string
+        steps:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+
+    TemplateRecord:
+      type: object
+      required:
+        [
+          template_id,
+          template_family_id,
+          flow_id,
+          version,
+          status,
+          name,
+          params_schema,
+          defaults,
+          policies,
+          recommended,
+          created_at,
+          updated_at
+        ]
+      properties:
+        template_id:
+          type: string
+        template_family_id:
+          type: string
+        parent_template_id:
+          type: string
+          nullable: true
+        flow_id:
+          type: string
+        version:
+          type: integer
+          minimum: 1
+        status:
+          type: string
+          enum: [draft, active, superseded, archived]
+        name:
+          type: string
+        params_schema:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+        defaults:
+          type: object
+          additionalProperties: true
+        policies:
+          type: object
+          additionalProperties: true
+        recommended:
+          type: boolean
+        promotion_source:
+          type: object
+          nullable: true
+          additionalProperties: true
+        created_by:
+          type: string
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+
+    TemplateListResponse:
+      type: object
+      required: [templates]
+      properties:
+        templates:
+          type: array
+          items:
+            $ref: "#/components/schemas/TemplateRecord"
+
+    TemplateCreateRequest:
+      type: object
+      required: [flow_id, name]
+      properties:
+        flow_id:
+          type: string
+        name:
+          type: string
+        params_schema:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+        defaults:
+          type: object
+          additionalProperties: true
+        policies:
+          type: object
+          additionalProperties: true
+
+    TemplateUpdateRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        params_schema:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+        defaults:
+          type: object
+          additionalProperties: true
+        policies:
+          type: object
+          additionalProperties: true
+
+    TemplatePromoteRequest:
+      type: object
+      properties:
+        flow_id:
+          type: string
+          nullable: true
+        run_id:
+          type: string
+          nullable: true
+        template_name:
+          type: string
+        change_note:
+          type: string
+          nullable: true
+        recommended:
+          type: boolean
+
+    TemplateVersionForkRequest:
+      type: object
+      properties:
+        template_name:
+          type: string
+          nullable: true
+        change_note:
+          type: string
+          nullable: true
+        params_schema:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+        defaults:
+          type: object
+          additionalProperties: true
+        policies:
+          type: object
+          additionalProperties: true
+
+    TemplateHistoryResponse:
+      type: object
+      required: [templates]
+      properties:
+        templates:
+          type: array
+          items:
+            $ref: "#/components/schemas/TemplateRecord"
+
+    TemplateExportResponse:
+      type: object
+      additionalProperties: true
+
+    ProfileResolveRequest:
+      type: object
+      additionalProperties: true
+
+    ProfileResolveResponse:
+      type: object
+      additionalProperties: true
+
+    ReconstructionPreviewRequest:
+      type: object
+      additionalProperties: true
+
+    ReconstructionPreviewResponse:
+      type: object
+      additionalProperties: true
+
+    ReconstructionGenerateRequest:
+      type: object
+      additionalProperties: true
+
+    ReconstructionGenerateResponse:
+      type: object
+      additionalProperties: true
+
+    OrchestrateFromArtifactsRequest:
+      type: object
+      additionalProperties: true
+
+    OrchestrateFromArtifactsResponse:
+      type: object
+      additionalProperties: true
+
+    DiagnosticsResponse:
+      type: object
+      required: [status, uptime_seconds, storage_backend, task_counts, task_total, metrics]
+      properties:
+        status:
+          type: string
+          example: ok
+        uptime_seconds:
+          type: integer
+          minimum: 0
+        storage_backend:
+          type: string
+          description: Runtime task storage backend.
+          enum: [file, sql]
+        task_counts:
+          $ref: "#/components/schemas/HealthTaskCounts"
+        task_total:
+          type: integer
+          minimum: 0
+        metrics:
+          $ref: "#/components/schemas/HealthMetrics"
+        generated_at:
+          type: string
+          format: date-time
+          description: Deprecated compatibility field from legacy diagnostics contract.
+        diagnostics_index:
+          $ref: "#/components/schemas/DiagnosticsIndex"
+          description: Deprecated compatibility field from legacy diagnostics contract.
+        alerts:
+          type: array
+          description: Deprecated compatibility field from legacy diagnostics contract.
+          items:
+            $ref: "#/components/schemas/AlertItem"
+
+    AlertsResponse:
+      type: object
+      required: [state, failure_rate, threshold, completed, failed]
+      properties:
+        state:
+          type: string
+          enum: [ok, degraded]
+        failure_rate:
+          type: number
+          minimum: 0
+          maximum: 1
+        threshold:
+          type: number
+          minimum: 0
+          maximum: 1
+        completed:
+          type: integer
+          minimum: 0
+        failed:
+          type: integer
+          minimum: 0
+        alerts:
+          type: array
+          description: Deprecated compatibility field from legacy alerts contract.
+          items:
+            $ref: "#/components/schemas/AlertItem"
+        total:
+          type: integer
+          minimum: 0
+          description: Deprecated compatibility field from legacy alerts contract.
+
+    HealthTaskCounts:
+      type: object
+      required: [queued, running, success, failed, cancelled]
+      properties:
+        queued:
+          type: integer
+          minimum: 0
+        running:
+          type: integer
+          minimum: 0
+        success:
+          type: integer
+          minimum: 0
+        failed:
+          type: integer
+          minimum: 0
+        cancelled:
+          type: integer
+          minimum: 0
+
+    HealthMetrics:
+      type: object
+      additionalProperties: true
+      description: Runtime metrics snapshot. Includes counters/gauges used by health panels.
+
+    RumMetricIngestRequest:
+      type: object
+      required: [metric, value]
+      properties:
+        metric:
+          type: string
+          description: Metric name, usually one of LCP/CLS/INP/FCP/TTFB.
+        value:
+          type: number
+        rating:
+          type: string
+          nullable: true
+        path:
+          type: string
+          nullable: true
+        navigationType:
+          type: string
+          nullable: true
+        timestampMs:
+          type: number
+          nullable: true
+
+    RumMetricIngestResponse:
+      type: object
+      required: [status, metric, samples_total]
+      properties:
+        status:
+          type: string
+          example: accepted
+        metric:
+          type: string
+        samples_total:
+          type: integer
+
+    DiagnosticsIndex:
+      type: object
+      required: [capture, explore, chaos, report]
+      properties:
+        capture:
+          type: object
+          additionalProperties: true
+        explore:
+          type: object
+          additionalProperties: true
+        chaos:
+          type: object
+          additionalProperties: true
+        report:
+          $ref: "#/components/schemas/ReportSummary"
+
+    AlertItem:
+      type: object
+      required: [code, severity, message]
+      properties:
+        code:
+          type: string
+        severity:
+          type: string
+          enum: [info, warning, critical]
+        message:
+          type: string
+
+    AutomationCommandListResponse:
+      type: object
+      required: [commands]
+      properties:
+        commands:
+          type: array
+          items:
+            $ref: "#/components/schemas/AutomationCommand"
+
+    AutomationCommand:
+      type: object
+      required: [command_id, title, description, tags, accepts_env]
+      properties:
+        command_id:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+        accepts_env:
+          type: boolean
+          default: true
+
+    AutomationTaskListResponse:
+      type: object
+      required: [tasks]
+      properties:
+        tasks:
+          type: array
+          items:
+            $ref: "#/components/schemas/AutomationTask"
+
+    AutomationTaskResponse:
+      type: object
+      required: [task]
+      properties:
+        task:
+          $ref: "#/components/schemas/AutomationTask"
+
+    AutomationRunRequest:
+      type: object
+      description: |
+        Preferred payload uses `command` + `params`.
+        Backward compatibility:
+        - `command_id` is accepted as an alias of `command`.
+        - deprecated `env` is accepted and merged under compatibility rules.
+      oneOf:
+        - required: [command]
+        - required: [command_id]
+      properties:
+        command:
+          type: string
+          description: Preferred command identifier.
+        command_id:
+          type: string
+          nullable: true
+          deprecated: true
+          description: Deprecated alias for `command`.
+        params:
+          $ref: "#/components/schemas/AutomationRunParams"
+        env:
+          type: object
+          deprecated: true
+          maxProperties: 32
+          description: Deprecated compatibility env payload. Use `params` instead.
+          additionalProperties:
+            type: string
+            maxLength: 2048
+
+    AutomationRunParams:
+      type: object
+      additionalProperties: false
+      properties:
+        BASE_URL:
+          type: string
+        START_URL:
+          type: string
+        SUCCESS_SELECTOR:
+          type: string
+        MIDSCENE_MODEL_NAME:
+          type: string
+        GEMINI_API_KEY:
+          type: string
+        GEMINI_MODEL:
+          type: string
+        GEMINI_FAST_MODEL:
+          type: string
+        GEMINI_EMBEDDING_MODEL:
+          type: string
+        GEMINI_THINKING_LEVEL:
+          type: string
+        GEMINI_INCLUDE_THOUGHTS:
+          type: string
+        GEMINI_CONTEXT_CACHE_TTL_SECONDS:
+          type: string
+        GEMINI_MEDIA_RESOLUTION_DEFAULT:
+          type: string
+        GEMINI_TOOL_MODE:
+          type: string
+        MIDSCENE_STRICT:
+          type: string
+        REGISTER_PASSWORD:
+          type: string
+        HEADLESS:
+          type: string
+        FLOW_STEP_ID:
+          type: string
+        FLOW_FROM_STEP_ID:
+          type: string
+        FLOW_REPLAY_PRECONDITIONS:
+          type: string
+        FLOW_SELECTOR_INDEX:
+          type: string
+        FLOW_INPUT:
+          type: string
+        FLOW_SECRET_INPUT:
+          type: string
+        FLOW_OTP_CODE:
+          type: string
+
+    AutomationRunResponse:
+      type: object
+      required: [task]
+      properties:
+        task:
+          $ref: "#/components/schemas/AutomationTask"
+
+    AutomationTask:
+      type: object
+      required: [task_id, command, command_id, status, attempt, max_attempts, created_at, updated_at, output_tail]
+      properties:
+        task_id:
+          type: string
+        command:
+          type: string
+        command_id:
+          type: string
+          nullable: true
+        status:
+          type: string
+          enum: [queued, running, success, failed, cancelled]
+        requested_by:
+          type: string
+          nullable: true
+        attempt:
+          type: integer
+          minimum: 1
+        max_attempts:
+          type: integer
+          minimum: 1
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        started_at:
+          type: string
+          format: date-time
+          nullable: true
+        finished_at:
+          type: string
+          format: date-time
+          nullable: true
+        exit_code:
+          type: integer
+          nullable: true
+        message:
+          type: string
+          nullable: true
+        output_tail:
+          type: string
+
+    RunCreateRequest:
+      type: object
+      required: [template_id]
+      description: |
+        Create-run payload.
+        For backward compatibility, the server also accepts camelCase aliases (`templateId`, `sessionId`, `otpCode`).
+      properties:
+        template_id:
+          type: string
+        session_id:
+          type: string
+          nullable: true
+          description: Optional session id. Accepted for contract compatibility and ignored by current run execution flow.
+        params:
+          type: object
+          additionalProperties: true
+        otp_code:
+          type: string
+          nullable: true
+
+    RunOtpSubmitRequest:
+      type: object
+      description: |
+        Resume payload for both manual wait states.
+        - `waiting_otp`: provide `otp_code`.
+        - `waiting_user`: `otp_code` is optional and only needed when the gate asks for OTP-like supplemental input.
+      properties:
+        otp_code:
+          type: string
+          nullable: true
+          description: Optional resume input. Required for `waiting_otp`; optional for `waiting_user`.
+        expected_version:
+          type: integer
+          nullable: true
+
+    ManualGateAction:
+      type: object
+      required: [kind]
+      properties:
+        kind:
+          type: string
+          enum: [otp, approval, input, checkpoint_ack]
+        otp_code:
+          type: string
+          nullable: true
+        input_text:
+          type: string
+          nullable: true
+        approved:
+          type: boolean
+          nullable: true
+        checkpoint_id:
+          type: string
+          nullable: true
+        note:
+          type: string
+          nullable: true
+
+    RunResumeRequest:
+      type: object
+      required: [kind]
+      properties:
+        kind:
+          type: string
+          enum: [otp, approval, input, checkpoint_ack]
+        otp_code:
+          type: string
+          nullable: true
+        input_text:
+          type: string
+          nullable: true
+        approved:
+          type: boolean
+          nullable: true
+        confirmation_note:
+          type: string
+          nullable: true
+        checkpoint_id:
+          type: string
+          nullable: true
+        payload:
+          type: object
+          additionalProperties: true
+        expected_version:
+          type: integer
+          nullable: true
+
+    RunListResponse:
+      type: object
+      required: [runs]
+      properties:
+        runs:
+          type: array
+          items:
+            $ref: "#/components/schemas/Run"
+
+    RunResponse:
+      type: object
+      required: [run]
+      properties:
+        run:
+          $ref: "#/components/schemas/Run"
+
+    RunCancelResponse:
+      type: object
+      required: [run]
+      properties:
+        run:
+          $ref: "#/components/schemas/Run"
+
+    Run:
+      type: object
+      required: [run_id, status, created_at, updated_at]
+      properties:
+        run_id:
+          type: string
+        template_id:
+          type: string
+          nullable: true
+        session_id:
+          type: string
+          nullable: true
+        status:
+          $ref: "#/components/schemas/RunStatus"
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        reason_code:
+          type: string
+          nullable: true
+        wait_context:
+          $ref: "#/components/schemas/RunWaitContext"
+        report:
+          $ref: "#/components/schemas/ReportSummary"
+
+    RunStatus:
+      type: string
+      description: |
+        `waiting_otp` means the run is paused for OTP/3DS input.
+        `waiting_user` means a manual gate is triggered (for example protected payment providers or anti-bot challenges) and user action is required before resume.
+        `blocked` is retained for compatibility but current backend run records do not emit it.
+      enum: [queued, running, waiting_user, waiting_otp, success, failed, cancelled, blocked]
+
+    RunWaitContext:
+      type: object
+      description: Optional context attached when run status is `waiting_otp` or `waiting_user`.
+      properties:
+        reason_code:
+          type: string
+          nullable: true
+          description: Machine-readable reason for the wait state (for example `provider_protected_payment_step`).
+        at_step_id:
+          type: string
+          nullable: true
+          description: Step id where the wait state is detected.
+        after_step_id:
+          type: string
+          nullable: true
+          description: Last completed step id before pausing.
+        resume_from_step_id:
+          type: string
+          nullable: true
+          description: Step id used by resume flow when continuing execution.
+        resume_hint:
+          type: string
+          nullable: true
+          description: Human-readable hint for operators.
+        provider_domain:
+          type: string
+          nullable: true
+          description: Provider domain hint when available (for example `stripe.com`).
+        gate_required_by_policy:
+          type: boolean
+          nullable: true
+          description: Whether the wait state is triggered by explicit gate policy.
+        allowed_resume_kinds:
+          type: array
+          items:
+            type: string
+            enum: [otp, approval, input, checkpoint_ack]
+        input_schema:
+          type: object
+          nullable: true
+          additionalProperties: true
+        required_actions:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+        evidence_refs:
+          type: array
+          items:
+            type: string
+        screen_title:
+          type: string
+          nullable: true
+
+    ProofCampaignRecord:
+      type: object
+      required: [campaign_id, model, status, policy_mode, run_ids, generated_at]
+      properties:
+        campaign_id:
+          type: string
+        model:
+          type: string
+        name:
+          type: string
+          nullable: true
+        description:
+          type: string
+          nullable: true
+        status:
+          type: string
+          enum: [passed, failed, blocked]
+        policy_mode:
+          type: string
+        run_ids:
+          type: array
+          items:
+            type: string
+        generated_at:
+          type: string
+          format: date-time
+        reason_codes:
+          type: array
+          items:
+            type: string
+        stats:
+          type: object
+          additionalProperties: true
+
+    ProofCampaignListResponse:
+      type: object
+      required: [campaigns]
+      properties:
+        campaigns:
+          type: array
+          items:
+            $ref: "#/components/schemas/ProofCampaignRecord"
+
+    ProofCampaignResponse:
+      type: object
+      required: [campaign]
+      properties:
+        campaign:
+          type: object
+          additionalProperties: true
+
+    ProofCampaignCreateRequest:
+      type: object
+      required: [model, run_ids]
+      properties:
+        model:
+          type: string
+        name:
+          type: string
+          nullable: true
+        description:
+          type: string
+          nullable: true
+        run_ids:
+          type: array
+          minItems: 1
+          items:
+            type: string
+
+    ProofCampaignDiffRequest:
+      type: object
+      required: [other_campaign_id]
+      properties:
+        other_campaign_id:
+          type: string
+
+    ProofCampaignDiffResponse:
+      type: object
+      required: [diff]
+      properties:
+        diff:
+          type: object
+          additionalProperties: true
+
+    ProofRunCompareRequest:
+      type: object
+      required: [left_run_id, right_run_id]
+      properties:
+        left_run_id:
+          type: string
+        right_run_id:
+          type: string
+
+    ProofRunCompareResponse:
+      type: object
+      required: [compare]
+      properties:
+        compare:
+          type: object
+          additionalProperties: true
+
+    RunAiReviewProjectionResponse:
+      type: object
+      required: [run_id, review]
+      properties:
+        run_id:
+          type: string
+        review:
+          type: object
+          additionalProperties: true
+
+    TargetFeasibilityResponse:
+      type: object
+      required: [template_id, target, supported, blocked_reasons, migration_hints, required_capabilities]
+      properties:
+        template_id:
+          type: string
+        target:
+          type: string
+        supported:
+          type: boolean
+        blocked_reasons:
+          type: array
+          items:
+            type: string
+        migration_hints:
+          type: array
+          items:
+            type: string
+        required_capabilities:
+          type: array
+          items:
+            type: string
+
+    ReportSummary:
+      type: object
+      required: [run_id, status, checks]
+      properties:
+        run_id:
+          type: string
+        status:
+          $ref: "#/components/schemas/RunStatus"
+        checks:
+          type: array
+          items:
+            $ref: "#/components/schemas/ReportCheck"
+
+    ReportCheck:
+      type: object
+      required: [id, status]
+      properties:
+        id:
+          type: string
+        status:
+          type: string
+          enum: [passed, failed, skipped]
+        reason_code:
+          type: string
+          nullable: true
+        evidence_path:
+          type: string
+          nullable: true
+
+    CommandTowerOverviewResponse:
+      type: object
+      required: [status, diagnostics, alerts, latest_flow]
+      properties:
+        status:
+          type: string
+          example: ok
+        diagnostics:
+          type: object
+          additionalProperties: true
+        alerts:
+          type: object
+          additionalProperties: true
+        latest_flow:
+          $ref: "#/components/schemas/FlowPreviewResponse"
+
+    FlowPreviewStep:
+      type: object
+      required: [step_id, action]
+      properties:
+        step_id:
+          type: string
+        action:
+          type: string
+        url:
+          type: string
+          nullable: true
+        value_ref:
+          type: string
+          nullable: true
+        selector:
+          type: string
+          nullable: true
+
+    FlowPreviewResponse:
+      type: object
+      required: [source_event_count, step_count, steps]
+      properties:
+        session_id:
+          type: string
+          nullable: true
+        start_url:
+          type: string
+          nullable: true
+        generated_at:
+          type: string
+          format: date-time
+          nullable: true
+        source_event_count:
+          type: integer
+        step_count:
+          type: integer
+        steps:
+          type: array
+          items:
+            $ref: "#/components/schemas/FlowPreviewStep"
+
+    FlowDraftDocumentResponse:
+      type: object
+      properties:
+        session_id:
+          type: string
+          nullable: true
+        flow:
+          type: object
+          nullable: true
+          additionalProperties: true
+
+    FlowDraftDocumentUpdateRequest:
+      type: object
+      required: [flow]
+      properties:
+        flow:
+          type: object
+          additionalProperties: true
+
+    ReplayLatestStepRequest:
+      type: object
+      required: [step_id]
+      properties:
+        step_id:
+          type: string
+
+    ReplayFromStepRequest:
+      type: object
+      required: [step_id]
+      properties:
+        step_id:
+          type: string
+        replay_preconditions:
+          type: boolean
+          default: false
+
+    TaskSnapshot:
+      type: object
+      required: [task_id, command_id, status, attempt, max_attempts, created_at, output_tail]
+      properties:
+        task_id:
+          type: string
+        command_id:
+          type: string
+        status:
+          type: string
+          enum: [queued, running, success, failed, cancelled]
+        requested_by:
+          type: string
+          nullable: true
+        attempt:
+          type: integer
+        max_attempts:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+        started_at:
+          type: string
+          format: date-time
+          nullable: true
+        finished_at:
+          type: string
+          format: date-time
+          nullable: true
+        exit_code:
+          type: integer
+          nullable: true
+        message:
+          type: string
+          nullable: true
+        output_tail:
+          type: string
+
+    RunCommandResponse:
+      type: object
+      required: [task]
+      properties:
+        task:
+          $ref: "#/components/schemas/TaskSnapshot"
+
+    SelectorAttemptResponse:
+      type: object
+      required: [kind, value, success]
+      properties:
+        selector_index:
+          type: integer
+          nullable: true
+        kind:
+          type: string
+        value:
+          type: string
+        normalized:
+          type: string
+          nullable: true
+        success:
+          type: boolean
+        error:
+          type: string
+          nullable: true
+
+    StepEvidenceResponse:
+      type: object
+      required: [step_id, fallback_trail]
+      properties:
+        step_id:
+          type: string
+        action:
+          type: string
+          nullable: true
+        ok:
+          type: boolean
+          nullable: true
+        detail:
+          type: string
+          nullable: true
+        duration_ms:
+          type: integer
+          nullable: true
+        matched_selector:
+          type: string
+          nullable: true
+        selector_index:
+          type: integer
+          nullable: true
+        screenshot_before_path:
+          type: string
+          nullable: true
+        screenshot_after_path:
+          type: string
+          nullable: true
+        screenshot_before_data_url:
+          type: string
+          nullable: true
+        screenshot_after_data_url:
+          type: string
+          nullable: true
+        fallback_trail:
+          type: array
+          items:
+            $ref: "#/components/schemas/SelectorAttemptResponse"
+
+    EvidenceTimelineItemResponse:
+      type: object
+      required: [step_id, fallback_trail]
+      properties:
+        step_id:
+          type: string
+        action:
+          type: string
+          nullable: true
+        ok:
+          type: boolean
+          nullable: true
+        detail:
+          type: string
+          nullable: true
+        duration_ms:
+          type: integer
+          nullable: true
+        matched_selector:
+          type: string
+          nullable: true
+        selector_index:
+          type: integer
+          nullable: true
+        screenshot_before_path:
+          type: string
+          nullable: true
+        screenshot_after_path:
+          type: string
+          nullable: true
+        screenshot_before_data_url:
+          type: string
+          nullable: true
+        screenshot_after_data_url:
+          type: string
+          nullable: true
+        fallback_trail:
+          type: array
+          items:
+            $ref: "#/components/schemas/SelectorAttemptResponse"
+
+    EvidenceTimelineResponse:
+      type: object
+      required: [items]
+      properties:
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/EvidenceTimelineItemResponse"
+
+    VonageInboundResponse:
+      type: object
+      required: [ok, provider]
+      properties:
+        ok:
+          type: boolean
+        provider:
+          type: string
+          enum: [vonage]
+        duplicate:
+          type: boolean
+          nullable: true
+        message_id:
+          type: string
+          nullable: true

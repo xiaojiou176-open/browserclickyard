@@ -1,0 +1,54 @@
+name: pr
+steps:
+  - unit
+  - contract
+  - ct
+  - e2e
+  - capture
+  - a11y
+  - perf
+  - visual
+  - report
+tests:
+  e2eSuite: smoke
+gates:
+  consoleErrorMax: 0
+  pageErrorMax: 0
+  http5xxMax: 0
+  flakeRateMax: 0.02
+  contractStatus: passed
+  a11ySeriousMax: 0
+  perfLcpMsMax: 4000
+  perfFcpMsMax: 2500
+  visualDiffPixelsMax: 300
+determinism:
+  timezone: UTC
+  locale: en-US
+  seed: 20260218
+  disableAnimations: true
+  reducedMotion: reduce
+diagnostics:
+  maxItems: 10
+perf:
+  preset: mobile
+  engine: lhci
+a11y:
+  standard: wcag2aa
+  maxIssues: 300
+  engine: axe
+visual:
+  engine: builtin
+  mode: diff
+# PR enforces Gemini UI/UX review by default; missing or invalid artifacts must fail.
+aiReview:
+  enabled: true
+  maxArtifacts: 60
+  emitIssue: false
+  emitPrComment: false
+  severityThreshold: medium
+geminiAccuracyMin: 0.82
+geminiParallelConsistencyMin: 0.75
+geminiSampleSizeMin: 5 # keep aligned with generate-ui-ux-gemini-report default parallel sample size
+enginePolicy:
+  required: []
+  failOnBlocked: true

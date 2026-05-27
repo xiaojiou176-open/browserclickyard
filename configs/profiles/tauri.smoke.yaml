@@ -1,0 +1,16 @@
+name: tauri.smoke
+steps:
+  - desktop_readiness
+  - desktop_smoke
+  - desktop_e2e
+  - security
+  - report
+gates:
+  consoleErrorMax: 0
+  pageErrorMax: 0
+  http5xxMax: 0
+  securityHighVulnMax: 0
+security:
+  engine: builtin
+  maxFileSizeKb: 512
+  rulesFile: configs/security-rules.yaml

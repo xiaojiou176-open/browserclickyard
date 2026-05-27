@@ -1,0 +1,59 @@
+aggregates:
+  ci:
+    workflow: .github/workflows/ci.yml
+    job: required_ci_gate
+  pr:
+    workflow: .github/workflows/pr.yml
+    job: pr_required_gate
+
+required_jobs:
+  ci:
+    - ci-quick-gate
+  pr:
+    - pr-quick-gate
+  nightly:
+    - nightly-gate
+
+optional_jobs:
+  ci:
+    workflow: .github/workflows/ci.yml
+    jobs: []
+  pr:
+    workflow: .github/workflows/pr.yml
+    jobs: []
+  nightly:
+    workflow: .github/workflows/nightly.yml
+    jobs: []
+
+manual_dispatch_jobs:
+  nightly:
+    workflow: .github/workflows/nightly.yml
+    jobs:
+      - nightly-manual-observability
+
+branch_protection:
+  default_branch: main
+  allowed_required_aggregates:
+    - pr_required_gate
+  audit_workflow: .github/workflows/branch-protection-audit.yml
+
+features:
+  chromatic_web:
+    status: disabled
+    workflow: .github/workflows/ci.yml
+    job: chromatic_web
+  hygiene_job:
+    status: disabled
+    workflow: .github/workflows/ci.yml
+    job: hygiene
+
+policy_flags:
+  required_job_mode:
+    ci: hard_fail
+    pr: hard_fail
+    nightly: hard_fail
+  deterministic_core_entrypoints:
+    nightly: scripts/ci/run-nightly-deterministic-core.sh
+  informational_jobs:
+    ci: []
+    nightly: []

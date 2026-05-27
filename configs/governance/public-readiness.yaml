@@ -1,0 +1,153 @@
+schema_version: 2
+current_mode: public-repo-maintainer-operated
+public_claim_allowed: true
+current_statement: >-
+  This page is a repo-side truth reference. It records tracked governance
+  stance, the audit paths that exist, and which remote GitHub settings remain
+  audit-backed, unknown, or manual-only until a fresh verification run confirms
+  them.
+english_canonical_status: scoped-only-not-repo-wide
+artifact_publication_mode: private-only
+repo_side_confirmed:
+  - id: generated-reference
+    claim: This page is generated from tracked governance source and should be updated through source-plus-render, not by hand-editing the rendered markdown.
+    evidence:
+      - configs/governance/public-readiness.yaml
+      - scripts/ci/render-public-readiness-doc.mjs
+      - docs/reference/public-readiness.md
+  - id: private-default-artifacts
+    claim: Runtime evidence and failure bundles remain private-only by default unless a path is explicitly allowlisted as public-safe.
+    evidence:
+      - configs/governance/public-readiness.yaml
+  - id: historical-closure-record
+    claim: The v0.1.0 closure record is retained as a historical snapshot and no longer acts as current truth for live GitHub settings.
+    evidence:
+      - docs/releases/v0.1.0-public-closure.md
+  - id: branch-protection-audit-path
+    claim: The repository ships a dedicated branch-protection audit workflow for remote main-branch protection rechecks.
+    evidence:
+      - .github/workflows/branch-protection-audit.yml
+  - id: public-surface-audit-path
+    claim: The repository ships a dedicated public-surface audit workflow and script for manual or scheduled rechecks of API-readable and GraphQL-readable public GitHub metadata.
+    evidence:
+      - .github/workflows/public-surface-audit.yml
+      - scripts/ci/public-surface-audit.mjs
+  - id: protected-sensitive-workflows
+    claim: Secret-backed live, desktop, and privileged governance workflows stay on GitHub-hosted runners, require workflow_dispatch entrypoints when they touch external or privileged surfaces, and bind the owner-approved-sensitive protected environment.
+    evidence:
+      - .github/workflows/live-realism.yml
+      - .github/workflows/desktop-smoke.yml
+      - .github/workflows/nightly.yml
+      - .github/workflows/branch-protection-audit.yml
+  - id: deep-water-english-gate
+    claim: The scoped deep-water English closure gate still protects deep-water Command Center files, frontend E2E support, runtime-path reference docs, and runtime-path governance source files. A small allowlisted set of locale-aware Command Center operator surfaces is intentionally bilingual and is verified by app tests instead of being rejected by this English-purity gate. It is not a repo-wide no-non-English guarantee.
+    evidence:
+      - scripts/ci/check-deep-english-purity.mjs
+      - apps/command-center
+      - tests/frontend-e2e
+      - docs/reference/runtime-paths.md
+      - docs/reference/dependency-governance.md
+      - configs/governance/runtime-paths.yaml
+  - id: dependabot-version-updates-reopened
+    claim: Dependabot version updates are reopened on a weekly cadence with a bounded open-PR cap across GitHub Actions, npm, uv, and Docker ecosystems.
+    evidence:
+      - .github/dependabot.yml
+      - docs/reference/dependency-governance.md
+  - id: dependency-review-audit-path
+    claim: The repository ships a dedicated Dependency Review check inside the required PR gate, backed by a tracked config, so dependency diffs are evaluated on the same protected merge path.
+    evidence:
+      - .github/workflows/pr.yml
+      - .github/dependency-review-config.yml
+  - id: trivy-fs-audit-path
+    claim: The repository ships a Trivy filesystem audit path that runs inside the main CI and PR gates through a repo-owned wrapper script instead of a detached side workflow.
+    evidence:
+      - .github/workflows/ci.yml
+      - .github/workflows/pr.yml
+      - package.json
+      - scripts/ci/run-trivy-fs.sh
+  - id: zizmor-workflow-audit-path
+    claim: The repository ships a zizmor workflow audit inside the main CI and PR gates so GitHub Actions policy analysis no longer relies only on actionlint or manual review.
+    evidence:
+      - .github/workflows/ci.yml
+      - .github/workflows/pr.yml
+      - package.json
+  - id: oss-redaction-fresh-clone-audit
+    claim: The OSS redaction audit now checks the tracked worktree, git history, a fresh clone, and GitHub-facing issue or pull-request text surfaces when credentials are available.
+    evidence:
+      - scripts/ci/oss-redaction-audit.sh
+audit_paths:
+  - id: render-check
+    surface: Rendered public-readiness reference drift
+    verification_mode: repo-local-check
+    paths:
+      - scripts/ci/render-public-readiness-doc.mjs
+    detail: Run the render script with --check to prove the reference page still matches the tracked YAML source.
+  - id: branch-protection-remote
+    surface: Remote branch-protection state on main
+    verification_mode: manual-protected-environment-workflow
+    paths:
+      - .github/workflows/branch-protection-audit.yml
+    detail: Use uploaded audit artifacts from the protected workflow_dispatch audit before restating required checks, review rules, or admin enforcement as current fact.
+  - id: public-surface-remote
+    surface: Remote repo visibility, default branch, description, discussions, topics, release presence, and social preview assignment
+    verification_mode: manual-or-scheduled-workflow
+    paths:
+      - .github/workflows/public-surface-audit.yml
+      - scripts/ci/public-surface-audit.mjs
+    detail: The audit summary explicitly labels API-readable and GraphQL-readable signals. Social preview assignment can be queried, but uploading or replacing the image still remains a GitHub Settings action.
+repo_side_limitations:
+  - Remote GitHub settings must remain audit-backed or manual-verified facts instead of unconditional tracked prose.
+remote_state_unknown_or_manual:
+  - id: live-repo-visibility
+    surface: Current GitHub repository visibility and API-readable public metadata, including description, homepage, topics, discussions, and release presence
+    status: unknown-until-audited
+    why: Tracked markdown is a repo-side statement, not proof of the current remote GitHub settings.
+    reverify_paths:
+      - .github/workflows/public-surface-audit.yml
+      - scripts/ci/public-surface-audit.mjs
+  - id: live-branch-protection
+    surface: Current main-branch protection rules, required checks, review settings, and conversation resolution
+    status: unknown-until-audited
+    why: These settings live on GitHub and must come from a fresh audit artifact rather than a static repository document.
+    reverify_paths:
+      - .github/workflows/branch-protection-audit.yml
+  - id: live-secret-scanning
+    surface: Current secret scanning and push protection state
+    status: manual-verification-required
+    why: GitHub API visibility can be permission-limited, so this repo keeps the state in unknown/manual until a fresh audit artifact or direct settings review confirms it.
+    reverify_paths:
+      - .github/workflows/public-surface-audit.yml
+      - GitHub Settings > Security
+  - id: live-social-preview
+    surface: Current GitHub social preview image assignment
+    status: queryable-state-manual-mutation
+    why: The current assignment is queryable through GraphQL or `gh repo view` fields such as `openGraphImageUrl` and `usesCustomOpenGraphImage`, but uploading or replacing the image still requires GitHub Settings.
+    reverify_paths:
+      - scripts/ci/public-surface-audit.mjs
+      - gh repo view <owner>/<repo> --json openGraphImageUrl,usesCustomOpenGraphImage
+      - GitHub Settings > General > Social preview
+  - id: live-push-protection
+    surface: Current push protection state
+    status: manual-verification-required
+    why: Push protection remains a GitHub-side enforcement surface that should not be restated from repo prose without direct settings verification.
+    reverify_paths:
+      - GitHub Settings > Security
+external_blockers:
+  - id: remote-github-state-proof
+    class: blocker
+    status: open
+    owner: maintainers
+    summary: Remote GitHub settings still require audit-backed verification and must not be stated as unconditional repo-side truth.
+    evidence:
+      - .github/workflows/branch-protection-audit.yml
+      - .github/workflows/public-surface-audit.yml
+      - docs/reference/public-readiness.md
+deferred_preconditions:
+  - id: public-surface-audit-baseline
+    class: precondition
+    status: pending
+    owner: maintainers
+    summary: Establish and retain a current public-surface audit artifact before promoting GitHub-side metadata into tracked current-state prose.
+    evidence:
+      - .github/workflows/public-surface-audit.yml
+      - scripts/ci/public-surface-audit.mjs

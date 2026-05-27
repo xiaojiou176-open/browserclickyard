@@ -1,0 +1,10 @@
+# This config records the repo's upstream policy, not proof of a live upstream
+# binding in the current checkout.
+# If `scripts/git-sync-audit.sh --json` reports `configured=false` or
+# `ref_present=false`, this repository must be treated as
+# dependency-governance-first / upstream-inactive until a maintainer explicitly
+# binds a real canonical upstream remote.
+remoteName: upstream
+branch: main
+required: false
+status: inactive-until-bound

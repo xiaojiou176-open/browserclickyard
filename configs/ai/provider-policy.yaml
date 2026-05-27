@@ -1,0 +1,4 @@
+provider: gemini
+primary: gemini
+fallback: none
+fallbackMode: strict

@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "source": "nightly-gate",
+  "updatedAt": "2026-02-20T00:00:00Z",
+  "metrics": {
+    "lcp": 1.8,
+    "inp": 200,
+    "cls": 0.1
+  },
+  "units": {
+    "lcp": "seconds",
+    "inp": "milliseconds",
+    "cls": "score"
+  },
+  "thresholds": {
+    "lcpRegressionRatio": 0.15,
+    "inpRegressionRatio": 0.2,
+    "clsRegressionDelta": 0.03
+  }
+}

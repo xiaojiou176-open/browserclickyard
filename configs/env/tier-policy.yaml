@@ -1,0 +1,37 @@
+version: 1
+description: >
+  Environment variable tier policy for reduction governance.
+  This file defines canonical core keys and profile-oriented keys.
+
+core_keys:
+  - AUTOMATION_API_TOKEN
+  - GEMINI_API_KEY
+  - GEMINI_MODEL
+  - GEMINI_FAST_MODEL
+  - GEMINI_EMBEDDING_MODEL
+  - GEMINI_THINKING_LEVEL
+  - GEMINI_INCLUDE_THOUGHTS
+  - BASE_URL
+
+profiles:
+  local_dev:
+    - BACKEND_PORT
+    - UIQ_BASE_URL
+  live_localhost:
+    - UIQ_LIVE_RETRIES
+    - UIQ_LIVE_ALLOW_INSECURE_CERTS
+  ci:
+    - CI
+    - GITHUB_BASE_REF
+    - GITHUB_EVENT_NAME
+    - GITHUB_REF
+    - GITHUB_REPOSITORY
+    - GITHUB_STEP_SUMMARY
+
+deprecated_aliases: {}
+
+keep_prefixes:
+  - UIQ_
+  - GEMINI_
+  - RECON_
+  - VONAGE_

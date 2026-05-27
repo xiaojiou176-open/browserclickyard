@@ -1,0 +1,30 @@
+schema_version: 1
+exceptions:
+  - system_id: k6
+    reference_type: ci-image
+    reference_value: ci-browser runtime image revision
+    owner: uiq-platform
+    reason: load test engine is supplied by host/container image instead of repo-pinned package
+    validation_profile: nightly
+    required_gate: nightly-gate
+  - system_id: semgrep
+    reference_type: ci-image
+    reference_value: ci-browser runtime image revision
+    owner: uiq-platform
+    reason: security scanner binary is supplied by host/container image instead of repo-pinned package
+    validation_profile: nightly
+    required_gate: nightly-gate
+  - system_id: tauri_runtime
+    reference_type: desktop-runtime-registry
+    reference_value: target runtime capability registry revision
+    owner: uiq-platform
+    reason: desktop runtime is managed by host target environment
+    validation_profile: nightly
+    required_gate: nightly-gate
+  - system_id: swift_driver
+    reference_type: host-xcode
+    reference_value: host managed xcode image revision
+    owner: uiq-platform
+    reason: macOS xcuitest driver depends on host managed Xcode runtime
+    validation_profile: nightly
+    required_gate: nightly-gate
