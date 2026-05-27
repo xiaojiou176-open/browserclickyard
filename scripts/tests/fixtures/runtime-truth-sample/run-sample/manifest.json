@@ -1,0 +1,31 @@
+{
+  "schemaVersion": "1.1",
+  "runId": "run-sample",
+  "profile": "pr",
+  "target": {
+    "type": "web",
+    "name": "web.ci"
+  },
+  "reports": {
+    "evidenceIndex": "reports/evidence.index.json",
+    "diagnosticsIndex": "reports/diagnostics.index.json"
+  },
+  "evidenceIndex": [
+    {
+      "id": "log-backend-runtime",
+      "source": "report",
+      "kind": "log",
+      "path": "logs/runtime/service-api.app.jsonl"
+    },
+    {
+      "id": "report-summary",
+      "source": "report",
+      "kind": "report",
+      "path": "reports/summary.json"
+    }
+  ],
+  "gateResults": {
+    "status": "passed",
+    "checks": []
+  }
+}

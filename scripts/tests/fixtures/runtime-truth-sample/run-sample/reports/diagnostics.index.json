@@ -1,0 +1,45 @@
+{
+  "runId": "run-sample",
+  "status": "passed",
+  "profile": "pr",
+  "target": {
+    "type": "web",
+    "name": "web.ci"
+  },
+  "reports": {
+    "summary": "reports/summary.json",
+    "evidenceIndex": "reports/evidence.index.json"
+  },
+  "diagnostics": {
+    "capture": {
+      "consoleErrors": 0,
+      "pageErrors": 0,
+      "http5xxUrls": 0
+    },
+    "explore": {
+      "consoleErrors": 0,
+      "pageErrors": 0,
+      "http5xxUrls": 0
+    },
+    "chaos": {
+      "consoleErrors": 0,
+      "pageErrors": 0,
+      "http5xxUrls": 0
+    },
+    "aggregateHttp5xx": 0,
+    "blockedSteps": [],
+    "blockedStepDetails": [],
+    "failureLocations": [],
+    "execution": {
+      "maxParallelTasks": 4,
+      "stagesMs": {
+        "capture": 1200,
+        "report": 350
+      },
+      "criticalPath": [
+        "capture",
+        "report"
+      ]
+    }
+  }
+}
