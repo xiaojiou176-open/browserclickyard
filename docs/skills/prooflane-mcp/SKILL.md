@@ -32,13 +32,13 @@ package-registry or hosted distribution that does not exist yet.
 - Node.js 20+
 - pnpm
 - Python 3.12+
-- A local shell session inside the cloned `ui-automation-control-plane` checkout
+- A local shell session inside the cloned `browserclickyard` checkout
 
 ## Canonical Repo
 
 ```bash
-git clone https://github.com/xiaojiou176-open/ui-automation-control-plane.git
-cd ui-automation-control-plane
+git clone https://github.com/xiaojiou176-open/browserclickyard.git
+cd browserclickyard
 ```
 
 ## Install
@@ -103,7 +103,7 @@ Do **not** claim this package is published until registry publication really hap
     "uiq": {
       "command": "pnpm",
       "args": ["mcp:start"],
-      "cwd": "/absolute/path/to/ui-automation-control-plane",
+      "cwd": "/absolute/path/to/browserclickyard",
       "env": {
         "UIQ_MCP_API_BASE_URL": "http://127.0.0.1:18080",
         "UIQ_MCP_TOOL_GROUPS": "advanced,analysis,proof"
@@ -143,7 +143,7 @@ Do **not** claim this package is published until registry publication really hap
 
 ## Minimal Verification
 
-Run these from your cloned `ui-automation-control-plane` checkout:
+Run these from your cloned `browserclickyard` checkout:
 
 ```bash
 pnpm mcp:check

@@ -26,17 +26,17 @@ boundaries:
     - No published npm or PyPI package is claimed here
     - No hosted Prooflane SaaS state is claimed here
 installation:
-  repo: https://github.com/xiaojiou176-open/ui-automation-control-plane
+  repo: https://github.com/xiaojiou176-open/browserclickyard
   steps:
-    - git clone https://github.com/xiaojiou176-open/ui-automation-control-plane.git
-    - cd ui-automation-control-plane
+    - git clone https://github.com/xiaojiou176-open/browserclickyard.git
+    - cd browserclickyard
     - ./scripts/setup.sh
 configuration:
   repo_native:
     command: pnpm
     args:
       - mcp:start
-    cwd: /absolute/path/to/ui-automation-control-plane
+    cwd: /absolute/path/to/browserclickyard
     env:
       UIQ_MCP_API_BASE_URL: http://127.0.0.1:18080
       UIQ_MCP_TOOL_GROUPS: advanced,analysis,proof

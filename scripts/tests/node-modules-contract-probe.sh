@@ -162,9 +162,9 @@ if ! uiq_workspace_node_modules_topology_ready "$workspace_root" "$authoritative
 fi
 
 rm -f "$workspace_root/apps/command-center/node_modules"
-mkdir -p "$workspace_root/apps/command-center/home/runner/work/ui-automation-control-plane/ui-automation-control-plane"
+mkdir -p "$workspace_root/apps/command-center/home/runner/work/browserclickyard/browserclickyard"
 ln -s ../../../../../../node_modules \
-  "$workspace_root/apps/command-center/home/runner/work/ui-automation-control-plane/ui-automation-control-plane/node_modules"
+  "$workspace_root/apps/command-center/home/runner/work/browserclickyard/browserclickyard/node_modules"
 
 if uiq_workspace_node_modules_topology_ready "$workspace_root" "$authoritative_root"; then
   echo "expected corrupted workspace bridge topology to be rejected" >&2

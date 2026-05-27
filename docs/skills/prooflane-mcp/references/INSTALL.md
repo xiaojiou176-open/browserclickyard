@@ -3,8 +3,8 @@
 ## Local repo setup
 
 ```bash
-git clone https://github.com/xiaojiou176-open/ui-automation-control-plane.git
-cd ui-automation-control-plane
+git clone https://github.com/xiaojiou176-open/browserclickyard.git
+cd browserclickyard
 ./scripts/setup.sh
 ```
 
@@ -12,7 +12,7 @@ If you already trust the workspace toolchain, `pnpm install` is enough for JS
 dependencies.
 
 Before loading the host config snippets in this folder, replace
-`/absolute/path/to/ui-automation-control-plane` with the real path to your
+`/absolute/path/to/browserclickyard` with the real path to your
 local clone.
 
 ## Start the current repo-native MCP server

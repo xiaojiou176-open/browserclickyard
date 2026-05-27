@@ -1,11 +1,11 @@
 blank_issues_enabled: false
 contact_links:
   - name: Discussions
-    url: https://github.com/xiaojiou176-open/ui-automation-control-plane/discussions
+    url: https://github.com/xiaojiou176-open/browserclickyard/discussions
     about: Use Discussions for questions, ideas, and show-and-tell posts that do not belong in a bug ticket.
   - name: Usage and support
-    url: https://github.com/xiaojiou176-open/ui-automation-control-plane/issues
+    url: https://github.com/xiaojiou176-open/browserclickyard/issues
     about: Use GitHub Issues for reproducible bugs and concrete repo work items.
   - name: Security reporting
-    url: https://github.com/xiaojiou176-open/ui-automation-control-plane/security/advisories/new
+    url: https://github.com/xiaojiou176-open/browserclickyard/security/advisories/new
     about: Do not post security-sensitive reports in public issue threads. Use the private security advisory flow instead.
