@@ -300,7 +300,7 @@ test.afterEach(async ({ context, page }) => {
 test("@core-nonstub @nonstub run and cancel chain over live local api", async ({ page }) => {
   await page.goto("/");
 
-  await expect(page.getByRole("heading", { level: 1, name: "Browserclickyard" })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 1, name: "Pagestress" })).toBeVisible();
   const backendUnavailable = page.getByText("The backend connection failed.").first();
   if (await backendUnavailable.isVisible()) {
     throw new Error("frontend non-stub contract requires backend connectivity");

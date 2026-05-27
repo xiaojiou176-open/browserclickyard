@@ -34,7 +34,7 @@ Completed in the current round:
 - Direction-neutral lane clarity landed across:
   - `README.md`
   - `docs/get-started.md`
-  - `docs/why-browserclickyard.md`
+  - `docs/why-pagestress.md`
   - `docs/proof-center.md`
   - `docs/reference/universal-api.md`
   - the Command Center shell and supporting help/onboarding surfaces

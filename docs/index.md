@@ -1,12 +1,12 @@
 # Docs Index
 
-This is the public navigation map for Browserclickyard. Start with the layer that
+This is the public navigation map for Pagestress. Start with the layer that
 matches the WebUI-testing job you actually want to do, then go deeper only when
 you need more detail.
 
 ## Distribution Truth Today
 
-Browserclickyard is already public through **GitHub + GitHub Pages + public-safe
+Pagestress is already public through **GitHub + GitHub Pages + public-safe
 docs**, but it is not claiming package-registry or marketplace distribution
 that has not happened yet.
 
@@ -15,9 +15,9 @@ that has not happened yet.
 - **Remote GitHub routes exist**: repository, homepage, Discussions, and
   release surfaces remain audit-backed rather than static proof.
 - **Ready but not live yet**: the publish-ready MCP package
-  `@uiq/mcp-server`, the planned `browserclickyard-mcp` CLI shape, and other external
+  `@uiq/mcp-server`, the planned `pagestress-mcp` CLI shape, and other external
   distribution listings that are prepared but not published.
-- **Companion skill host state**: `docs/skills/browserclickyard-mcp/` is listed live
+- **Companion skill host state**: `docs/skills/pagestress-mcp/` is listed live
   on ClawHub and still review-pending on OpenHands/extensions; that host state
   belongs to the companion skill lane only.
 - **Not published yet**: npm, PyPI, additional public Skills marketplace
@@ -30,7 +30,7 @@ Quick map:
 
 - **front door first:** `README.md` + `docs/get-started.md`
 - **proof second:** `docs/proof-center.md`
-- **MCP / skill later:** `services/mcp-server/` docs + `docs/skills/browserclickyard-mcp/`
+- **MCP / skill later:** `services/mcp-server/` docs + `docs/skills/pagestress-mcp/`
 - **remote GitHub truth:** re-check through
   `docs/reference/public-readiness.md` before treating homepage/release/discussion
   state as fresh fact
@@ -46,7 +46,7 @@ architecture stack:
 | If you are trying to... | Read this first | Then go here |
 | --- | --- | --- |
 | Understand the product without local setup | [docs/examples/public-stress-lab-guided-demo.md](./examples/public-stress-lab-guided-demo.md) | [README.md](../README.md) |
-| Understand the stress-lab story in 30 seconds | [README.md](../README.md) | [docs/why-browserclickyard.md](./why-browserclickyard.md) |
+| Understand the stress-lab story in 30 seconds | [README.md](../README.md) | [docs/why-pagestress.md](./why-pagestress.md) |
 | Get a localhost-first result fast | [docs/get-started.md](./get-started.md) | [docs/how-to/mcp-quickstart-1pager.md](./how-to/mcp-quickstart-1pager.md) |
 | Connect Codex, Claude Code, or another MCP-capable client | [docs/how-to/mcp-agent-review-loop.md](./how-to/mcp-agent-review-loop.md) | [docs/how-to/mcp-clients-setup.md](./how-to/mcp-clients-setup.md) |
 | See bilingual operator guidance in the Command Center | [README.md](../README.md) | [docs/get-started.md](./get-started.md) |
@@ -60,7 +60,7 @@ architecture stack:
 - [README.md](../README.md): public front door
 - [docs/examples/public-stress-lab-guided-demo.md](./examples/public-stress-lab-guided-demo.md): no-setup guided demo
 - [docs/get-started.md](./get-started.md): localhost-first quickstart
-- [docs/why-browserclickyard.md](./why-browserclickyard.md): product story and differentiation
+- [docs/why-pagestress.md](./why-pagestress.md): product story and differentiation
 - [docs/releases/v0.1.0-public-launch.md](./releases/v0.1.0-public-launch.md): first public release notes
 - [docs/releases/v0.1.0-public-closure.md](./releases/v0.1.0-public-closure.md): historical closure snapshot
 - [docs/faq.md](./faq.md): evaluation FAQ
@@ -121,7 +121,7 @@ architecture stack:
 ## MCP
 
 These docs describe the **companion integration lane**.
-They are real and usable today, but they are not the primary Browserclickyard product
+They are real and usable today, but they are not the primary Pagestress product
 story.
 
 - [docs/reference/integration-entrypoints.md](./reference/integration-entrypoints.md):
@@ -134,8 +134,8 @@ story.
 - [docs/how-to/mcp-clients-setup.md](./how-to/mcp-clients-setup.md):
   client setup
 - [docs/mcp.md](./mcp.md): full MCP contract
-- [docs/skills/browserclickyard-mcp/SKILL.md](./skills/browserclickyard-mcp/SKILL.md):
-  generic in-repo companion skill scaffold for `@uiq/mcp-server` / `browserclickyard-mcp`
+- [docs/skills/pagestress-mcp/SKILL.md](./skills/pagestress-mcp/SKILL.md):
+  generic in-repo companion skill scaffold for `@uiq/mcp-server` / `pagestress-mcp`
 
 Suggested roles:
 

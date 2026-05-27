@@ -1,5 +1,5 @@
 {
-  "app_name": "Browserclickyard",
+  "app_name": "Pagestress",
   "environment": "staging",
   "backend": {
     "host": "0.0.0.0",

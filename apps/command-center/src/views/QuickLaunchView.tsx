@@ -534,8 +534,8 @@ function QuickLaunchView({
             <p className="hint-text">
               {pickUiText(
                 locale,
-                "Browserclickyard is strongest when you treat it like a browser lab first: pick the target, choose the experiment type, run it, and only move into advanced review when the result needs deeper comparison.",
-                "Browserclickyard \u6700\u5f3a\u7684\u7528\u6cd5\u662f\u5148\u628a\u5b83\u5f53\u6210\u6d4f\u89c8\u5668\u5b9e\u9a8c\u53f0\uff1a\u5148\u9009\u76ee\u6807\u3001\u518d\u9009\u5b9e\u9a8c\u7c7b\u578b\u3001\u542f\u52a8\u5b9e\u9a8c\uff0c\u53ea\u6709\u7ed3\u679c\u9700\u8981\u66f4\u6df1\u5bf9\u6bd4\u65f6\u624d\u8fdb\u5165 Advanced Review\u3002",
+                "Pagestress is strongest when you treat it like a browser lab first: pick the target, choose the experiment type, run it, and only move into advanced review when the result needs deeper comparison.",
+                "Pagestress \u6700\u5f3a\u7684\u7528\u6cd5\u662f\u5148\u628a\u5b83\u5f53\u6210\u6d4f\u89c8\u5668\u5b9e\u9a8c\u53f0\uff1a\u5148\u9009\u76ee\u6807\u3001\u518d\u9009\u5b9e\u9a8c\u7c7b\u578b\u3001\u542f\u52a8\u5b9e\u9a8c\uff0c\u53ea\u6709\u7ed3\u679c\u9700\u8981\u66f4\u6df1\u5bf9\u6bd4\u65f6\u624d\u8fdb\u5165 Advanced Review\u3002",
               )}
             </p>
             <div className="templates-grid mt-3">

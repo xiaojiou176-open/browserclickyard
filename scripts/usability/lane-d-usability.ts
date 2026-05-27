@@ -370,7 +370,7 @@ async function closeOnboarding(page: Page): Promise<void> {
   await page.getByRole("button", { name: "下一步" }).click();
   await page.getByRole("button", { name: "下一步" }).click();
   await page.getByRole("button", { name: "开始使用" }).click();
-  await page.getByRole("heading", { level: 1, name: "Browserclickyard" }).waitFor({ state: "visible" });
+  await page.getByRole("heading", { level: 1, name: "Pagestress" }).waitFor({ state: "visible" });
 }
 
 async function runTaskA(page: Page): Promise<{ success: boolean; firstError: string | null }> {
@@ -578,7 +578,7 @@ function formatReportMarkdown(payload: {
 
 > Evidence label: ${EVIDENCE_LABEL}
 > Boundary: ${EVIDENCE_BOUNDARY}. This report is for internal interaction
-> tuning and must not be presented as Browserclickyard's public proof sample.
+> tuning and must not be presented as Pagestress's public proof sample.
 
 ## Method
 - Goal: quantify the first-time-user path from landing in the UI to seeing a success signal.

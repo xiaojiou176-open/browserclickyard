@@ -1,18 +1,18 @@
 {
   "name": "@uiq/mcp-server",
   "version": "0.1.0",
-  "description": "Browserclickyard MCP server for read-mostly governed run, artifact, and review workflows.",
+  "description": "Pagestress MCP server for read-mostly governed run, artifact, and review workflows.",
   "license": "MIT",
-  "homepage": "https://xiaojiou176-open.github.io/browserclickyard/",
+  "homepage": "https://xiaojiou176-open.github.io/pagestress/",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/xiaojiou176-open/browserclickyard.git",
+    "url": "git+https://github.com/xiaojiou176-open/pagestress.git",
     "directory": "services/mcp-server"
   },
   "keywords": [
     "mcp",
     "model-context-protocol",
-    "browserclickyard",
+    "pagestress",
     "ai-agents",
     "webui-testing",
     "stdio"
@@ -33,7 +33,7 @@
     "./package.json": "./package.json"
   },
   "bin": {
-    "browserclickyard-mcp": "./dist/server.js"
+    "pagestress-mcp": "./dist/server.js"
   },
   "files": [
     "dist",

@@ -1,5 +1,5 @@
 {
-  "app_name": "Browserclickyard",
+  "app_name": "Pagestress",
   "environment": "default",
   "backend": {
     "host": "127.0.0.1",

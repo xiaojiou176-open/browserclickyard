@@ -37,7 +37,7 @@
 
 ## What The Product Is Now
 
-Browserclickyard is no longer best described as “just a browser automation control
+Pagestress is no longer best described as “just a browser automation control
 plane”.
 
 The clearest current description is:

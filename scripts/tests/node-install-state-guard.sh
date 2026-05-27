@@ -62,7 +62,7 @@ cat >"$node_root/.pnpm-workspace-state-v1.json" <<'JSON'
 {
   "projects": {
     "/workspace": {
-      "name": "browserclickyard",
+      "name": "pagestress",
       "version": "0.1.0"
     }
   }
@@ -91,7 +91,7 @@ cat >"$node_root/.pnpm-workspace-state-v1.json" <<JSON
 {
   "projects": {
     "${workspace_root}": {
-      "name": "browserclickyard",
+      "name": "pagestress",
       "version": "0.1.0"
     }
   }

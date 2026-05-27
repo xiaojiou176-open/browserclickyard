@@ -46,12 +46,12 @@ The front door now tells the same story as the app:
 - `README.md`
 - `docs/get-started.md`
 - `docs/index.md`
-- `docs/why-browserclickyard.md`
+- `docs/why-pagestress.md`
 - `docs/proof-center.md`
 
 What changed:
 
-- README now describes Browserclickyard as an **AI-native WebUI stress lab**
+- README now describes Pagestress as an **AI-native WebUI stress lab**
 - the honest MVP boundary is stated as
   `localhost-first / governed-target-first`
 - the local governed experiment path now points at

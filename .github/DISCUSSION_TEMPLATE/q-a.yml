@@ -12,7 +12,7 @@ body:
     id: question
     attributes:
       label: Question
-      placeholder: What are you trying to do with Browserclickyard?
+      placeholder: What are you trying to do with Pagestress?
     validations:
       required: true
   - type: textarea

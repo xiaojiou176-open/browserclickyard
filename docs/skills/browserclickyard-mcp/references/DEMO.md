@@ -2,7 +2,7 @@
 
 ## Demo prompt
 
-Use Browserclickyard as a repo-native MCP surface. Start with `uiq_catalog` to confirm
+Use Pagestress as a repo-native MCP surface. Start with `uiq_catalog` to confirm
 the server is attached. Then inspect one run or run summary with `uiq_run` or
 `uiq_run_and_report`. If proof artifacts are already present, follow with
 `uiq_proof` or `uiq_read_artifact`. Summarize the current lane, the most
@@ -21,7 +21,7 @@ marketplace listing.
 - the host attaches the repo-native MCP server
 - the agent cites one real run or artifact instead of a generic stress-lab
   story
-- the answer stays grounded in current repo-native Browserclickyard surfaces
+- the answer stays grounded in current repo-native Pagestress surfaces
 
 ## What to check if it fails
 

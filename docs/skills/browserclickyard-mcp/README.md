@@ -1,6 +1,6 @@
-# Browserclickyard MCP Public Skill
+# Pagestress MCP Public Skill
 
-This folder is the public, self-contained skill packet for Browserclickyard's
+This folder is the public, self-contained skill packet for Pagestress's
 repo-native MCP surface.
 
 In plain language:
@@ -12,7 +12,7 @@ In plain language:
 
 Use it when you want one portable skill folder that teaches:
 
-- what Browserclickyard helps an agent do today
+- what Pagestress helps an agent do today
 - how to attach the repo-native stdio MCP server
 - which tool families are safe first
 - what a concrete first-success path looks like
@@ -40,21 +40,21 @@ Use it when you want one portable skill folder that teaches:
 ## Packet role
 
 - **Primary product stays elsewhere:** `README.md` and `docs/get-started.md`
-  remain the main Browserclickyard front door.
+  remain the main Pagestress front door.
 - **This folder is a companion packet:** it teaches repo-native MCP attach and
   proof-safe first steps for host-native skill flows.
 - **This folder is not the storefront:** any packet-lane review or listing
   state here does not prove package publication, browser-extension listing, or
-  hosted Browserclickyard availability.
+  hosted Pagestress availability.
 
 ## Current packet-lane state
 
 - OpenHands/extensions is currently `review-pending` via PR `#161`
 - ClawHub is now `listed-live` at
-  `https://clawhub.ai/xiaojiou176/browserclickyard-mcp` after fresh host-side
+  `https://clawhub.ai/xiaojiou176/pagestress-mcp` after fresh host-side
   read-back on `2026-04-09`
 - those packet-lane states apply only to this skill folder, not to the main
-  Browserclickyard product lane
+  Pagestress product lane
 
 ## What this packet must not claim
 
@@ -63,4 +63,4 @@ Use it when you want one portable skill folder that teaches:
   host-side read-back for this companion packet
 - no published npm package or public Docker image unless the repo has fresh
   proof
-- no hosted Browserclickyard SaaS claim
+- no hosted Pagestress SaaS claim

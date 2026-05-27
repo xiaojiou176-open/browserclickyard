@@ -26,7 +26,7 @@ echo "[security 1/5] python dependency audit"
 mkdir -p .runtime-cache/reports/security
 REQ_FILE=".runtime-cache/reports/security/pip-freeze.txt"
 REQ_FILE_ABS="$ROOT_DIR/$REQ_FILE"
-bash scripts/lib/python-exec.sh python -m pip freeze | grep -Ev '^(#|-e )|^browserclickyard==' > "$REQ_FILE"
+bash scripts/lib/python-exec.sh python -m pip freeze | grep -Ev '^(#|-e )|^pagestress==' > "$REQ_FILE"
 # Audit the fully pinned freeze list directly to avoid pip-audit temp venv bootstrap
 # failures in some local Python builds while keeping strict vulnerability gating.
 bash scripts/lib/python-exec.sh pip-audit --strict --no-deps --disable-pip -r "$REQ_FILE_ABS"
