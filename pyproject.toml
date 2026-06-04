@@ -14,7 +14,7 @@ dependencies = [
   "redis>=5.2.1",
   "sqlalchemy>=2.0.36",
   "pg8000>=1.31.2",
-  "uvicorn[standard]>=0.34.0"
+  "uvicorn[standard]>=0.48.0"
 ]
 
 [project.optional-dependencies]
