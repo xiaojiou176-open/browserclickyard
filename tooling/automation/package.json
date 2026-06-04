@@ -34,7 +34,7 @@
     "@eslint/js": "^9.23.0",
     "@google/genai": "1.42.0",
     "@playwright/test": "^1.59.1",
-    "@types/node": "^25.5.2",
+    "@types/node": "^25.9.1",
     "ajv": "^6.14.0",
     "curlconverter": "^4.12.0",
     "eslint": "^9.23.0",
