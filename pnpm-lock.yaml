@@ -43,8 +43,8 @@ importers:
         specifier: ^4.10.2
         version: 4.11.1(playwright-core@1.59.1)
       '@biomejs/biome':
-        specifier: ^2.4.4
-        version: 2.4.4
+        specifier: ^2.4.16
+        version: 2.4.16
       '@commitlint/cli':
         specifier: ^20.1.0
         version: 20.4.2(@types/node@25.5.2)(typescript@5.9.3)
@@ -273,7 +273,7 @@ importers:
         version: 9.39.4
       '@google/genai':
         specifier: 1.42.0
-        version: 1.42.0(@modelcontextprotocol/sdk@1.26.0(zod@4.3.6))
+        version: 1.42.0(@modelcontextprotocol/sdk@1.26.0(zod@4.4.3))
       '@playwright/test':
         specifier: ^1.59.1
         version: 1.59.1
@@ -683,6 +683,10 @@ packages:
     resolution: {integrity: sha512-9NhCeYjq9+3uxgdtp20LSiJXJvN0FeCtNGpJxuMFZ1Kv3cWUNb6DOhJwUvcVCzKGR66cw4njwM6hrJLqgOwbcw==}
     engines: {node: '>=6.9.0'}
 
+  '@babel/code-frame@7.29.7':
+    resolution: {integrity: sha512-Aup7aUOfpbAUg2ROOJN6Iw5f9DMBlzu0mIkm/malLQFN/YQgO48wCj0Kxa3sEHJvPVFg7siR+qRInwXd2qhQKw==}
+    engines: {node: '>=6.9.0'}
+
   '@babel/compat-data@7.29.0':
     resolution: {integrity: sha512-T1NCJqT/j9+cn8fvkt7jtwbLBfLC/1y1c7NtCeXFRgzGTsafi68MRv8yzkYSapBnFA6L3U2VSc02ciDzoAJhJg==}
     engines: {node: '>=6.9.0'}
@@ -759,6 +763,10 @@ packages:
 
   '@babel/helper-validator-identifier@7.28.5':
     resolution: {integrity: sha512-qSs4ifwzKJSV39ucNjsvc6WVHs6b7S03sOh2OcHF9UHfVPqWWALUsNUVzhSBiItjRZoLHx7nIarVjqKVusUZ1Q==}
+    engines: {node: '>=6.9.0'}
+
+  '@babel/helper-validator-identifier@7.29.7':
+    resolution: {integrity: sha512-qehxGkRj55h/ff8EMaJ+cYhyaKlHIxqYDn682wQD7RNp9UujOQsHog2uS0r2vzr4pW+sXf90NeeayjcNaX3fFg==}
     engines: {node: '>=6.9.0'}
 
   '@babel/helper-validator-option@7.27.1':
@@ -854,8 +862,8 @@ packages:
     resolution: {integrity: sha512-05WQkdpL9COIMz4LjTxGpPNCdlpyimKppYNoJ5Di5EUObifl8t4tuLuUBBZEpoLYOmfvIWrsp9fCl0HoPRVTdA==}
     engines: {node: '>=6.9.0'}
 
-  '@babel/runtime@7.29.2':
-    resolution: {integrity: sha512-JiDShH45zKHWyGe4ZNVRrCjBz8Nh9TMmZG1kh4QTK8hCBTWBi8Da+i7s1fJw7/lYpM4ccepSNfqzZ/QvABBi5g==}
+  '@babel/runtime@7.29.7':
+    resolution: {integrity: sha512-Nq8OhGWiZIZGV6hLHoyAKLLcJihP/xFeBMGJoUrxTX2psI8dCifzLhZISFb+VWS3wFMRDmCGw5R+dOySCqPLhw==}
     engines: {node: '>=6.9.0'}
 
   '@babel/template@7.28.6':
@@ -874,55 +882,55 @@ packages:
     resolution: {integrity: sha512-6zABk/ECA/QYSCQ1NGiVwwbQerUCZ+TQbp64Q3AgmfNvurHH0j8TtXa1qbShXA6qqkpAj4V5W8pP6mLe1mcMqA==}
     engines: {node: '>=18'}
 
-  '@biomejs/biome@2.4.4':
-    resolution: {integrity: sha512-tigwWS5KfJf0cABVd52NVaXyAVv4qpUXOWJ1rxFL8xF1RVoeS2q/LK+FHgYoKMclJCuRoCWAPy1IXaN9/mS61Q==}
+  '@biomejs/biome@2.4.16':
+    resolution: {integrity: sha512-x9ajFh1zChVybCiM3TN6OD4phAqLgtPZjFrZF+aTMYCPjwBO+k529TX7PPsAqtGNLeV4UgzwQnowEgS7bGmzcA==}
     engines: {node: '>=14.21.3'}
     hasBin: true
 
-  '@biomejs/cli-darwin-arm64@2.4.4':
-    resolution: {integrity: sha512-jZ+Xc6qvD6tTH5jM6eKX44dcbyNqJHssfl2nnwT6vma6B1sj7ZLTGIk6N5QwVBs5xGN52r3trk5fgd3sQ9We9A==}
+  '@biomejs/cli-darwin-arm64@2.4.16':
+    resolution: {integrity: sha512-wxPvu4XOA85YJk9ixSWUmq/QBHbid85BISbOAqqBM/5xQpPk9ayjk5375tOlSC0BeCwNSbPFafQBm+vBumXq0A==}
     engines: {node: '>=14.21.3'}
     cpu: [arm64]
     os: [darwin]
 
-  '@biomejs/cli-darwin-x64@2.4.4':
-    resolution: {integrity: sha512-Dh1a/+W+SUCXhEdL7TiX3ArPTFCQKJTI1mGncZNWfO+6suk+gYA4lNyJcBB+pwvF49uw0pEbUS49BgYOY4hzUg==}
+  '@biomejs/cli-darwin-x64@2.4.16':
+    resolution: {integrity: sha512-xFCqGPwYusQJp4N4NJLi1XJiZqjwFdjhT+KqtNy+Ug3qgfczqnTa6MSDvxJF6TkuDLoYJItMapz6tAf7kCekFw==}
     engines: {node: '>=14.21.3'}
     cpu: [x64]
     os: [darwin]
 
-  '@biomejs/cli-linux-arm64-musl@2.4.4':
-    resolution: {integrity: sha512-+sPAXq3bxmFwhVFJnSwkSF5Rw2ZAJMH3MF6C9IveAEOdSpgajPhoQhbbAK12SehN9j2QrHpk4J/cHsa/HqWaYQ==}
+  '@biomejs/cli-linux-arm64-musl@2.4.16':
+    resolution: {integrity: sha512-oYxnW0ARfJkr72ezzF2OR8N/rtkgLUQeYtF8cFhVswbknHxtTcmzSsanVJP8yQKnGpGpc2ck6c5zLvHahL6Cbg==}
     engines: {node: '>=14.21.3'}
     cpu: [arm64]
     os: [linux]
 
-  '@biomejs/cli-linux-arm64@2.4.4':
-    resolution: {integrity: sha512-V/NFfbWhsUU6w+m5WYbBenlEAz8eYnSqRMDMAW3K+3v0tYVkNyZn8VU0XPxk/lOqNXLSCCrV7FmV/u3SjCBShg==}
+  '@biomejs/cli-linux-arm64@2.4.16':
+    resolution: {integrity: sha512-2kFb4//jxfZaP6D+Rj5VkHkxgyD9EoRAVBEQb8PKRv+s4NO2zYNJKXFaJmK1CmhufJOWEfpHKaRbOja7qjmdhQ==}
     engines: {node: '>=14.21.3'}
     cpu: [arm64]
     os: [linux]
 
-  '@biomejs/cli-linux-x64-musl@2.4.4':
-    resolution: {integrity: sha512-gGvFTGpOIQDb5CQ2VC0n9Z2UEqlP46c4aNgHmAMytYieTGEcfqhfCFnhs6xjt0S3igE6q5GLuIXtdQt3Izok+g==}
+  '@biomejs/cli-linux-x64-musl@2.4.16':
+    resolution: {integrity: sha512-iHDS+MCM65DPqWGu+ECC3uoALyj2H7F4nVUPxIPjz/PIl94EUu+EDfGZDzFP+NY1EOPVt9NQvwFqq7HdMmowdg==}
     engines: {node: '>=14.21.3'}
     cpu: [x64]
     os: [linux]
 
-  '@biomejs/cli-linux-x64@2.4.4':
-    resolution: {integrity: sha512-R4+ZCDtG9kHArasyBO+UBD6jr/FcFCTH8QkNTOCu0pRJzCWyWC4EtZa2AmUZB5h3e0jD7bRV2KvrENcf8rndBg==}
+  '@biomejs/cli-linux-x64@2.4.16':
+    resolution: {integrity: sha512-NbcBbi/nJqn5baae6wqRXdS7Gadf2uRpehSh6vMSYpG8OhkXl/Xg8aorWrJ+9VWqAT5ml90alLvorkpMW0nBwQ==}
     engines: {node: '>=14.21.3'}
     cpu: [x64]
     os: [linux]
 
-  '@biomejs/cli-win32-arm64@2.4.4':
-    resolution: {integrity: sha512-trzCqM7x+Gn832zZHgr28JoYagQNX4CZkUZhMUac2YxvvyDRLJDrb5m9IA7CaZLlX6lTQmADVfLEKP1et1Ma4Q==}
+  '@biomejs/cli-win32-arm64@2.4.16':
+    resolution: {integrity: sha512-0rgImMsNb5v/chhkIFe3wu7PEFClS6RBAYUijGL9UsYN3PanSaoK24HSSuSJb1pYbYYVjzAyZTl3gtjJ84BM8A==}
     engines: {node: '>=14.21.3'}
     cpu: [arm64]
     os: [win32]
 
-  '@biomejs/cli-win32-x64@2.4.4':
-    resolution: {integrity: sha512-gnOHKVPFAAPrpoPt2t+Q6FZ7RPry/FDV3GcpU53P3PtLNnQjBmKyN2Vh/JtqXet+H4pme8CC76rScwdjDcT1/A==}
+  '@biomejs/cli-win32-x64@2.4.16':
+    resolution: {integrity: sha512-Kp85jgoBHa05gix6UIRjfCDiUV3w/8VIdZ247VyyO2gEjaw12WEVhdIjlxp/AMzXxqxQwbxNTDVZ3Mwd2RG5rw==}
     engines: {node: '>=14.21.3'}
     cpu: [x64]
     os: [win32]
@@ -7571,6 +7579,9 @@ packages:
   zod@4.3.6:
     resolution: {integrity: sha512-rftlrkhHZOcjDwkGlnUtZZkvaPHCsDATp4pGpuOOMDaTdDDXF91wuVDJoWoPsKX/3YPQ5fHuF3STjcYyKr+Qhg==}
 
+  zod@4.4.3:
+    resolution: {integrity: sha512-ytENFjIJFl2UwYglde2jchW2Hwm4GJFLDiSXWdTrJQBIN9Fcyp7n4DhxJEiWNAJMV1/BqWfW/kkg71UDcHJyTQ==}
+
 snapshots:
 
   '@adobe/css-tools@4.4.4': {}
@@ -8955,6 +8966,12 @@ snapshots:
       js-tokens: 4.0.0
       picocolors: 1.1.1
 
+  '@babel/code-frame@7.29.7':
+    dependencies:
+      '@babel/helper-validator-identifier': 7.29.7
+      js-tokens: 4.0.0
+      picocolors: 1.1.1
+
   '@babel/compat-data@7.29.0': {}
 
   '@babel/core@7.28.6':
@@ -9098,6 +9115,8 @@ snapshots:
 
   '@babel/helper-validator-identifier@7.28.5': {}
 
+  '@babel/helper-validator-identifier@7.29.7': {}
+
   '@babel/helper-validator-option@7.27.1': {}
 
   '@babel/helpers@7.29.2':
@@ -9199,7 +9218,7 @@ snapshots:
 
   '@babel/runtime@7.28.6': {}
 
-  '@babel/runtime@7.29.2': {}
+  '@babel/runtime@7.29.7': {}
 
   '@babel/template@7.28.6':
     dependencies:
@@ -9226,39 +9245,39 @@ snapshots:
 
   '@bcoe/v8-coverage@1.0.2': {}
 
-  '@biomejs/biome@2.4.4':
+  '@biomejs/biome@2.4.16':
     optionalDependencies:
-      '@biomejs/cli-darwin-arm64': 2.4.4
-      '@biomejs/cli-darwin-x64': 2.4.4
-      '@biomejs/cli-linux-arm64': 2.4.4
-      '@biomejs/cli-linux-arm64-musl': 2.4.4
-      '@biomejs/cli-linux-x64': 2.4.4
-      '@biomejs/cli-linux-x64-musl': 2.4.4
-      '@biomejs/cli-win32-arm64': 2.4.4
-      '@biomejs/cli-win32-x64': 2.4.4
+      '@biomejs/cli-darwin-arm64': 2.4.16
+      '@biomejs/cli-darwin-x64': 2.4.16
+      '@biomejs/cli-linux-arm64': 2.4.16
+      '@biomejs/cli-linux-arm64-musl': 2.4.16
+      '@biomejs/cli-linux-x64': 2.4.16
+      '@biomejs/cli-linux-x64-musl': 2.4.16
+      '@biomejs/cli-win32-arm64': 2.4.16
+      '@biomejs/cli-win32-x64': 2.4.16
 
-  '@biomejs/cli-darwin-arm64@2.4.4':
+  '@biomejs/cli-darwin-arm64@2.4.16':
     optional: true
 
-  '@biomejs/cli-darwin-x64@2.4.4':
+  '@biomejs/cli-darwin-x64@2.4.16':
     optional: true
 
-  '@biomejs/cli-linux-arm64-musl@2.4.4':
+  '@biomejs/cli-linux-arm64-musl@2.4.16':
     optional: true
 
-  '@biomejs/cli-linux-arm64@2.4.4':
+  '@biomejs/cli-linux-arm64@2.4.16':
     optional: true
 
-  '@biomejs/cli-linux-x64-musl@2.4.4':
+  '@biomejs/cli-linux-x64-musl@2.4.16':
     optional: true
 
-  '@biomejs/cli-linux-x64@2.4.4':
+  '@biomejs/cli-linux-x64@2.4.16':
     optional: true
 
-  '@biomejs/cli-win32-arm64@2.4.4':
+  '@biomejs/cli-win32-arm64@2.4.16':
     optional: true
 
-  '@biomejs/cli-win32-x64@2.4.4':
+  '@biomejs/cli-win32-x64@2.4.16':
     optional: true
 
   '@borewit/text-codec@0.2.1': {}
@@ -9884,6 +9903,19 @@ snapshots:
       - supports-color
       - utf-8-validate
 
+  '@google/genai@1.42.0(@modelcontextprotocol/sdk@1.26.0(zod@4.4.3))':
+    dependencies:
+      google-auth-library: 10.6.1
+      p-retry: 4.6.2
+      protobufjs: 7.6.1
+      ws: 8.19.0
+    optionalDependencies:
+      '@modelcontextprotocol/sdk': 1.26.0(zod@4.4.3)
+    transitivePeerDependencies:
+      - bufferutil
+      - supports-color
+      - utf-8-validate
+
   '@grpc/grpc-js@1.14.3':
     dependencies:
       '@grpc/proto-loader': 0.8.0
@@ -10282,6 +10314,29 @@ snapshots:
       zod-to-json-schema: 3.25.1(zod@4.3.6)
     transitivePeerDependencies:
       - supports-color
+
+  '@modelcontextprotocol/sdk@1.26.0(zod@4.4.3)':
+    dependencies:
+      '@hono/node-server': 1.19.13(hono@4.12.12)
+      ajv: 8.18.0
+      ajv-formats: 3.0.1(ajv@8.18.0)
+      content-type: 1.0.5
+      cors: 2.8.6
+      cross-spawn: 7.0.6
+      eventsource: 3.0.7
+      eventsource-parser: 3.0.6
+      express: 5.2.1
+      express-rate-limit: 8.2.2(express@5.2.1)
+      hono: 4.12.12
+      jose: 6.1.3
+      json-schema-typed: 8.0.2
+      pkce-challenge: 5.0.1
+      raw-body: 3.0.2
+      zod: 4.4.3
+      zod-to-json-schema: 3.25.1(zod@4.4.3)
+    transitivePeerDependencies:
+      - supports-color
+    optional: true
 
   '@ngneat/falso@8.0.2':
     dependencies:
@@ -11595,8 +11650,8 @@ snapshots:
 
   '@testing-library/dom@10.4.1':
     dependencies:
-      '@babel/code-frame': 7.29.0
-      '@babel/runtime': 7.29.2
+      '@babel/code-frame': 7.29.7
+      '@babel/runtime': 7.29.7
       '@types/aria-query': 5.0.4
       aria-query: 5.3.0
       dom-accessibility-api: 0.5.16
@@ -16972,8 +17027,16 @@ snapshots:
     dependencies:
       zod: 4.3.6
 
+  zod-to-json-schema@3.25.1(zod@4.4.3):
+    dependencies:
+      zod: 4.4.3
+    optional: true
+
   zod@3.23.8: {}
 
   zod@3.25.76: {}
 
   zod@4.3.6: {}
+
+  zod@4.4.3:
+    optional: true
