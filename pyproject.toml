@@ -9,7 +9,7 @@ description = "Automation scaffold with FastAPI backend and browser/API testing 
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
-  "fastapi>=0.115.0",
+  "fastapi>=0.136.3",
   "pydantic-settings>=2.7.0",
   "redis>=5.2.1",
   "sqlalchemy>=2.0.36",
