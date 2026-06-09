@@ -92,7 +92,7 @@ jobs:
           python3 -m pip install --user uv
           echo "${HOME}/.local/bin" >> "$GITHUB_PATH"
       - name: Setup Trivy
-        uses: aquasecurity/setup-trivy@3fb12ec12f41e471780db15c232d5dd185dcb514 # v0.2.6
+        uses: aquasecurity/setup-trivy@151a37f29c09e4ff49f853d2b23682e688bb1fa1 # v0.3.0
         with:
           cache: true
       - name: Repo governance fast gate
